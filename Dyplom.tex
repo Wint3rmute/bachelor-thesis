@@ -681,32 +681,42 @@ SPECJALNOŚĆ: & \@specjalnosc\\
 \chapterstyle{noNumbered}
 \pagestyle{outer}
 \mbox{}\pdfbookmark[0]{Spis treści}{spisTresci.1}
+
+\setcounter{tocdepth}{1}
 \tableofcontents* 
+
+
+% TODO: UNCOMMENT
 
 \newpage
 \mbox{}\pdfbookmark[0]{Spis rysunków}{spisRysunkow.1}
-%\addcontentsline{toc}{chapter}{Spis rysunków}
+\addcontentsline{toc}{chapter}{Spis rysunków}
 \listoffigures*
 
 \newpage
 \mbox{}\pdfbookmark[0]{Spis listingów}{spisListingow.1}
-%\addcontentsline{toc}{chapter}{Spis listingów}
+\addcontentsline{toc}{chapter}{Spis listingów}
 \lstlistoflistings*
 
+% END OF TODO: UNCOMMENT
 
-%{%
-%\let\oldnumberline\numberline%
-%\renewcommand{\numberline}{\figurename~\oldnumberline}%
-%\listoffigures%
-%}
+% nie wiem do czego to jest, na razie zakomentowane
+% {%
+% \let\oldnumberline\numberline%
+% \renewcommand{\numberline}{\figurename~\oldnumberline}%
+% \listoffigures%
+% }
 
+
+% TODO: UNCOMMENT
 
 \newpage
 \mbox{}\pdfbookmark[0]{Spis tabel}{spisTabel.1}
-%\addcontentsline{toc}{chapter}{Spis tabel}
+\addcontentsline{toc}{chapter}{Spis tabel}
 \listoftables*
-
 \include{skroty} %skróty można sobie pominąć
+% END OF TODO: UNCOMMENT
+
 \chapterstyle{default}
 
 \include{rozdzial01}
@@ -720,7 +730,8 @@ SPECJALNOŚĆ: & \@specjalnosc\\
 
 % \bibliographystyle{plalpha}
 % \bibliographystyle{plabbrv}
-\bibliographystyle{plain}
+% \bibliographystyle{plain}
+\bibliographystyle{ieeetr}
 
 %UWAGA: bibliotekę referencji należy przygotować samemu. Dobrym do tego narzędziem jest JabRef.
 %       Nazwę przygotowanej biblioteki wpisuje się poniżej bez rozszerzenia 

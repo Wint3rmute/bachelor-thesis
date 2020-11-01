@@ -1,28 +1,29 @@
 \chapter{Wstęp}
 
 
-
 \section{Geneza pracy}
 % kilka akapitów wprowadzających,
 % z czego powinno wynikać, że zrobienie
 % takiego systemu jest potrzebne i ma sens.
 
-Lotnictwo autonomiczne to prężnie rozwijający się segment branży lotniczej.
+Lotnictwo autonomiczne to prężnie rozwijający się sektor branży lotniczej.
 Technologie pozwalające na wykorzystanie autonomicznych dronów i samolotów
 w nowych projektach biznesowych są dostępne na wyciągnięcie ręki - istnieją
 zarówno systemy zamknięte, w pełni komercyjne, jak i projekty zupełnie otwarte,
 pozwalające na zapoznanie się z kodem źródłowym oprogramowania sterującego statkami
-powietrznymi. 
+powietrznymi i interakcję z aktywną społecznością pasjonatów, wspólnie rozwijającą
+projekt. 
 
 W świecie biznesu powstają coraz to nowe rozwiązania, wykorzystujące autonomiczne
 maszyny do świadczenia różnorakich usług - od razu nasuwającym się rozwiązaniem
-jest autonomiczne dostarczanie paczek \cite{prime_air}. Warto wspomnieć, że branża
-jest bardzo otwarta na innowatorów - firmy takie jak Boeing i Lockheed Martin
-sponsorują międzynarodowe konkursy dla młodych konstruktorów \cite{sae_2018}. 
+jest autonomiczne dostarczanie paczek \cite{prime_air}, ale istnieją też znacznie
+bardziej ambitne projekty\cite{10.1001/jama.2017.3957}. Warto wspomnieć, że branża
+jest otwarta na innowatorów - firmy takie jak Boeing i Lockheed Martin sponsorują
+międzynarodowe konkursy przeznaczone dla młodych konstruktorów \cite{sae_2018}. 
 
 Zainteresowani autonomicznym lotnictwem inwestorzy nie ograniczają się do
 prywatnych firm. Rząd australijskiego stanu Queensland współorganizuje
-UAV Challenge - zawody skupione wokół rozwijania systemów wspierających 
+\textit{UAV Challenge} - zawody skupione wokół rozwijania systemów wspierających 
 służby medyczne \cite{uav_sponsors}.
 
 
@@ -34,28 +35,35 @@ Szczególnie interesujące są zagadnienia integracji komponentów systemu,
 oraz testowanie - które w przypadku systemu angażującego rzeczywiste
 maszyny nie może ograniczyć się jedynie do standardowych testów jednostkowych.
 
-
+\newpage
 \section{Cel pracy}
 % koniecznie sformułowania:
 % - Celem ogólnym pracy jest…?,
 % - Celami szczegółowymi pracy są…?
 
 Celem pracy jest stworzenie prototypu systemu monitorującego, wykorzystującego
-autonomiczne drony. System ma wykorzystywać już istniejące oprogramowanie sterujące
-autonomicznymi maszynami, wykorzystywać napisaną na potrzeby pracy infrastrukturę
-służącą do planowania tras lotów, przechwytywanie i wyświetlanie telemetrii oraz 
-rozpoznawanie obiektów na zdjęciach wykonanych w czasie lotu za pomocą sztucznej
-inteligencji.
+autonomiczne drony. System ma integrować się z już istniejącym oprogramowaniem
+sterującym autonomicznymi maszynami oraz wykorzystywać napisaną na potrzeby pracy
+infrastrukturę służącą do planowania tras lotów, przechwytywania i wyświetlania
+telemetrii oraz rozpoznawania obiektów na zdjęciach wykonanych w czasie lotu za
+pomocą sztucznej inteligencji.
 
-Prototyp ma być w pełni testowalny - testy muszą angażować wszystkie
-komponenty systemu, uruchomione wewnątrz w pełni zautomatyzowanego środowiska
-testowego.
+Architektura systemu musi pozwalać na zautomatyzowanie procesu wdrażania
+systemu, oraz zautomatyzowanie wdrażania nowych funkcjonalności - każde
+z wdrożeń musi być poprzedzone testami integracyjnymi na poziomie całego systemu. 
+
+Prototyp ma być w pełni testowalny, zarówno na poziomie pojedynczych
+elementów systemu jak i na poziomie integracji całego projektu - testy muszą
+angażować wszystkie komponenty systemu, uruchomione wewnątrz w pełni
+zautomatyzowanego środowiska testowego.
 
 \section{Zakres pracy}
 
 Zakres pracy obejmuje elementy projektu związane z
-inżynierią oprogramowania - proces projektowania architektury systemu,
-wybór technologii, zaprojektowanie punktów stykowych w systemie. Praca opisuje
-też sposób testowania systemu - od weryfikacji poprawności działania poszczególnych
+inżynierią i architekturą oprogramowania - proces projektowania struktury systemu,
+wybór technologii, zaprojektowanie punktów stykowych w systemie, automatyzacja
+procesu wdrażania systemu i nowych funkcjonalności.
+
+Praca opisuje też sposób testowania systemu - od weryfikacji poprawności działania poszczególnych
 komponentów, po pełne automatyczne testy integracyjne, wykorzystujące wszystkie
 komponenty systemu oraz zintegrowany symulator drona. 
