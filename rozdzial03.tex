@@ -1,5 +1,43 @@
 \chapter{Przegląd i wybór technologii, architektura systemu}
 
+\section{Zarys architektury}
+
+\begin{tikzpicture}[auto,node distance=1.5cm]
+	% Create an entity with ID node1, label "Fancy Node 1".
+	% Default for children (ie. attributes) is to be a tree "growing up"
+	% and having a distance of 3cm.
+	%
+	% 2 of these attributes do so, the 3rd's positioning is overridden.
+	\node[entity] (backend) {Serwer webowy}
+	  [grow=up,sibling distance=3cm];
+
+	\node[entity](telem) {Podsystem obsługujący telemetrię}
+		[below right = of backend];
+	% Now place a relation (ID=rel1)
+	% Now the 2nd entity (ID=rel2)
+	\node[entity] (dron) [below left = of backend] {Dron};
+	
+	% \node[entity] (backend) [above right = of rel1]	{Serwer webowy};
+	
+	% Draw an edge between rel1 and dron; rel1 and node2
+	% \path (backend) edge node {1-\(m\)} (dron);
+\end{tikzpicture}
+
+% \begin{tikzpicture}
+	
+% 	\node[entity](backend) {Serwer webowy}
+% 	[];
+% 	\node[entity](backend_telem) {Podsystem obsługujący telemetrię}[
+% 		below right = of backend
+% 	];
+
+% 	% \node[entity] (dron) {Dron}
+% 	%   [grow=up,sibling distance=3cm];
+	
+	
+	 
+% \end{tikzpicture}
+
 \section{Oprogramowanie na dronie}
 
 \subsection{Kontroler lotu}
@@ -10,21 +48,39 @@ autonomiczny lot, stabilizację oraz obsługę
 peryferiów takich jak czujniki oraz silniki.
 
 Spośród aktywnie rozwijanych i popularnych
-projektów tworzących oprogramowanie do kontrolerów
-lotu, można wyróżnić trzy najpopuparniejsze inicjatywy: \\
+projektów \cite{autopilots_sourvey} tworzących oprogramowanie do kontrolerów
+lotu, można wyróżnić cztery najpopularniejsze inicjatywy: \\
 
 \begin{table}[htb]
 	\centering\small
-	\caption{Najpopularniejsze otwarte projekty oprogramowania obsługującego kontrolery lotu}
+	\caption{
+		Najpopularniejsze otwarte projekty
+		oprogramowania obsługującego kontrolery lotu
+	}
 	\label{tab}
 
-	\begin{tabular}{|l|l|l|l|}
-		\hline 
-		\textbf{Nazwa projektu}						& \textbf{Rok założenia} &  \textbf{Licencja} \\ \hline
-		Ardupilot\cite{ardupilot_home_page}			&     2009				 & GPL     \\ \hline
-		PX4 Autopilot\cite{px4_home_page}						&     2012				 & BSD    \\ \hline
-		Paparazzi UAV\cite{paparazzi_home_page}		&     2005				 & GPL \\ \hline    
-	\end{tabular}
+	\begin{tabularx}{0.87\textwidth}
+	{ 
+	| >{\raggedright\arraybackslash}l 
+	| c 
+	| >{\raggedright\arraybackslash}X
+	| >{\raggedleft\arraybackslash}l |
+	}
+	\hline
+	\textbf{Nazwa projektu} & \textbf{Rok założenia} &
+	\textbf{Docelowy hardware}
+	&  \textbf{Licencja}
+	\\\hline
+	ArduPilot\cite{ardupilot_home_page}		&  2009	& otwarte mikrokontrolery ARM & GPLv3
+	\\ \hline
+	AutoQuad\cite{autoquad_timeline}		&  2011	& mikrokontrolery STM Cortex M4		 & GPLv3
+	\\ \hline
+	LibrePilot\cite{librepilot_home_page}	&  2015	& zamknięte źródłowo kontrolery lotu, bazujące na architekturze ARM & GPLv3
+	\\ \hline       
+	PX4 Autopilot\cite{px4_home_page}		&  2012	& otwarte mikrokontrolery ARM & BSD
+	\\ \hline       
+	\end{tabularx}
+	
 \end{table}
 
 
@@ -48,4 +104,5 @@ do zastosowań bardziej ogólnych.
 \section{Wspólne punkty stykowe - \texttt{git submodules}}
 
 % \chapter{Metodyka pracy i zarządzania}
-% \section{Efektywne wykorzystanie narzędzi dostępnych w popularnych systemach kontroli wersji}
+% \section{Efektywne wykorzystanie narzędzi dostępnych w popularnych 
+% systemach kontroli wersji}

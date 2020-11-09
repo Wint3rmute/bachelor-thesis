@@ -49,6 +49,14 @@
 %% Ponadto tgtermes to czcionka do tekstu. Wszelkie matematyczne wzory będą sformatowane domyślną czcionką do wzorów.
 %% Jeśli wzory mają być sformatowane z wykorzystaniem innych czcionek, trzeba to jawnie zadeklarować.
 
+%% BĄCZKOWE BIBLIOTEKI
+
+\usepackage{tikz}
+% we want ER + above/below + left/right
+\usetikzlibrary{er,positioning}
+
+%% END OF BĄCZKOWE BIBLIOTEKI
+
 %% Po zainstalowaniu pakietu tgtermes może będzie trzeba zauktualizować informacje 
 %% o dostępnych fontach oraz mapy. Można to zrobić z konsoli (jako administrator)
 %% initexmf --admin --update-fndb
@@ -370,7 +378,8 @@ Listing \thelstlisting: #1\hfill%\hfill%
 %\pdftrue \fi
 \ifpdf
  \usepackage[pdftex,bookmarks,breaklinks,unicode]{hyperref}
- \usepackage[pdftex]{graphicx}
+%  WARNING - usunąłem to bo był jakiś "Option clash for package graphicx"   
+%  \usepackage[pdftex]{graphicx}
  \DeclareGraphicsExtensions{.pdf,.jpg,.mps,.png}
 \pdfcompresslevel=9
 \pdfoutput=1
