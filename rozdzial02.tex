@@ -21,13 +21,22 @@ czasie prowadzone jest nagrywanie.
 
 \section{Protokoły wymiany danych}
 
+W przypadku systemu działającego autonomicznie, wymiana danych jest kluczowym
+elementem pozwalającym na sprawdzanie poprawności działania
+i diagnozowania błędów w systemie. Podczas lotów testowych
+często nie ma możliwości bezpośredniej obserwacji systemu
+lub ingerencji w jego sposób działania. Odpowiednia architektura
+zbierająca i archiwizująca dane z lotów pozwala znacznie szybciej 
+wykryć potencjalne problemy i zapobiec krytycznym błędom. 
+
 \subsection{Dane telemetryczne}
 Protokół do wymiany danych telemetrycznych powinien
 wysyłać dane w postaci binarnej, gdyż jest to bardziej
 efektywne niż kodowanie ich w postaci tekstowej (na
-przykład w formacie \texttt{JSON}).
+przykład w formacie \texttt{JSON}, typowym dla języków
+wysokopoziomowych - wykorzystywanym w technologiach webowych).
 
-Protokół powinien być też w łatwy sposób rozszerzalny,
+Protokół powinien być w łatwy sposób rozszerzalny,
 pozwalając w przyszłości zredefiniować część wysyłanych
 pakietów lub dodać nowe dane, bez tracenia kompatybilności
 wstecznej bądź konieczności przebudowania całego systemu.
@@ -36,8 +45,8 @@ językach programowania - biorąc to pod uwagę, pożądaną
 cechą protokołu jest też możliwość szybkiego przeportowania
 go na inny język programowania. 
 
-\subsection{Zdjęcia}
-Efektywny przesył zdjęć oraz filmów to temat zbyt złożony
+\subsection{Zdjęcia wykonane w trakcie lotu}
+Efektywny przesył zdjęć oraz filmów to temat zbyt obszerny
 i wymagający, żeby poruszać go w treści pracy - system
 powinien wykorzystywać dowolny prosty w implementacji
 protokół wysyłania zdjęć. Architektura systemu powinna
@@ -47,18 +56,32 @@ przez bardziej zoptymalizowane rozwiązanie.
 
 \section{Oprogramowanie serwerowe}
 
+Serwer webowy jest komponentem, który odbiera, archiwizuje i przekazuje
+dane nadchodzące z dronów do aplikacji klienckiej. Jest punktem centralnym systemu,
+wykorzystywanym bezpośrednio przez wszystkie pozostałe elementy.
+
 \subsection{Odbiór i multipleksowanie telemetrii}
+
+Aby umożliwić diagnozowanie stanu systemu w czaie rzeczywistym - szczególnie
+stanu wykonujących lot wielowirnikowców, telemetria nadchodząca z maszyn nie może być
+jedynie archiwizowana na dysku serwera centralnego. Konieczną funkcjonalnością jest
+przesyłanie jej w czasie rzeczywistym do wielu jednocześnie podłączonych klientów.
+
+Umożliwi to podjęcie akcji w przypadku wykrycia krytycznego błędu, który mógłby
+zakończyć się uszkodzeniem bądź rozbiciem drona, ułatwi też wykonywanie testów - zarówno
+na rzeczywistych maszynach, jak i wykorzystujących symulatory lotu.
 
 \section{Oprogramowanie klienckie}
 
+Aplikacja kliencka skupiona jest wokół trzech funkcjonalności:
 
-% Wielowirnikowce podłączone do systemu, muszą być
-% wyposażone w kontroler lotu - umożliwiający
-% autonomiczny lot, stabilizację oraz obsługujący 
-% peryferia takie jak czujniki oraz silniki.
+\begin{enumerate}
+    \item planowanie tras i harmonogramu lotów,
+    \item odbiór telemetrii i zdjęć z dronów w czasie rzeczywistym,
+    \item przegląd i analiza telemetrii oraz zdjęć zarchiwizowanych z poprzednich lotów.
+\end{enumerate}
 
-% Poza kontrolerem lotu, który zawiera jedynie oprogramowanie 
-% niezbędnie do sterowania lotem i udostępniania
-% strumienia telemetrii (zazwyczaj przez port szeregowy),
-% na maszynie musi znaleźć się też drugi komputer - 
-% do zastosowań bardziej ogólnych.
+Kluczowym elementem aplikacji klienckiej jest obsługa mapy - wszystkie
+wymienione funkcjonalności wymagają wizualizacji nadchodzących danych geograficznych,
+rozszerzonych o dodatkowe informacje (na przykład godzina przelotu przez dany punkt lub
+zarejestrowane w danym miejscu zdjęcia i wykryte na nich obiekty).
