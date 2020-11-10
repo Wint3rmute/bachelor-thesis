@@ -52,8 +52,19 @@
 %% BĄCZKOWE BIBLIOTEKI
 
 \usepackage{tikz}
-% we want ER + above/below + left/right
 \usetikzlibrary{er,positioning}
+
+\usepackage[edges]{forest}
+\forestset{
+  direction switch/.style={
+    for tree={edge+=thick, font=\sffamily},
+    where level>=1{folder, grow'=0}{for children=forked edge},
+    where level=3{}{draw},
+  },
+}
+
+% \usepackage{lscape}
+% we want ER + above/below + left/right
 
 %% END OF BĄCZKOWE BIBLIOTEKI
 

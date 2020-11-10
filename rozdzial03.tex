@@ -1,27 +1,113 @@
-\chapter{Przegląd i wybór technologii, architektura systemu}
+\chapter{ Architektura systemu: przegląd i wybór technologii }
 
 \section{Zarys architektury}
 
-\begin{tikzpicture}[auto,node distance=1.5cm]
-	% Create an entity with ID node1, label "Fancy Node 1".
-	% Default for children (ie. attributes) is to be a tree "growing up"
-	% and having a distance of 3cm.
-	%
-	% 2 of these attributes do so, the 3rd's positioning is overridden.
-	\node[entity] (backend) {Serwer webowy}
-	  [grow=up,sibling distance=3cm];
+% \begin{tikzpicture}[auto,node distance=1.5cm]
+% 	% Create an entity with ID node1, label "Fancy Node 1".
+% 	% Default for children (ie. attributes) is to be a tree "growing up"
+% 	% and having a distance of 3cm.
+% 	%
+% 	% 2 of these attributes do so, the 3rd's positioning is overridden.
+% 	\node[entity] (backend) {\textbf{Serwer webowy}}
+% 	  [grow=up,sibling distance=1cm];
 
-	\node[entity](telem) {Podsystem obsługujący telemetrię}
-		[below right = of backend];
-	% Now place a relation (ID=rel1)
-	% Now the 2nd entity (ID=rel2)
-	\node[entity] (dron) [below left = of backend] {Dron};
-	
-	% \node[entity] (backend) [above right = of rel1]	{Serwer webowy};
-	
-	% Draw an edge between rel1 and dron; rel1 and node2
-	% \path (backend) edge node {1-\(m\)} (dron);
-\end{tikzpicture}
+% 	  \node[entity, node distance=0.5cm] (telem) [below  = of backend] {\footnotesize{Obsługa telemetrii}};
+% 	  \node[entity, node distance=0.5cm, align=center] (api) [below right = of backend] {\footnotesize{Zapis tras i harmonogramu lotów}};
+% 	  \node[entity, node distance=0.5cm] (api) [below left = of backend] {\footnotesize{Archiwizacja logów}};
+% 	% Now place a relation (ID=rel1)
+% 	% Now the 2nd entity (ID=rel2)
+% 	\node[entity, node distance=3cm] (dron) [below left = of backend] {Dron};
+% 	% \path (dron) edge node {n-\(1\)} (backend);
+
+% 	\node[entity, node distance=2.5cm] (flight_controller) [ below left of = dron] {Kontroler lotu};
+% 	\node[entity, node distance=2.5cm] (flight_computer) [ below right of = dron] {Komputer pokładowy};
+% 	\node[entity, node distance=1.5cm] (camera) [ below of = flight_computer] {Kamera};
+
+% 	\node[entity, node distance=3cm] (frontend) [below right = of backend] {Aplikacja kliencka};
+% 	% \path (backend) edge node {1-\(n\)} (frontend);
+
+
+
+
+% \end{tikzpicture}
+% \begin{tikzpicture} [level distance=2cm] %[level 1/.style={sibling distance=2cm},level 2/.style={sibling distance=10mm}]
+
+
+% 	\tikzstyle{level 1}=[sibling distance=4.5cm]
+% 	\tikzstyle{level 2}=[sibling distance=3.5cm]
+% 	\tikzstyle{level 3}=[sibling distance=2mm]
+		
+% 	\node[](root){}
+% 		child {node [rectangle,draw] (dron) {Dron}
+% 			edge from parent[draw=none]
+% 			child {node [rectangle,draw](flight_controller){Kontroler lotu}}
+% 			child {node [rectangle,draw](flight_computer){Komputer pokładowy}
+% 				child {node [rectangle,draw, yshift=1.1cm](camera){Kamera}}
+% 			}
+% 		}
+% 		child {node [rectangle,draw, yshift=1.5cm, xshift=-0.5cm] (backend) {Serwer webowy}
+% 			edge from parent[draw=none]
+% 			child {node [rectangle,draw](flight_controller){Rest API}}
+% 			child {node [rectangle,draw, align=center](ai){Analiza\\zdjęć}}
+% 			child {node [rectangle,draw, align=center](flight_controller){Obsługa\\telemetrii}}
+% 		}
+% 		child {node [rectangle,draw] (frontend) {Aplikacja kliencka}
+% 			edge from parent[draw=none]
+% 			child {node [rectangle,draw, align=center](flight_controller){Odbiór\\telemetrii}}
+% 			child {node [rectangle,draw, align=center](flight_controller){Planowanie tras i \\ harmonogramów lotów}}
+% 		};
+		
+
+% \end{tikzpicture}
+
+\hspace{-1.2cm}
+\begin{forest}
+	% forest preamble: determine layout and format of tree
+	direction switch,
+	for tree={fork sep=3em}
+	[ System inspekcji obszarów,yshift=3em,alias=LP
+	  [ \textbf{Dron}
+		[ Kontroler lotu ]
+		[ Komputer pokładowy
+		 [ Wyznaczanie trasy lotu ]
+		 [ Wysyłanie telemetrii ]
+		 [ Wysyłanie zdjęć ]
+		]
+		[ Kamera ]
+		[ Modem GSM ]
+	  ]
+	  [ \textbf{Serwer webowy}, yshift=0.5cm
+		[ Obsługa telemetrii
+			[ Odbiór danych z drona ]
+			[ Przekazywanie do klientów ]
+			[ Przygotowanie do archiwizacji ]
+		]
+		[ Rest API: odczyt i zapis
+		  [ Logów telemetrii ]
+		  [ Tras lotów ] 
+		  [ Harmonogramu lotów ]
+		  [ Raportów z lotów ]
+		]
+		[ Sztuczna inteligencja
+		  [ Analiza obrazów z lotów ]
+		]
+	  ]
+	  [ \textbf{Aplikacja kliencka}, xshift=0.1cm
+		[ Planowanie 
+			[ Tras lotów ]
+			[ Harmonogramu lotów ]
+		]
+		[ Odbiór telemetrii ]
+		[ Przegląd raportów z lotów 
+		  [ Trasa lotu ]
+		  [ Rozpoznane na zdjęciach obiekty ]
+		]
+	  ]
+	]
+%   \draw[thick]
+%   ([yshift=-1.5em]LP.south)  -- ++(-6em,0) node[left,draw,font=\sffamily,thin]{ABC}
+%   ([yshift=-1.5em]LP.south)  -- ++(6em,0) node[right,draw,font=\sffamily,thin]{XYZ};
+  \end{forest}
 
 % \begin{tikzpicture}
 	
@@ -38,12 +124,12 @@
 	 
 % \end{tikzpicture}
 
-\section{Oprogramowanie na dronie}
+\section{Dron}
 
 \subsection{Kontroler lotu}
 
 Wielowirnikowce podłączone do systemu, muszą być
-wyposażone w kontroler lotu - umożliwiający
+wyposażone w kontroler lotu -- umożliwiający
 autonomiczny lot, stabilizację oraz obsługę 
 peryferiów takich jak czujniki oraz silniki.
 
@@ -84,13 +170,14 @@ lotu, można wyróżnić cztery najpopularniejsze inicjatywy: \\
 \end{table}
 
 
-\subsection{eee reszta?}
+\subsection{Komputer pokładowy}
 
 Poza kontrolerem lotu, który zawiera jedynie oprogramowanie 
 niezbędnie do sterowania lotem i udostępniania
 strumienia telemetrii (zazwyczaj przez port szeregowy),
-na maszynie musi znaleźć się też drugi komputer - 
-do zastosowań bardziej ogólnych.
+na maszynie musi znaleźć się też drugi komputer -- 
+do zastosowań bardziej ogólnych: komunikacja z bardziej wysokopoziomowymi
+peryferiami, takimi jak kamera lub modem GSM.
 
 \section{Protokoły wymiany danych}
 
