@@ -15,25 +15,32 @@ powietrznymi i interakcję z aktywną społecznością pasjonatów, wspólnie ro
 projekt. 
 
 W świecie biznesu powstają coraz to nowe rozwiązania, wykorzystujące autonomiczne
-maszyny do świadczenia różnorakich usług - od razu nasuwającym się rozwiązaniem
+maszyny do świadczenia usług - od razu nasuwającym się rozwiązaniem
 jest autonomiczne dostarczanie paczek \cite{prime_air}, ale istnieją też znacznie
-bardziej ambitne projekty\cite{10.1001/jama.2017.3957}. Warto wspomnieć, że branża
-jest otwarta na innowatorów - firmy takie jak Boeing i Lockheed Martin sponsorują
-międzynarodowe konkursy przeznaczone dla młodych konstruktorów \cite{sae_2018}. 
+bardziej ambitne projekty: dostarczanie defibrylatora wprost do domu osoby, u której
+wystąpiło zatrzymanie akcji serca \cite{10.1001/jama.2017.3957} lub generowanie
+trójwymiarowych map terenu, wykorzystując zdjęcia wykonanych z dronów
+\cite{uav_photogrametry}. Biznes jest stosunkowo młody, więc branża jest otwarta
+na innowatorów -- firmy takie jak Boeing i Lockheed Martin sponsorują międzynarodowe
+konkursy przeznaczone dla młodych konstruktorów \cite{sae_2018}. 
 
 Zainteresowani autonomicznym lotnictwem inwestorzy nie ograniczają się do
 prywatnych firm. Rząd australijskiego stanu Queensland współorganizuje
-\textit{UAV Challenge} - zawody skupione wokół rozwijania systemów wspierających 
+\textit{UAV Challenge} -- zawody skupione wokół rozwijania systemów wspierających 
 służby medyczne \cite{uav_sponsors}.
 
+Wykorzystanie otwartych technologii, skupionych wokół awiacji autonomicznej
+i połączenie ich z nowoczesnymi praktykami wdrażania oprogramowania to temat atrakcyjny
+zarówno z perspektywy inżynierii oprogramowania, jak i z perspektywy biznesowej. 
+% zapytać o to
+Koło naukowe Politechniki Wrocławskiej -- \textit{Akademicki Klub Lotniczy} (AKL) zajmuje
+się budowaniem i rozwijaniem autonomicznych dronów i samolotów \cite{akl_home_page}.
+Omawiany w pracy system powstał w ramach realizacji projektu
+z Wrocławskiego Funduszu Aktywności Studenckiej\cite{fast_webpage}.
 
-Wykorzystanie otwartych technologii skupionych wokół awiacji autonomicznej
-i połączenie ich z nowoczesnymi praktykami wdrażania oprogramowania to temat
-atrakcyjny zarówno z perspektywy inżynierii oprogramowania jak i z perspektywy biznesowej. 
-
-Szczególnie interesujące są zagadnienia integracji komponentów systemu,
-oraz testowanie - które w przypadku systemu angażującego rzeczywiste
-maszyny nie może ograniczyć się jedynie do standardowych testów jednostkowych.
+% Szczególnie interesujące są zagadnienia integracji komponentów systemu,
+% oraz testowanie - które w przypadku systemu angażującego rzeczywiste
+% maszyny nie może ograniczyć się jedynie do standardowych testów jednostkowych.
 
 \newpage
 \section{Cel pracy}
@@ -41,12 +48,14 @@ maszyny nie może ograniczyć się jedynie do standardowych testów jednostkowyc
 % - Celem ogólnym pracy jest…?,
 % - Celami szczegółowymi pracy są…?
 
-Celem pracy jest stworzenie prototypu systemu monitorującego, wykorzystującego
+Celem pracy jest stworzenie prototypu systemu inspekcji terenów, wykorzystującego
 autonomiczne drony. System ma integrować się z już istniejącym oprogramowaniem
-sterującym autonomicznymi maszynami oraz wykorzystywać napisaną na potrzeby pracy
-infrastrukturę służącą do planowania tras lotów, przechwytywania, przekazywania
-i wyświetlania telemetrii oraz rozpoznawania obiektów na zdjęciach wykonanych
-w czasie lotu za pomocą sztucznej inteligencji.
+sterującym autonomicznymi maszynami, oraz wykorzystywać napisaną na potrzeby pracy
+infrastrukturę informatyczną, pozwalającą na planowanie tras lotów, obsługę telemetrii
+i rozpoznawanie obiektów na zdjęciach wykonanych w czasie lotu, za pomocą algorytmów
+sztucznej inteligencji. Finalnie, system ma generować raport podsumowujący każdy lot,
+w którym zawarta będzie trasa pokonana przez drona i zdjęcia wykonane w trakcie lotu,
+wraz z rozpoznanymi na nich obiektami. 
 
 Architektura systemu musi pozwalać na zautomatyzowanie procesu wdrażania
 systemu, oraz zautomatyzowanie wdrażania nowych funkcjonalności - każde
@@ -64,6 +73,6 @@ inżynierią i architekturą oprogramowania - proces projektowania struktury sys
 wybór technologii, zaprojektowanie punktów stykowych w systemie, automatyzacja
 procesu wdrażania systemu i nowych funkcjonalności.
 
-Praca opisuje też sposób testowania systemu - od weryfikacji poprawności działania poszczególnych
-komponentów, po pełne automatyczne testy integracyjne, wykorzystujące wszystkie
-komponenty systemu wraz ze zintegrowanym symulatorem drona. 
+Praca opisuje także sposób testowania systemu - od weryfikacji poprawności działania
+poszczególnych komponentów, po pełne automatyczne testy integracyjne, wykorzystujące 
+wszystkie komponenty systemu wraz ze zintegrowanym symulatorem drona. 
