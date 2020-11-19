@@ -228,11 +228,167 @@ Jedną z nich jest \texttt{pymavlink} - implementacja protokołu \textit{MavLink
 w języku Python. \texttt{pymavlink} zawiera podstawowe funkcje i obiekty konieczne
 do komunikacji z kontrolerem lotu. Biblioteka jest niskopoziomowa i nie w całości
 napisana w sposób obiektowy -- finalnie wykorzystujemy więc bibliotekę
-\texttt{dronekit-python}\cite{dronekit_python}, która rozbudowuje \texttt{pymavlink} o w pełni
-obiektowy, wysokopoziomowy interfejs do komunikacji z kontrolerem lotu. 
+\texttt{dronekit-python}\cite{dronekit_python}, która rozbudowuje \texttt{pymavlink}
+o w pełni obiektowy, wysokopoziomowy interfejs do komunikacji z kontrolerem lotu. 
 Skrypty odpowiedzialne za logikę biznesową napisane są w Pythonie.
 
 \section{Protokoły wymiany danych}
+
+\subsection{Dane telemetryczne - biblioteka \texttt{protobuf}}
+
+W trakcie lotu, drony regularnie wysyłają dane telemetryczne, identyfikując się,
+podając number lotu oraz informują o swoim obecnym położeniu a także podają stan baterii.
+Nie jest wykluczone, że w przyszłości może pojawić się potrzeba dołączenia do danych
+telemetrycznych nowych informacji, na przykład w przypadku, gdy do maszyny zostanie
+dodane nowe oprzyrządowanie, lub gdy system byłby adaptowany do obsługi innego rodzaju misji.
+
+Dodatkowo, skala projektu wymusza utrzymywanie implementacji tego samego protokołu w wielu
+różnych językach programowania -- oprogramowanie wysyłające telemetrię z drona napisane
+jest w Pythonie, interfejs webowy wyświetlający telemetrię będzie musiał być jednak napisany
+w języku JavaScript (ponieważ tylko ten język jest wspierany przez przeglądarki internetowe).
+W przyszłości może pojawić się konieczność dodania wsparcia dla innego języka programowania,
+niestety wraz z dodawaniem coraz to kolejnych danych telemetrycznych i zwiększaniem liczby
+wspieranych języków, rośnie szansa na popełnienie błędu w implementacji protokołu.
+
+Jednym z możliwych rozwiązań tego problemu jest wykorzystanie narzędzi do generowania
+kodu. Narzędzia tego typu pozwalają na zdefiniowanie standardu danych telemetrycznych
+we własnym (specyficznym dla narzędzia) języku, opisującym strukturę danych przesyłanych
+przez protokół. Następnie, narzędzia takie generują implementację protokołu w wybranych
+językach programowania. Dzięki automatycznemu generowaniu implementacji protokołu,
+programiści nie muszą dbać o spójność implementacji pomiędzy wieloma językami.
+
+Wykorzystywanym w projekcie narzędziem do generowania implementacji protokołu jest
+\texttt{protobuf} (\textit{Protocol Buffers})\cite{protocol_buffers} -- biblioteka
+napisana w firmie Google, stworzona z myślą o zapewnianiu wydajnej komunikacji w czasie
+rzeczywistym pomiędzy wieloma systemami informatycznymi. W obecnej wersji
+(\texttt{v3.14.0}), biblioteka pozwala na generowanie kodu w językach:
+
+\begin{multicols}{2}
+\begin{itemize}
+	\item Python
+	\item C++
+	\item JavaScript
+	\item Go
+	\item Java
+	\item C\#
+\end{itemize}
+\end{multicols}
+
+\begin{figure}[H]
+	\centering\small
+	\caption{
+	 Diagram przedstawiający system generowania implementacji protokołu, na podstawie
+	 narzędzia \texttt{protobuf}	
+	}
+	\label{fig}
+	\hspace{-1.2cm}
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\begin{tikzpicture}[node distance=5cm]
+	
+	\node
+		[entity](definitions)
+		{ Definicje wiadomości };
+	
+	\node
+		[trapezium, trapezium left angle=70, trapezium right angle=110, draw=black, right of = definitions, align=center](coompiler)
+		{ Kompilator \texttt{protobuf} };
+	
+	\draw [arrow] (definitions) -- (coompiler);	
+	
+	% \node
+	% 	[align=center, right of = coompiler, xshift=1.5cm](implementations)
+	% 	{ Implementacje w wybranych \\ językach programowania };
+
+	% \draw [arrow] (coompiler) -- (8.5, 0.4);	
+	% \draw [arrow] (coompiler) -- (8.6, 0);	
+	% \draw [arrow] (coompiler) -- (8.5, -0.4);
+			
+	\node
+		[align = center, right of = coompiler, yshift=1.2cm, xshift=1.5cm](implementation_a)
+		{Implementacja w języku A};
+	\draw [arrow] (coompiler) -- (implementation_a.west);	
+	
+	\node
+		[align = center, right of = coompiler, xshift=1.5cm](implementation_b)
+		{Implementacja w języku B};
+	\draw [arrow] (coompiler) -- (implementation_b);
+	
+	\node
+		[align = center, right of = coompiler, yshift=-1.2cm, xshift=1.5cm](implementation_c)
+		{Implementacja w języku C};	
+	\draw [arrow] (coompiler) -- (implementation_c.west);
+
+\end{tikzpicture}
+\end{figure}
+
+Poza automatycznym generowaniem
+kodu protokołu, \texttt{protobuf} zapewnia także:
+
+\begin{itemize}
+	\item wydajne wykorzystanie miejsca -- biblioteka upakowuje dane w formie binarnej,
+	\item kompatybilność wsteczną -- w przypadku dodania nowego typu pakietu telemetrii,
+	implementacja zachowuje spójność z poprzednimi wersjami. Dzięki temu możliwe jest
+	stopniowe wprowadzanie zmian w wielokomponentowym systemie,
+	\item automatycznie generowane mechanizmy, pozwalające na sprawdzanie, czy dane 
+	umieszczone w pakiecie telemetrii są poprawne (sprawdzanie typów, sprawdzanie
+	czy zostały wypełnione wszystkie pola pakietu),
+	\item interfejs programistyczny, umożliwiający samodzielne dopisanie wsparcia
+	nowych języków do kompilatora \texttt{protobuf}.
+\end{itemize}
+
+\begin{lstlisting}[label=list:protobuf,caption=Przykład definicji pakietu \texttt{protobuf}, basicstyle=\footnotesize\ttfamily]
+syntax = "proto3";
+
+package Telemetry;
+
+/**
+  Wiadomość zawierająca pozycję
+  maszyny w trakcie lotu
+*/
+message Position {
+  float lat = 1;
+  float lng = 2;
+  float alt = 3;
+  float heading = 4;
+}
+
+message TelemFrameHeader {
+  /* Flight metadata */
+  fixed32 timestamp = 1;
+  int32 machine_id = 2;
+  fixed32 flight_id = 3;
+
+  /**
+	Kompozycja wcześniej
+	zdefiniowanej wiadomości 
+  */
+  Position position = 4;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[label=list:protobuf,caption=Przykład wykorzystania wygenerowanej implementacji pakietów w języku Python,basicstyle=\footnotesize\ttfamily]
+# Wygenerowany moduł zawierający definicje
+# pakietów, domyślnie nosi nazwę definitions_pb2
+import definitions_pb2
+import time
+
+header = definitions_pb2.TelemFrameHeader()
+
+header.timestamp = int(time.time())
+header.machine_id = 1
+header.flight_id = 5
+
+header.position.lat = 5
+header.position.lng = 10
+header.position.alt = 15
+header.position.heading = 20
+
+# Postać binarna, gotowa do zapisania do pliku
+# lub wysłania przez protokół UDP/WebSocket
+serialised_frame = frame.SerializeToString()
+print("Serialised frame:")
+print(serialised_frame) 
+\end{lstlisting}
 
 \section{Oprogramowanie serwerowe}
 
