@@ -397,10 +397,72 @@ Wykonane przez drony zdjęcia wysyłane są na serwer webowyza pomocą bibliotek
 temat zbyt skomplikowany, aby poruszać go w pracy -- rozwiązanie wykorzystywane
 do przesyłu zdjęć zostało wybrane ze względu na prostotę instalacji i implementacji.
 
-Biblioteka \texttt{imagezmq} służy do wysyłania obrazów za pomocą protokołu \texttt{zmq}.
-% Obra
+Biblioteka \texttt{imagezmq} pozwala wysyłać obrazy za pomocą protokołu \texttt{zmq}.
+Przed wysłaniem, obrazy są kompresowane, jednak jest to kompresja ograniczająca się do 
+pojedynczego kadru -- nie zaś strumienia obrazów, jak by to miało miejsce w przypadku 
+strumieniowania filmu z lotu.
 
 \section{Oprogramowanie serwerowe}
+
+Serwer webowy jest punktem stykowym wszystkich elementów w systemie.
+Na serwerze przechowywane są wszystkie dane konieczne do działania systemu, takie jak
+trasy i harmonogramy lotów. Nadchodząca z dronów telemetria jest na 
+serwerze multipleksowana i archiwizowana, pozwalając zarówno na odbieranie jej
+w czasie rzeczywistym z poziomu aplikacji klienckiej, jak i na analizę już zakończonych lotów.
+
+\subsection{Obsługa telemetrii}
+
+System obsługujący dane telemetryczne odbiera nadchodzące z maszyn pakiety
+\texttt{protobuf}, wysyłane w ramkach UDP, następnie przekazuje je do 
+podłączonych przez WebSockety aplikacji klienckich - w ten sposób możliwy jest
+jednoczesny odbiór telemetrii na dowolnie wielu urządzeniach. Pojedyncze loty rozróżnialne
+są za pomocą unikatowej krotki \texttt{(id\_maszyny, id\_lotu)}. Gdy system zauważy,
+że pakiety telemetryczne z danego lotu przestały napływać (przez ponad 10 sekund
+nie pojawił się żaden nowy pakiet o danym \texttt{(id\_maszyny, id\_lotu)}), zapisuje
+wszystkie otrzymane w ramach tego lotu pakiety.
+
+
+\begin{figure}[H]
+	\centering\small
+	\caption{
+	 Architektura systemu obsługującego telemetrię 
+	}
+	\label{fig}
+	\hspace{-1.2cm}
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\begin{tikzpicture}[node distance=8cm]
+	
+	\node
+		[circle, draw=black](drone)
+		{ Dron };
+	
+	\node
+		[entity, right of = drone, align=center, xshift=-1.5cm](telemetry_server)
+		{ Serwer telemetrii };
+	
+	\draw [arrow] (drone) -- (telemetry_server) node[pos=0.5, below]{Ramki UDP};	
+	
+				
+	\node
+		[entity, align = center, right of = coompiler, yshift=1cm](client_1)
+		{ Aplikacja kliencka };
+	\draw [arrow] (telemetry_server) -- (client_1.west) node[pos=0.5, above, yshift=0.12cm]{WebSocket};	
+
+	
+	\node
+		[entity, align = center, right of = coompiler, yshift=-1cm](client_2)
+		{ Aplikacja kliencka };
+	\draw [arrow] (telemetry_server) -- (client_2.west)node[pos=0.5, below, yshift=-0.09cm]{WebSocket};	
+
+
+\end{tikzpicture}
+\end{figure}
+
+
+\subsection{Rest API}
+
+\subsection{Sztuczna inteligencja - analiza obrazów z lotów}
+
 
 \section{Oprogramowanie klienckie}
 
