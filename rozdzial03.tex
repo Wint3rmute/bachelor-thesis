@@ -63,7 +63,7 @@
 \begin{figure}[H]
 \centering\small
 \caption{
-	Zarys architektury systemu	
+	Zarys architektury systemu
 }
 \label{fig}
 \hspace{-1.2cm}
@@ -142,7 +142,7 @@ peryferiów takich jak czujniki oraz silniki.
 
 Spośród aktywnie rozwijanych i popularnych
 projektów \cite{autopilots_sourvey} tworzących oprogramowanie do kontrolerów
-lotu, można wyróżnić cztery najpopularniejsze inicjatywy: \\
+lotu, można wyróżnić cztery najpopularniejsze inicjatywy: 
 
 \begin{table}[htb]
 	\centering\small
@@ -176,15 +176,56 @@ lotu, można wyróżnić cztery najpopularniejsze inicjatywy: \\
 	
 \end{table}
 
+Spośród wymienionych projektów, ArduPilot posiada najbardziej rozbudowaną bazę 
+dokumentacji i instrukcji. Architektura projektu umożliwia skompilowanie projektu
+na standardowy komputer typu PC uruchomienie go w wirtualnym
+środowisku\cite{ardupilot_sitl}, co ułatwia proces testowania oprogramowania,
+które steruje dronem -- model maszyny jest symulowany, jednak warstwa komunikacji
+jest dokładnie taka sama, jak w przypadku pracy z prawdziwym dronem. Dodatkowo, projekt
+realizowany był w kole studenckim, w którym ArduPilot jest od lat wykorzystywany
+do sterowania dronami i samolotami, co przesądziło o zastosowaniu go jako
+oprogramowanie do kontrolera lotu.
 
 \subsection{Komputer pokładowy}
 
 Poza kontrolerem lotu, który zawiera jedynie oprogramowanie 
-niezbędnie do sterowania lotem i udostępniania
-strumienia telemetrii (zazwyczaj przez port szeregowy),
-na maszynie musi znaleźć się też drugi komputer -- 
-do zastosowań bardziej ogólnych: komunikacja z bardziej wysokopoziomowymi
-peryferiami, takimi jak kamera lub modem GSM.
+niezbędnie do sterowania dronem i udostępniania
+strumienia telemetriii, na maszynie musi znaleźć się też komputer pokładowy, 
+do zastosowań bardziej ogólnych. Będzie on wykorzystywany do
+obsługi wysokopoziomowych peryferiów: kamery oraz modemu GSM. Do zadań
+komputera pokładowego będzie należała także realizacja logiki biznesowej systemu
+- odczytanie harmonogramu przelotów z serwera webowego i załadowanie do kontrolera lotu
+konkretnej trasy przelotu.
+
+\subsubsection{Wymagania sprzętowe}
+
+Aby wypełniać zadania wymienione powyżej, komputer pokładowy musi
+posiadać następujące interfejsy sprzętowe:
+
+\begin{itemize}
+	\item \texttt{UART} -- do komunikacji z kontrolerem lotu,
+	\item \texttt{USB} -- do komunikacji z modemem,
+	\item \texttt{CSI} -- do komunikacji z kamerą.
+\end{itemize}
+
+Większość dostępnych na rynku komputerów klasy SBC (\textit{Single-board Computer})
+posiada powyższe interfejsy, więc wymagania sprzętowe nie są tutaj ograniczeniem.
+W projekcie został wykorzystany najpopularniejszy do zastosowań amatorskich
+komputer \textit{Raspberry Pi}. 
+
+\subsubsection{Oprogramowanie}
+
+Na komputerze pokładowym zainstalowany jest system Linux -- gwarantuje to bezproblemową
+obsługę peryferiów oraz dostępność stosu sieciowego, koniecznego do przesyłania 
+danych telemetrycznych i zdjęć.
+Dodatkowo, wymagane jest oprogramowanie dekodujące
+i enkodujące wiadomości protokołu \textit{MavLink}, który jest wykorzystywany przez 
+ArduPilota do komunikacji z zewnętrznymi systemami \cite{ardupilot_mavlink}.
+
+Infrastruktura projektu ArduPilot dostarcza gotowe biblioteki, służące do
+parsowania i tworzenia wiadomości w protokole \textit{MavLink}. Wykorzystujemy bibliotekę
+\textit{Dronekit-Python}, która rozszerza biblioteki dostarczane przez projekt
+\textit{ArduPilot} i udostępnia interfejs obiektowy do komunikacji z kontrolerem lotu.
 
 \section{Protokoły wymiany danych}
 
@@ -196,6 +237,9 @@ peryferiami, takimi jak kamera lub modem GSM.
 
 % \section{Praca z wieloma repozytoriami}
 \section{Wspólne punkty stykowe - \texttt{git submodules}}
+
+
+\section{Podsumowanie architektury}
 
 % \chapter{Metodyka pracy i zarządzania}
 % \section{Efektywne wykorzystanie narzędzi dostępnych w popularnych 
