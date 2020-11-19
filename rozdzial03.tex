@@ -385,10 +385,20 @@ header.position.heading = 20
 
 # Postać binarna, gotowa do zapisania do pliku
 # lub wysłania przez protokół UDP/WebSocket
-serialised_frame = frame.SerializeToString()
-print("Serialised frame:")
-print(serialised_frame) 
+serialised_header = header.SerializeToString()
+print("Serialised header:")
+print(serialised_header) 
 \end{lstlisting}
+
+\subsection{Zdjęcia wysyłane w trakcie lotu - biblioteka \texttt{imagezmq}}
+
+Wykonane przez drony zdjęcia wysyłane są na serwer webowyza pomocą biblioteki
+\texttt{imagezmq}. Jak zaznaczono we wstępie, wysyłanie strumienia wideo to
+temat zbyt skomplikowany, aby poruszać go w pracy -- rozwiązanie wykorzystywane
+do przesyłu zdjęć zostało wybrane ze względu na prostotę instalacji i implementacji.
+
+Biblioteka \texttt{imagezmq} służy do wysyłania obrazów za pomocą protokołu \texttt{zmq}.
+% Obra
 
 \section{Oprogramowanie serwerowe}
 
