@@ -222,10 +222,15 @@ Dodatkowo, wymagane jest oprogramowanie dekodujące
 i enkodujące wiadomości protokołu \textit{MavLink}, który jest wykorzystywany przez 
 ArduPilota do komunikacji z zewnętrznymi systemami \cite{ardupilot_mavlink}.
 
-Infrastruktura projektu ArduPilot dostarcza gotowe biblioteki, służące do
-parsowania i tworzenia wiadomości w protokole \textit{MavLink}. Wykorzystujemy bibliotekę
-\textit{Dronekit-Python}, która rozszerza biblioteki dostarczane przez projekt
-\textit{ArduPilot} i udostępnia interfejs obiektowy do komunikacji z kontrolerem lotu.
+Infrastruktura projektu ArduPilot dostarcza gotowe narzędziae do
+parsowania i tworzenia wiadomości w protokole \textit{MavLink}.
+Jedną z nich jest \texttt{pymavlink} - implementacja protokołu \textit{MavLink} 
+w języku Python. \texttt{pymavlink} zawiera podstawowe funkcje i obiekty konieczne
+do komunikacji z kontrolerem lotu. Biblioteka jest niskopoziomowa i nie w całości
+napisana w sposób obiektowy -- finalnie wykorzystujemy więc bibliotekę
+\texttt{dronekit-python}\cite{dronekit_python}, która rozbudowuje \texttt{pymavlink} o w pełni
+obiektowy, wysokopoziomowy interfejs do komunikacji z kontrolerem lotu. 
+Skrypty odpowiedzialne za logikę biznesową napisane są w Pythonie.
 
 \section{Protokoły wymiany danych}
 
