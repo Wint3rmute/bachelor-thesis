@@ -236,19 +236,36 @@ Skrypty odpowiedzialne za logikę biznesową napisane są w Pythonie.
 
 \subsection{Dane telemetryczne - biblioteka \texttt{protobuf}}
 
-W trakcie lotu, drony regularnie wysyłają dane telemetryczne, identyfikując się,
-podając number lotu oraz informują o swoim obecnym położeniu a także podają stan baterii.
-Nie jest wykluczone, że w przyszłości może pojawić się potrzeba dołączenia do danych
-telemetrycznych nowych informacji, na przykład w przypadku, gdy do maszyny zostanie
-dodane nowe oprzyrządowanie, lub gdy system byłby adaptowany do obsługi innego rodzaju misji.
+% W trakcie lotu, drony regularnie wysyłają dane telemetryczne -- 
+% informują o swoim obecnym położeniu, podają stan baterii oraz .
 
+W trakcie lotu, drony regularnie wysyłają dane telemetryczne. Każdy pakiet
+danych telemetrycznych w systemie zawiera następujące informacje:
+\begin{itemize}
+	\item unikatowy identyfikator maszyny,
+	\item identyfikator lotu (unikatowy dla każdej maszyny),
+	\item pozycję odczytaną z odbiornika GPS,
+	\item poziom naładowania baterii,
+	\item informacja czy w obecnej chwili wykonywane są zdjęcia z lotu,
+	\item timestamp w standardowym 32-bitowym formacie unixowym.
+\end{itemize}
+
+Nie jest wykluczone, że w przyszłości
+może pojawić się potrzeba dołączenia do danych telemetrycznych nowych informacji,
+na przykład w przypadku, gdy do maszyny zostanie dodane nowe oprzyrządowanie,
+lub gdy system byłby adaptowany do obsługi innego rodzaju misji.
 Dodatkowo, skala projektu wymusza utrzymywanie implementacji tego samego protokołu w wielu
 różnych językach programowania -- oprogramowanie wysyłające telemetrię z drona napisane
 jest w Pythonie, interfejs webowy wyświetlający telemetrię będzie musiał być jednak napisany
 w języku JavaScript (ponieważ tylko ten język jest wspierany przez przeglądarki internetowe).
-W przyszłości może pojawić się konieczność dodania wsparcia dla innego języka programowania,
-niestety wraz z dodawaniem coraz to kolejnych danych telemetrycznych i zwiększaniem liczby
+W~przyszłości może pojawić się konieczność dodania wsparcia dla innego języka programowania
+-- na przykład gdyby do systemu miałby być dodany kolejny komponent. Jest to potencjalne
+źródło problemów związanych z integracją między komponentami systemu, ponieważ wraz
+z~dodawaniem kolejnych danych telemetrycznych i zwiększaniem liczby
 wspieranych języków, rośnie szansa na popełnienie błędu w implementacji protokołu.
+Nawet w przypadku dwóch równolegle wspieranych języków, utrzymywanie spójnej implementacji
+protokołu nie jest zadaniem trywialnym -- szczególnie jeśli protokół wysyła dane
+w formie binarnej, co jest konieczne, gdy jednym z wymagań jest wydajne zapakowanie danych. 
 
 Jednym z możliwych rozwiązań tego problemu jest wykorzystanie narzędzi do generowania
 kodu. Narzędzia tego typu pozwalają na zdefiniowanie standardu danych telemetrycznych
@@ -267,10 +284,10 @@ rzeczywistym pomiędzy wieloma systemami informatycznymi. W obecnej wersji
 \begin{itemize}
 	\item Python
 	\item C++
-	\item JavaScript
-	\item Go
 	\item Java
 	\item C\#
+	\item JavaScript
+	\item Go
 \end{itemize}
 \end{multicols}
 
@@ -413,13 +430,13 @@ w czasie rzeczywistym z poziomu aplikacji klienckiej, jak i na analizę już zak
 \subsection{Obsługa telemetrii}
 
 System obsługujący dane telemetryczne odbiera nadchodzące z maszyn pakiety
-\texttt{protobuf}, wysyłane w ramkach UDP, następnie przekazuje je do 
-podłączonych przez WebSockety aplikacji klienckich - w ten sposób możliwy jest
-jednoczesny odbiór telemetrii na dowolnie wielu urządzeniach. Pojedyncze loty rozróżnialne
-są za pomocą unikatowej krotki \texttt{(id\_maszyny, id\_lotu)}. Gdy system zauważy,
-że pakiety telemetryczne z danego lotu przestały napływać (przez ponad 10 sekund
-nie pojawił się żaden nowy pakiet o danym \texttt{(id\_maszyny, id\_lotu)}), zapisuje
-wszystkie otrzymane w ramach tego lotu pakiety.
+\texttt{protobuf}, następnie w czasie rzeczywistym przekazuje je do aplikacji klienckich 
+-- w ten sposób możliwy jest jednoczesny odbiór telemetrii na dowolnie wielu urządzeniach.
+Poszczególne loty rozróżnialne są za pomocą unikatowej krotki
+\texttt{(id\_maszyny, id\_lotu)}. Gdy system zauważy, że pakiety telemetryczne z danego
+lotu przestały napływać (przez ponad 10 sekund nie pojawił się żaden nowy pakiet o danym
+\texttt{(id\_maszyny, id\_lotu)}), archiwizuje wszystkie otrzymane w ramach tego lotu
+pakiety, aby możliwe było przeanalizowanie ich po locie.
 
 
 \begin{figure}[H]
@@ -458,8 +475,49 @@ wszystkie otrzymane w ramach tego lotu pakiety.
 \end{tikzpicture}
 \end{figure}
 
+Pakiety pomiędzy dronem a serwerem telemetrii wysyłane są za pośrednictwem protokołu
+UDP. Decyzja umotywowana jest naturą protokołu -- jest bezpołączeniowy, dzięki
+czemu będzie odporny na potencjalne straty zasięgu, które mogą wystąpić w przypadku
+przelotu maszyny przez miejsce o słabym pokryciu siecią GSM. Wykorzystanie protokołu
+UDP zapewnia też mniejszy narzut dodatkowych danych, niż w przypadku wykorzystania
+TCP.
+
+Po odebraniu ramek UDP na serwerze telemetrii, dane telemetryczne rozsyłane są do
+wszystkich podłączonych obecnie aplikacji klienckich. Aplikacja kliencka może
+być uruchomiona na dowolnej przeglądarce internetowej, w związku z czym wykorzystanie
+niskopoziomowych protokołów nie jest tutaj możliwe - przeglądarki internetowe nie 
+obsługują ich ze względów bezpieczeństwa. Nadal wymagana jest jednak komunikacja
+w czasie rzeczywistym - w związku z czym wykorzystany został protokół \texttt{WebSocket},
+obsługiwany przez wszystkie obecnie używane przeglądarki internetowe. Protokół posiada
+swoje implementacje we wszystkich popularnych językach programowania. 
+
+Równoczesna obsługa ramek protokołu \texttt{UDP} oraz połączeniowego protokołu 
+\texttt{WebSocket}, uniemożliwia wykorzystanie wysokopoziomowego frameworka,
+napisanego z myślą o typowych projektach w obrębie technologii webowych --
+tego typu narzędzia nie zapewniają wsparcia dla niskopoziomowych protokołów,
+takich jak UDP.
+
+% Tutaj o asyncio
 
 \subsection{Rest API}
+
+System zaopatrzony jest w standardowy serwer
+\texttt{Rest API}\cite{principled_design_of_modern_web_apps},
+pozwalający na zapis i odczyt:
+
+\begin{itemize}
+	\item Tras lotów
+	\item Harmonogramów lotów
+	\item Danych telemetrycznych, odebranych w trakcie lotu
+	\item Obrazów otrzymanych w trakcie lotu
+\end{itemize}
+
+Wszystkie obecnie używane popularne języki programowania,
+posiadają przynajmniej jeden aktywnie rozwijany framework 
+służący do pisania interfejsów \texttt{Rest API}. W projekcie
+wykorzystano język Python i framework \texttt{Django},
+jednak równie dobrze sprawdzi się tutaj dowolna inna technologia
+(\texttt{Spring}, \texttt{.NET}, \texttt{Ruby on Rails}).
 
 \subsection{Sztuczna inteligencja - analiza obrazów z lotów}
 
