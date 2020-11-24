@@ -54,10 +54,84 @@ przechowywać i wersjonować kontenery. Skrypt systemu CI/CD automatycznie oznac
 kontener za pomocą nazwy brancha, na której został zbudowany. Kontenery pochodzące
 z brancha \textit{master}, uruchamiane są na serwerze produkcyjnym.
 
+\begin{lstlisting}[language=yml, label=list:ci_cd_frontend,caption={Plik konfiguracyjny \textit{Gitlab CI}, budujący aplikację kliencką }, basicstyle=\footnotesize\ttfamily]
+# Definicje zmiennych, wpływających na proces budowania
+variables:
+  # Wywołuje automatyczne pobranie submodułów,
+  # przed przystąpieniem do budowania 
+  GIT_SUBMODULE_STRATEGY: recursive
+ 
+  # Zapewnia dostęp do dockera z poziomu systemu CI/CD
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: "" 
+
+  # Specyfikuje nazwę kontenera, który zostanie zbudowany 
+  IMAGE_NAME: "registry.gitlab.com/academic-aviation-club/gavron/frontend"
+
+# Przed wykonaniem danego skryptu budującego, wykonywane jest logowanie
+# do rejestru dockera - umożliwi to w zapisanie w nim 
+# zbudowanego obrazu aplikacji. Zmienna $GITLAB_DEPLOY_TOKEN
+# przypisywana jest w ustawieniach repozytorium
+before_script:
+  - docker login -u baczek-vps -p $GITLAB_DEPLOY_TOKEN registry.gitlab.com
+
+# Zawsze budowany jest obraz testowy, który zostanie
+# później wykorzystany do testów integracyjnych
+build_testing_image:
+  stage: build
+  # Zapewnia dostęp do dockera w ramach zadania `build_testing_image`
+  services:
+    - docker:19.03.12-dind
+  image: docker:19.03.12
+  
+  # Skrypt wpierw buduje obraz dockera, zawierający aplikację.
+  # Następnie uruchamia na obrazie testy jednostkowe. Jeśli testy
+  # nie zwrócą błędu, obraz jest wysyłany do rejestru.
+  # Na obrazach w rejestrze wykonywane są testy integracyjne.
+  script:
+  - docker build -f docker/test.dockerfile -t $IMAGE_NAME:test_$CI_COMMIT_REF_NAME .
+  - docker run $IMAGE_NAME:$CI_COMMIT_REF_NAME "npm run test"
+  - docker push $IMAGE_NAME:test_$CI_COMMIT_REF_NAME
+
+# Tylko dla brancha `master`, budowany jest obraz 
+# produkcyjny, który zostanie uruchomiony na serwerze
+build_prod_image:
+  stage: build
+  services:
+	- docker:19.03.12-dind	
+  # `only` pozwala na wybranie brancha, na którym działa dany skrypt
+  only:
+    - master
+  image: docker:19.03.12
+   
+  script:
+  - docker build -f docker/Dockerfile -t $IMAGE_NAME:$CI_COMMIT_REF_NAME .
+  - docker run $IMAGE_NAME:$CI_COMMIT_REF_NAME "npm run test"
+  - docker push $IMAGE_NAME:$CI_COMMIT_REF_NAME
+\end{lstlisting}
+
+Wszystkie logi, jakie system CI/CD zbierze w trakcie budowania obrazu 
+z aplikacją są dostępne dla programisty - pozwala to odnaleźć błędy,
+które pojawiły się w procesie budowania. Systemy obsługi repozytorium
+(taki jak \textit{GitHub}, \textit{BitBucket} czy \textit{GitLab}),
+wyświetlają informacje o tym, czy dany commit przeszedł testy w systemie CI/CD:
+
+\begin{figure}[H]
+    \centering
+    \caption{ Historia zmian w kodzie w serwisie \textit{GitLab}.
+    Ikony po prawej stronie informują, czy dany commit przeszedł testy w systemie CI/CD }
+\includegraphics[width=.7\linewidth]{rys04/gitlab_ci_commit_status.png}
+    
+	\label{gitlab_ci_history}
+\end{figure}
+
+
+
+
 \begin{figure}[H]
 	\centering\small
 	\caption{
-      Proces automatycznej budowy kontenerów 
+      Diagram sekwencji, opisujący proces automatycznej budowy kontenerów 
 	}
 	\label{telemetry_backend_architecture}
 \tikzstyle{arrow} = [thick,->,>=stealth]
