@@ -665,20 +665,20 @@ submoduł z definicjami.
 \begin{forest}
 	% forest preamble: determine layout and format of tree
 	direction switch, 
-	for tree={fork sep=2em, l sep=0.5cm, s sep=0.7cm}
-	[ System inspekcji obszarów,yshift=3em,alias=LP, s sep=2.2cm
+	for tree={fork sep=2em, l sep=0.5cm, s sep=0.6cm}
+	[ ,yshift=3em,alias=LP, s sep=2.2cm
 	  [ \textbf{Dron}
 		[ Kontroler lotu 
 		  [ \texttt{ArduPilot} ]
 		]
-		[ Komputer pokładowy
+		[ Komputer pokładowy, name=flight_computer
 		 [ Raspberry Pi ]
 		 [ \texttt{Dronekit-Python} ]
 		 [ \texttt{pymavlink} ]
 		]
 	  ]
 	  [ \textbf{Serwer webowy}, %yshift=0.5cm
-		[ Serwer telemetrii
+		[ Serwer telemetrii, name=telem_server
 			[ \texttt{asyncio } ]
 			[ \texttt{UDP} ]
 			[ \texttt{WebSocket} ]
@@ -696,9 +696,15 @@ submoduł z definicjami.
 	  [ \textbf{Aplikacja kliencka}, xshift=0.1cm
 		[ \texttt{VueJS} 
 			[ \texttt{Leaflet} ]
-			[ \texttt{WebSocket} ]
+			[ \texttt{WebSocket}, name=front_websocket]
 		]
 	  ]
 	]
-  \end{forest}
+	\node
+		[entity, yshift=-17cm, xshift=4.5cm, align=center](definitions)
+		{ Definicje wiadomości \texttt{protobuf} };
+	\draw[->] (definitions) to[out=north east, in=south east] node[fill=white,pos=.6]{Submoduł} (telem_server); % leave fill=white away in order to get your image. pos=. is optional. Default would be .5
+	\draw[->] (definitions) to[out=north east, in=south east] node[fill=white,pos=.6]{Submoduł} (front_websocket); % leave fill=white away in order to get your image. pos=. is optional. Default would be .5
+	\draw[->] (definitions) to[out=west, in=south east] node[fill=white,pos=.6]{Submoduł} (flight_computer); % leave fill=white away in order to get your image. pos=. is optional. Default would be .5
+\end{forest}
 \end{figure}
