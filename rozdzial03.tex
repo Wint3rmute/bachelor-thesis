@@ -353,7 +353,7 @@ kodu protokołu, \texttt{protobuf} zapewnia także:
 	nowych języków do kompilatora \texttt{protobuf}.
 \end{itemize}
 
-\begin{lstlisting}[label=list:protobuf,caption=Przykład definicji pakietu \texttt{protobuf}, basicstyle=\footnotesize\ttfamily]
+\begin{lstlisting}[language=protobuf, label=list:protobuf,caption=Przykład definicji pakietu \texttt{protobuf}, basicstyle=\footnotesize\ttfamily]
 syntax = "proto3";
 
 package Telemetry;
@@ -371,9 +371,9 @@ message Position {
 
 message TelemFrameHeader {
   /* Flight metadata */
-  fixed32 timestamp = 1;
+  int32 timestamp = 1;
   int32 machine_id = 2;
-  fixed32 flight_id = 3;
+  int32 flight_id = 3;
 
   /**
 	Kompozycja wcześniej
@@ -383,8 +383,8 @@ message TelemFrameHeader {
 }
 \end{lstlisting}
 
-\begin{lstlisting}[label=list:protobuf,caption=Przykład wykorzystania wygenerowanej implementacji pakietów w języku Python,basicstyle=\footnotesize\ttfamily]
-# Wygenerowany moduł zawierający definicje
+\begin{lstlisting}[language=Python, label=list:protobuf,caption=Przykład wykorzystania wygenerowanej implementacji pakietów w języku Python,basicstyle=\footnotesize\ttfamily]
+# Wygenerowany moduł, zawierający definicje
 # pakietów, domyślnie nosi nazwę definitions_pb2
 import definitions_pb2
 import time
@@ -611,13 +611,82 @@ Wykorzystanym w aplikacji frameworkiem \texttt{JavaScript} jest \texttt{VueJS}.
 
 \section{Struktura repozytoriów}
 
-\subsection{Konfiguracja CI/CD}
+\subsection{Konfiguracja \textit{CI/CD}}
 
 Jak zaznaczono w zakresie pracy (\ref{intro_scope}), system zaopatrzony jest w  
 mechanizmy automatyzujące testowanie i wdrażanie nowych 
-funkcjonalności. Popularne narzędzia do ciągłej integracji 
+funkcjonalności. Popularne narzędzia do ciągłej integracji, takie jak
+\textit{Jenkins}, \textit{Gitlab CI} czy \textit{Travis CI}, wykorzystują specjalny
+plik konfiguracyjny umieszczony w repozytorium. Konfiguracja zawiera zestaw kroków,
+dzięki którym kod obecny w repozytorium zostanie automatycznie
+zbudowany, przetestowany i wdrożony. Wykorzystywanym w projekcie narzędziem \textit{CI/CD}
+jest \textit{Gitlab CI}, ktory oczekuje, że w głównym folderze repozytorium będzie 
+znajdował się specjalny plik konfiguracyjny, o nazwie \texttt{gitlab-ci.yml}. 
+Jest on obecny we wszystkich repozytoriach projektowych.
 
-% \section{Praca z wieloma repozytoriami}
+
+\begin{lstlisting}[language=yml, label=list:ci_cd_frontend,caption={Plik konfiguracyjny \textit{Gitlab CI}, budujący aplikację kliencką }, basicstyle=\footnotesize\ttfamily]
+# Definicje zmiennych, wpływających na proces budowania
+variables:
+  # Wywołuje automatyczne pobranie submodułów,
+  # przed przystąpieniem do budowania 
+  GIT_SUBMODULE_STRATEGY: recursive
+ 
+  # Zapewnia dostęp do dockera z poziomu systemu CI/CD
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: "" 
+
+  # Specyfikuje nazwę kontenera, który zostanie zbudowany 
+  IMAGE_NAME: "registry.gitlab.com/academic-aviation-club/gavron/frontend"
+
+# Przed wykonaniem danego skryptu budującego, wykonywane jest logowanie
+# do rejestru dockera - umożliwi to w zapisanie w nim 
+# zbudowanego obrazu aplikacji. Zmienna $GITLAB_DEPLOY_TOKEN
+# przypisywana jest w ustawieniach repozytorium
+before_script:
+  - docker login -u baczek-vps -p $GITLAB_DEPLOY_TOKEN registry.gitlab.com
+
+# Zawsze budowany jest obraz testowy, który zostanie
+# później wykorzystany do testów integracyjnych
+build_testing_image:
+  stage: build
+  # Zapewnia dostęp do dockera w ramach zadania `build_testing_image`
+  services:
+    - docker:19.03.12-dind
+  image: docker:19.03.12
+  
+  # Skrypt wpierw buduje obraz dockera, zawierający aplikację.
+  # Następnie uruchamia na obrazie testy jednostkowe. Jeśli testy
+  # nie zwrócą błędu, obraz jest wysyłany do rejestru.
+  # Na obrazach w rejestrze wykonywane są testy integracyjne.
+  script:
+  - docker build -f docker/test.dockerfile -t $IMAGE_NAME:test_$CI_COMMIT_REF_NAME .
+  - docker run $IMAGE_NAME:$CI_COMMIT_REF_NAME "npm run test"
+  - docker push $IMAGE_NAME:test_$CI_COMMIT_REF_NAME
+
+# Tylko dla brancha `master`, budowany jest obraz 
+# produkcyjny, który zostanie uruchomiony na serwerze
+build_prod_image:
+  stage: build
+  services:
+	- docker:19.03.12-dind	
+  # `only` pozwala na wybranie brancha, na którym działa dany skrypt
+  only:
+    - master
+  image: docker:19.03.12
+
+   
+  script:
+  - docker build -f docker/Dockerfile -t $IMAGE_NAME:$CI_COMMIT_REF_NAME .
+  - docker run $IMAGE_NAME:$CI_COMMIT_REF_NAME "npm run test"
+  - docker push $IMAGE_NAME:$CI_COMMIT_REF_NAME
+
+
+\end{lstlisting}
+
+
+
+
 \subsection{Wspólne punkty stykowe - \texttt{git submodules}}
 
 
