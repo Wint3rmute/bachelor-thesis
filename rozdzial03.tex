@@ -476,8 +476,8 @@ pakiety, aby możliwe było przeanalizowanie ich po locie.
 \end{figure}
 
 Pakiety pomiędzy dronem a serwerem telemetrii przesyłane są za pośrednictwem protokołu
-UDP. Został wybrany, ponieważ jest bezpołączeniowy, dzięki czemu będzie odporny na
-potencjalne straty zasięgu. które mogą wystąpić w przypadku
+UDP. Został wybrany, ponieważ jest protokołem bezpołączeniowym -- będzie odporny na
+potencjalne straty zasięgu, które mogą wystąpić w przypadku
 przelotu maszyny przez miejsce o słabym pokryciu siecią GSM. Wykorzystanie protokołu
 UDP zapewnia też mniejszy narzut dodatkowych danych, niż w przypadku wykorzystania
 TCP.
@@ -487,17 +487,48 @@ wszystkich podłączonych obecnie aplikacji klienckich. Aplikacja kliencka może
 być uruchomiona na dowolnej przeglądarce internetowej, w związku z czym wykorzystanie
 niskopoziomowych protokołów nie jest tutaj możliwe - przeglądarki internetowe nie 
 obsługują ich ze względów bezpieczeństwa. Nadal wymagana jest jednak komunikacja
-w czasie rzeczywistym - w związku z czym wykorzystany został protokół \texttt{WebSocket},
-obsługiwany przez wszystkie obecnie używane przeglądarki internetowe. Protokół posiada
-swoje implementacje we wszystkich popularnych językach programowania. 
+w czasie rzeczywistym. 
+Aby spełnić te wymagania, wykorzystany został protokół \texttt{WebSocket}\cite{websocket},
+obsługiwany przez wszystkie powszechnie używane przeglądarki internetowe.
 
-Równoczesna obsługa ramek protokołu \texttt{UDP} oraz połączeniowego protokołu 
+System obsługujący telemetrię będzie musiał równolegle obsługiwać nadchodzące
+ramki protokołu \texttt{UDP} oraz aplikacje klienckie, połączone za pośrednictwem protokołu 
 \texttt{WebSocket}, uniemożliwia wykorzystanie wysokopoziomowego frameworka,
 napisanego z myślą o typowych projektach w obrębie technologii webowych --
 tego typu narzędzia nie zapewniają wsparcia dla niskopoziomowych protokołów,
 takich jak UDP.
 
-% Tutaj o asyncio
+W projekcie wykorzystana została biblioteka \texttt{asyncio} -- służąca między innymi
+do pisania kodu odpowiedzialnego za komunikację sieciową\cite{asyncio}.
+\texttt{Asyncio} pozwala na łatwe zinterfejsowanie ze sobą asynchronicznie działających
+korutyn, jednocześnie wykonujących różne operacje sieciowe. 
+
+\begin{figure}[H]
+	\centering\small
+	\caption{
+		Zadania wykonywane równolegle wewnątrz systemu obsługi telemetrii.
+		Wspólny interfejs obsługi korutyn oraz wymianę danych pomiędzy
+		zadaniami zapewnia biblioteka \texttt{asyncio}.	
+	}
+	\label{fig}
+
+
+\begin{center}
+\begin{tikzpicture}
+  \begin{scope}[blend group = soft light]
+    \fill[red!30!white]   ( 90:3) circle (3.5);
+    \fill[blue!30!white]  (210:3) circle (3.5);
+    \fill[orange!30!white]  (330:3) circle (3.5);
+  \end{scope}
+  \node at ( 90:3 ) [align=center] {\small Odbiór telemetrii \\ w pakietach \texttt{UDP}};
+  \node at ( 210:3) [align=center]{ \small Utrzymywanie \\ \small połączeń \texttt{WebSocket}};
+  \node at ( 330:3) [align=center]  {\small Multipleksowanie \\ \small telemetrii};
+  \node[align=center] { \textbf{Wspólna} \\ \textbf{pętla zdarzeń} \\ \textbf{\texttt{asyncio}}};
+\end{tikzpicture}
+\end{center}
+\end{figure}
+
+% \texttt{Asyncio} pozwala na zinterfejsowanie ze sobą 
 
 \subsection{Rest API}
 
@@ -521,8 +552,62 @@ jednak równie dobrze sprawdzi się tutaj dowolna inna technologia
 
 \subsection{Sztuczna inteligencja - analiza obrazów z lotów}
 
+Ostatnim komponentem tworzącym oprogramowanie serwerowe jest moduł sztucznej inteligencji,
+rozpoznający obiekty na zdjęciach wykonanych w trakcie lotu. Zakres pracy nie obejmuje
+tematów związanych ze szczegółami działania sztucznej inteligencji -- implementacja
+ogranicza się do wykorzystania gotowego rozwiązania i zintegrowania
+go z pozostałymi komponentami systemu (w szczególności z systemem
+odbierającym zdjęcia z lotu).
+
+Do rozpoznawania obrazów wykorzystany został otwartoźródłowy system
+YOLO - \textit{You Only Look Once} \cite{yolo}. W ramach integracji, system został
+skompilowany do formy biblioteki współdzielonej i podłączony do skryptu
+w języku \textit{Python}. Skrypt monitoruje określony folder w systemie plików
+i rozpoznaje zdjęcia, które się w nim pojawią.
+
+% TODO: można dodać dialogi
+
+\begin{figure}[H]
+	\centering
+\includegraphics[width=.7\linewidth]{rys03/rozpoznane_yolo.jpg}
+	\caption{ Zdjęcie wykonane w czasie lotów testowych. System rozpoznał na nim 2 osoby.}
+	\label{fig:stronaTytulowa}
+\end{figure}
 
 \section{Oprogramowanie klienckie}
+
+Aplikacja kliencka pozwala na wykonanie następujących działań:
+
+\begin{itemize}
+	\item zaplanowanie przelotu:
+	\begin{itemize}
+		\item zaplanowanie trasy,
+		\item wybór prędkości, z jaką mają być pokonywane konkretne segmenty trasy,
+		\item wybór segmentów trasy, podczas których mają być wykonywane zdjęcia,
+		\item zaplanowanie godziny wylotu.
+	\end{itemize}
+	\item podgląd telemetrii w czasie lotu,
+	\item przegląd danych teletrycznych zapisanych z poprzednich lotów:
+	\begin{itemize}
+		\item podlgąd trasy pokonanej przez maszynę,
+		\item podgląd wykonanych przez maszynę zdjęć,
+				wraz z informacjami o rozpoznanych obiektach,
+	\end{itemize} 
+\end{itemize}
+
+Najbardziej wymagającym z wymagań jest obsługa mapy, która będzie obecna we wszystkich
+widokach aplikacji. W systemie została wykorzystana biblioteka \texttt{Leaflet}, 
+służąca do wizualizowania danych na mapach. Biblioteka napisana jest z myślą o technologiach 
+webowych, aplikacja kliencka została więc zrealizowana jako aplikacja webowa.
+Wykorzystanym w aplikacji frameworkiem \texttt{JavaScript} jest \texttt{VueJS}. 
+
+\begin{figure}[H]
+	\centering
+\includegraphics[width=\linewidth]{rys03/flight_planner.png}
+	\caption{ Widok aplikacji klienckiej, odpowiedzialny za planowanie tras. }
+	\label{fig:stronaTytulowa}
+\end{figure}
+
 
 \section{Struktura repozytoriów}
 
