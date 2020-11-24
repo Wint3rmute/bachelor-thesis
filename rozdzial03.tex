@@ -684,14 +684,76 @@ build_prod_image:
 
 \subsection{Wspólne punkty stykowe - \texttt{git submodules}}
 
-Komunikacja pomiędzy komponentami systemu, realizowana jest za pośrednictwem
+Komunikacja pomiędzy komponentami systemu realizowana jest za pośrednictwem
 pakietów \texttt{Protobuf}, opisanych w rozdziale \ref{protobuf_chapter}.
-Każde z repozytoriów musi posiadać pliki z definicjami pakietów,
-wygenerowane za pomocą kompilatora \texttt{Protobuf}, 
+Każde z repozytoriów musi więc posiadać pliki, zawierające definicje pakietów,
+wygenerowane za pomocą kompilatora \texttt{Protobuf}. 
+
+Możliwe jest utrzymywanie kopii definicji pakietów w każdym projektowym repozytorium,
+jednak takie rozwiązanie szybko doprowadzi do konieczności wykonywania dużej ilości
+ręcznych poprawek w kodzie, za każdym razem gdy zmieni się standard pakietów. 
+Nawet przy niewielkiej liczbie repozytoriów, łatwo tu o błąd programisty. 
+
+Napisanie biblioteki z definicjami pakietów nie jest tutaj odpowiednim rozwiązaniem, 
+ponieważ biblioteki pisane są zazwyczaj pod konkretny język programowania. Komponenty
+systemu, które przetwarzają telemetrię są napisane w językach \textit{Python} i 
+\textit{TypeScript} -- nie jest więc możliwe napisanie dla nich wspólnej biblioteki.
+
+System kontroli wersji \texttt{git} zawiera funkcjonalność
+\texttt{git submodules}\cite{git_submodules}, która została wykorzystana
+w projekcie do rozwiązania problemu wspólnych definicji pakietów.
+
+Definicje pakietów, wraz z wygenerowanymi implementacjami w wielu językach, utrzymywane 
+są w osobnym repozytorium, które pobierane jest jako submoduł dla pozostałych projektów.
+Dzięki temu, możliwa jest aktualizacja repozytorium z definicjami pakietów, a następnie
+pobranie nowych definicji do wszystkich innych  repozytoriów, które wykorzystują
+submoduł z definicjami. 
 
 
-\section{Podsumowanie architektury}
 
-% \chapter{Metodyka pracy i zarządzania}
-% \section{Efektywne wykorzystanie narzędzi dostępnych w popularnych 
-% systemach kontroli wersji}
+\section{Architektura systemu - podsumowanie}
+
+% \begin{figure}[H]
+% \centering\small
+% \caption{
+% 	Architektura systemu - wykorzystane technologie
+% }
+% \label{technologies_diagram}
+% \hspace{-1.2cm}
+% \begin{forest}
+% 	% forest preamble: determine layout and format of tree
+% 	direction switch, 
+% 	for tree={fork sep=2em} %, l sep=0.5cm, s sep=0.4cm}
+% 	[ System inspekcji obszarów,yshift=3em,alias=LP,
+% 	  [ \textbf{Dron}
+% 		[ Kontroler lotu 
+% 		  [ ArduPilot ]
+% 		]
+% 		[ Komputer pokładowy
+% 		 [ Raspberry Pi ]
+% 		 [ \texttt{Dronekit-Python} ]
+% 		 [ \texttt{pymavlink} ]
+% 		]
+% 	  ]
+% 	  [ \textbf{Serwer webowy}, %yshift=0.5cm
+% 		[ Serwer telemetrii
+% 			[ \texttt{asyncio } ]
+% 			[ \texttt{UDP} ]
+% 			[ \texttt{WebSocket} ]
+% 		]
+% 		[ Rest API: odczyt i zapis
+% 		  [ \texttt{django} ]
+% 		]
+% 		[ Sztuczna inteligencja
+% 		  [ \texttt{yolo} ]
+% 		]
+% 	  ]
+% 	  [ \textbf{Aplikacja kliencka}, xshift=0.1cm
+% 		[ \texttt{VueJS} 
+% 			[ \texttt{Leaflet} ]
+% 			[ \texttt{WebSocket} ]
+% 		]
+% 	  ]
+% 	]
+%   \end{forest}
+% \end{figure}
