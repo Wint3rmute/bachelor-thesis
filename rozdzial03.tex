@@ -234,7 +234,7 @@ Skrypty odpowiedzialne za logikę biznesową napisane są w Pythonie.
 
 \section{Protokoły wymiany danych}
 
-\subsection{Dane telemetryczne - biblioteka \texttt{protobuf}}
+\subsection{Dane telemetryczne - biblioteka \texttt{protobuf}} \label{protobuf_chapter}
 
 % W trakcie lotu, drony regularnie wysyłają dane telemetryczne -- 
 % informują o swoim obecnym położeniu, podają stan baterii oraz .
@@ -674,20 +674,20 @@ build_prod_image:
   only:
     - master
   image: docker:19.03.12
-
    
   script:
   - docker build -f docker/Dockerfile -t $IMAGE_NAME:$CI_COMMIT_REF_NAME .
   - docker run $IMAGE_NAME:$CI_COMMIT_REF_NAME "npm run test"
   - docker push $IMAGE_NAME:$CI_COMMIT_REF_NAME
-
-
 \end{lstlisting}
 
 
-
-
 \subsection{Wspólne punkty stykowe - \texttt{git submodules}}
+
+Komunikacja pomiędzy komponentami systemu, realizowana jest za pośrednictwem
+pakietów \texttt{Protobuf}, opisanych w rozdziale \ref{protobuf_chapter}.
+Każde z repozytoriów musi posiadać pliki z definicjami pakietów,
+wygenerowane za pomocą kompilatora \texttt{Protobuf}, 
 
 
 \section{Podsumowanie architektury}
