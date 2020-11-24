@@ -1,7 +1,147 @@
 \chapter{Wdrażanie systemu}
 
-\section{Konteneryzacja}
-\section{Automatyczne budowanie projektów}
-\section{Automatyczne aktualizacje kontenerów}
-% \section{Automatyczne wdrażanie statycznego kodu}
+% Napisać jeszcze raz, wtf
+Jak zaznaczono w zakresie pracy (\ref{intro_scope}), celem pracy jest
+budowa systemu o architekturze, która pozwoli na automatyzację wdrożeń.
+W tym rozdziale opisane są technologie i praktyki, które zostały 
+zastosowane, aby zautomatyzować proces wdrażania systemu oraz proces
+dodawania do systemu nowych funkcjonalności.
 
+\section{Konteneryzacja}
+
+Wszystkie elementy systemu docelowo są uruchamiane w kontenerach.
+Wykorzystanym systemem konteneryzacji jest \texttt{docker}\cite{docker}.
+% można dopisać w rozdziale03 że jest Dockerfile w każdym repo
+Konteneryzacja ułatwia proces przenoszenia oprogramowania 
+z maszyny na maszynę. Pozwala też na pełne zautomatyzowanie
+procesu budowania oprogramowania i instalacji koniecznych
+składników środowiska uruchomieniowego. Konteneryzacja
+aplikacji wymusza na programiście napisanie skryptu, w wyniku
+którego w kontenerze zostanie zainstalowane wszystkie konieczne 
+oprogramowanie.
+
+\subsection{Zachowywanie stanu systemu plików w kontenerze}
+
+Ważną różnicą, jaka odróżnia kontenery od aplikacji zainstalowanych
+w sposób konwencjonalny, jest \textbf{bezstanowość}. Jeśli komputer,
+na którym działają kontenery zostanie zresetowany, bądź kontener zostanie
+usunięty i utworzony na nowo (na przykład w celu aktualizacji), system
+plików w kontenerze zostanie zresetowany do stanu, w jakim znajdował się 
+w momencie uruchomienia (takim, jaki jest zapisany w \textit{obrazie kontenera}).
+
+\texttt{Docker} pozwala rozwiązać ten problem za pomocą mechanizmu zwanego 
+woluminami (\textit{docker volumes})\cite{docker_volumes}.
+Za pomocą woluminów, dowolny fragment systemu
+plików kontenera może zostać zmapowany do nieulotnej pamięci komputera, na którym 
+działa kontener. W ten sposób zapewnia się persystencję plików baz danych, czy innych
+plików, które mają być przetrzymywane przez aplikację.\\ % newline CAN be removed
+
+\textit{Uwaga:} nie wszystkie kontenery potrzebują zachowywać pliki - kontener
+odpowiedzialny za hostowanie statycznej strony internetowej nie potrzebuje
+zapamiętywać zmian w plikach strony. 
+
+\section{Automatyczne budowanie komponentów systemu}
+
+Jak wspomniano w rozdziale \ref{repo_structure}, poświęconym strukturze repozytoriów,
+wszystkie repozytoria zawierają plik \texttt{.gitlab-ci.yml}. Plik ten definiuje skrypty,
+jakie wykona system \texttt{CI/CD}, gdy do repozytorium zostanie dodany nowy kod.
+
+Ponieważ konteneryzacja pozwala na zupełne zautomatyzowanie procesu budowania,
+skrypty w systemie \texttt{CI/CD} są w stanie samodzielnie zbudować kontener,
+zawierający konkretny komponent systemu. Następnie, kontener wysyłany jest
+do \textit{rejestru kontenerów} -- specjalnego repozytorium, w którym można
+przechowywać i wersjonować kontenery. Skrypt systemu CI/CD automatycznie oznacza
+kontener za pomocą nazwy brancha, na której został zbudowany. Kontenery pochodzące
+z brancha \textit{master}, uruchamiane są na serwerze produkcyjnym.
+
+\begin{figure}[H]
+	\centering\small
+	\caption{
+      Proces automatycznej budowy kontenerów 
+	}
+	\label{telemetry_backend_architecture}
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\begin{tikzpicture}[node distance=4cm,auto,>=stealth']
+    
+    \node[] (programmer) {Programista};
+    \node[right of = programmer] (repo) {Repozytorium};
+    \node[right of = repo] (ci_cd) {System \texttt{CI/CD}};
+    \node[right of = ci_cd] (registry) {Rejestr kontenerów};
+
+    \node[below of = programmer, node distance=6cm] (programmer_ground) {};
+    \node[below of = repo, node distance=6cm] (repo_ground) {};
+    \node[below of = ci_cd, node distance=6cm] (ci_cd_ground) {};
+    \node[below of = registry, node distance=6cm] (registry_ground) {};
+    %
+    \draw (repo) -- (repo_ground);
+    \draw (programmer) -- (programmer_ground);
+    \draw (ci_cd) -- (ci_cd_ground);
+    \draw (registry) -- (registry_ground);
+
+
+    \draw[->] ($(programmer)!0.20!(programmer_ground)$) -- node[above,scale=1,midway]{Nowy \textit{commit}} ($(repo)!0.20!(repo_ground)$);
+    % \draw[<-] ($(programmer)!0.35!(programmer_ground)$) -- node[above,scale=1,midway]{Text} ($(repo)!0.35!(repo_ground)$);
+    \draw[->,align=center] ($(repo)!0.35!(repo_ground)$) -- node[above,scale=1,midway]{Zainicjowanie procesu\\budowania} ($(ci_cd)!0.35!(ci_cd_ground)$);
+
+    \draw[->,align=center] ($(ci_cd)!0.60!(ci_cd_ground)$) -- node[above,scale=1,midway]{ Wysłanie zbudowanego \\ i przetestowanego \\ konteneru do rejestru} ($(registry)!0.60!(registry_ground)$);
+    
+    \draw[<-,align=center] ($(repo)!0.70!(repo_ground)$) -- node[above,scale=1,midway]{Status i logi \\z systemu \texttt{CI/CD}} ($(ci_cd)!0.70!(ci_cd_ground)$);
+    \draw[<-,align=center] ($(programmer)!0.90!(programmer_ground)$) -- node[above,scale=1,midway]{Informacja, czy \\ \textit{commit} przeszedł testy} ($(repo)!0.90!(repo_ground)$);
+\end{tikzpicture}
+
+\end{figure}
+
+\section{Automatyczne aktualizacje kontenerów}
+
+Pobranie i uruchomienie kontenera, zawierającego dany komponent systemu
+nie wymaga przechodzenia przez proces instalacji czy konfiguracji - wystarczy
+pobrać obraz kontenera z rejestru i uruchomić go:
+
+\begin{lstlisting}[language=bash, label=list:docker_clone_run_example,caption={Pobranie i uruchomienie obrazu dockera, zawierającego aplikację}, basicstyle=\footnotesize\ttfamily]
+# Zapisane jako zmienna, aby poprawić czytelność przykładu 
+IMAGE=registry.gitlab.com/academic-aviation-club/gavron/frontend:master
+
+docker pull $IMAGE
+docker run \
+    -d \ # detach: kontener działa w tle, nie wysyła logów do terminala
+    -p 5000:5000 \ # mapuje port 5000 z kontenera do portu na komputerze  
+    --name frontend \ # Nadaje nazwę uruchomionemu kontenerowi
+    $IMAGE # Nazwa obrazu do uruchomienia 
+\end{lstlisting}
+
+W przypadku, gdy na serwerze działa już kontener z aplikacją, należy
+pobrać nowy obraz kontenera, usunąc obecnie działający kontener i uruchomić
+nowy obraz:
+
+\begin{lstlisting}[language=bash, label=list:docker_update_container,caption={Aktualizacja kontenerów}, basicstyle=\footnotesize\ttfamily]
+IMAGE=registry.gitlab.com/academic-aviation-club/gavron/frontend:master
+
+docker pull $IMAGE # Pobranie najnowszej wersji kontenera
+
+# Nazwa kontenera nadana w poprzednim przykładzie, za pomocą --name
+docker stop frontend
+
+# Usunięcie kontenera w starej wersji (jego stanu, zmian w systemie plików)
+docker rm frontend
+
+# Tak samo jak w przykładzie powyżej
+docker run \
+    -d \ # detach: kontener działa w tle, nie wysyła logów do terminala
+    -p 5000:5000 \ # mapuje port 5000 z kontenera do portu na komputerze  
+    --name frontend \ # Nadaje nazwę uruchomionemu kontenerowi
+    $CONTAINER # Nazwa kontenera do uruchomienia 
+\end{lstlisting}
+
+W przypadku wielu równolegle działających kontenerów, ręczna aktualizacja 
+każdej działającej aplikacji jest zadaniem niepotrzebnie czasochłonnym.
+Wprowadza też dodatkowy punkt, w którym może zajść pomyłka -- na przykład
+pominięcie jednego z kontenerów przy aktualizacji.
+
+Projekt wykorzystuje narzędzie \texttt{Ouroboros} do automatycznej aktualizacji
+uruchomionych na serwerze kontenerów. \texttt{Ouroboros} w regularnych odstępach
+czasu sprawdza, czy uruchomione na serwerze kontenery nie wymagają aktualizacji.
+Jeśli w rejestrze dostępna jest nowa wersja obrazu kontenera, pobiera ją i zastępuje
+nią obecnie działający kontener.
+
+\section{Orkiestracja systemu złożonego z wielu kontenerów - \texttt{docker-compose}}
