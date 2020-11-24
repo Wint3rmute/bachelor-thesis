@@ -65,7 +65,7 @@
 \caption{
 	Zarys architektury systemu
 }
-\label{fig}
+\label{top_level_architecture_diagram}
 \hspace{-1.2cm}
 \begin{forest}
 	% forest preamble: determine layout and format of tree
@@ -150,7 +150,7 @@ lotu, można wyróżnić cztery najpopularniejsze inicjatywy:
 		Najpopularniejsze otwarte projekty
 		oprogramowania obsługującego kontrolery lotu
 	}
-	\label{tab}
+	\label{flight_controllers_comparison}
 
 	\begin{tabularx}{0.87\textwidth}
 	{ 
@@ -297,7 +297,7 @@ rzeczywistym pomiędzy wieloma systemami informatycznymi. W obecnej wersji
 	 Diagram przedstawiający system generowania implementacji protokołu, na podstawie
 	 narzędzia \texttt{protobuf}	
 	}
-	\label{fig}
+	\label{protobuf_generation}
 	\hspace{-1.2cm}
 \tikzstyle{arrow} = [thick,->,>=stealth]
 \begin{tikzpicture}[node distance=5cm]
@@ -444,7 +444,7 @@ pakiety, aby możliwe było przeanalizowanie ich po locie.
 	\caption{
 	 Architektura systemu obsługującego telemetrię 
 	}
-	\label{fig}
+	\label{telemetry_backend_architecture}
 	\hspace{-1.2cm}
 \tikzstyle{arrow} = [thick,->,>=stealth]
 \begin{tikzpicture}[node distance=8cm]
@@ -510,7 +510,7 @@ korutyn, jednocześnie wykonujących różne operacje sieciowe.
 		Wspólny interfejs obsługi korutyn oraz wymianę danych pomiędzy
 		zadaniami zapewnia biblioteka \texttt{asyncio}.	
 	}
-	\label{fig}
+	\label{telemetry_backend_asyncio}
 
 
 \begin{center}
@@ -571,7 +571,7 @@ i rozpoznaje zdjęcia, które się w nim pojawią.
 	\centering
 \includegraphics[width=.7\linewidth]{rys03/rozpoznane_yolo.jpg}
 	\caption{ Zdjęcie wykonane w czasie lotów testowych. System rozpoznał na nim 2 osoby.}
-	\label{fig:stronaTytulowa}
+	\label{yolo_example}
 \end{figure}
 
 \section{Oprogramowanie klienckie}
@@ -605,14 +605,20 @@ Wykorzystanym w aplikacji frameworkiem \texttt{JavaScript} jest \texttt{VueJS}.
 	\centering
 \includegraphics[width=\linewidth]{rys03/flight_planner.png}
 	\caption{ Widok aplikacji klienckiej, odpowiedzialny za planowanie tras. }
-	\label{fig:stronaTytulowa}
+	\label{frontend_flight_planner}
 \end{figure}
 
 
 \section{Struktura repozytoriów}
 
+\subsection{Konfiguracja CI/CD}
+
+Jak zaznaczono w zakresie pracy (\ref{intro_scope}), system zaopatrzony jest w  
+mechanizmy automatyzujące testowanie i wdrażanie nowych 
+funkcjonalności. Popularne narzędzia do ciągłej integracji 
+
 % \section{Praca z wieloma repozytoriami}
-\section{Wspólne punkty stykowe - \texttt{git submodules}}
+\subsection{Wspólne punkty stykowe - \texttt{git submodules}}
 
 
 \section{Podsumowanie architektury}
