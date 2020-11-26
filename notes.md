@@ -2,7 +2,11 @@
 
 `https://www.bu.edu/math/files/2013/08/tikzpgfmanual.pdf`
 
-- Jak opisywać pracę ludzi z klubu
+# Pytania
+
+- Jak robić listingi? Mówić jaki to język/składnia? Przykładowo: gitlabowy YML/linuxowy bash
+
+- Jak opisywać pracę ludzi z klubu?
 
 Opisywać, powiedzieć czemu i co we wstępie, podlinkować stronę
 i czym się zajmują - i że to prowadzi do napisania tego systemu
