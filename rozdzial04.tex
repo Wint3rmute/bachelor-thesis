@@ -20,7 +20,7 @@ aplikacji wymusza na programiście napisanie skryptu, w wyniku
 którego w kontenerze zostanie zainstalowane wszystkie konieczne 
 oprogramowanie.
 
-\subsection{Zachowywanie stanu systemu plików w kontenerze}
+\subsection{Zachowywanie stanu systemu plików w kontenerze} \label{volumes}
 
 Ważną różnicą, jaka odróżnia kontenery od aplikacji zainstalowanych
 w sposób konwencjonalny, jest \textbf{bezstanowość}. Jeśli komputer,
@@ -219,3 +219,37 @@ Jeśli w rejestrze dostępna jest nowa wersja obrazu kontenera, pobiera ją i za
 nią obecnie działający kontener.
 
 \section{Orkiestracja systemu złożonego z wielu kontenerów - \texttt{docker-compose}}
+
+Finalnie, infrastruktura internetowa systemu składa się z sześciu
+jednocześnie działających kontenerów dockerowych:
+
+\begin{enumerate}
+  \item Kontener serwujący stronę internetową z aplikacją kliencką,
+  \item Kontener z serwerem API,
+  \item Kontener z serwerem \texttt{imagezmq},
+  \item Kontener z systemem telemetrii,
+  \item Kontener z programem \texttt{ouroboros},
+  \item Kontener z systemem do rozpoznawania obrazów. 
+\end{enumerate}
+
+\noindent
+Każdy kontener musi zostać odpowiednio skonfigurowany w momencie uruchamiania,
+konfiguracja obejmuje:
+
+\begin{itemize}
+  \item Przypisanie limitów zasobów (n.p. maksymalny procent wykorzystania procesora)
+  \item Udostępnienie portów serwera, które może wykorzystywać dany kontener,
+  \item Przypisanie woluminów systemu plików serwera, w celu zapewnienia persystencji
+        danych, zapisywanych przez kontener (opisane w rozdziale \ref{volumes}),
+  \item Zdefiniowanie reguł automatycznego restartu kontenera (na przykład gdyby proces
+        działający w kontenerze uległ awarii),
+  \item Określenie zmiennych środowiskowych, które mogą wpływać na zachowanie się
+        procesów wewnątrz kontenera (przykładowo, kontener \texttt{ouroboros} pozwala
+        za pomocą zmiennych środowiskowych określić, jak często mają być sprawdzane
+        aktualizacje kontenerów).
+\end{itemize}
+
+Narzędzie \texttt{docker-compose} pozwala zebrać całą konfigurację kontenerów do 
+jednego pliku konfiguracyjnego \cite{docker_compose}. W ten sposób, po uzyskaniu
+dostępu do rejestru z kontenerami, zawierającymi komponenty systemu, możliwe jest
+natychmiastowe pobranie i uruchomienie systemu z właściwą konfiguracją kontenerów.
