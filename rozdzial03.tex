@@ -448,18 +448,11 @@ takich jak UDP.
 W projekcie wykorzystana została biblioteka \texttt{asyncio} -- służąca między innymi
 do pisania kodu odpowiedzialnego za komunikację sieciową\cite{asyncio}.
 \texttt{Asyncio} pozwala na łatwe zinterfejsowanie ze sobą asynchronicznie działających
-korutyn, jednocześnie wykonujących różne operacje sieciowe. 
+korutyn, jednocześnie wykonujących różne operacje sieciowe. Diagram \ref{telemetry_backend_asyncio}
+ilustruje zadania wykonywane przez serwer telemetrii, za pośrednictwem~\texttt{asyncio}. 
 
 \begin{figure}[H]
 	\centering\small
-	\caption{
-		Zadania wykonywane równolegle wewnątrz systemu obsługi telemetrii.
-		Wspólny interfejs obsługi korutyn oraz wymianę danych pomiędzy
-		zadaniami zapewnia biblioteka \texttt{asyncio}.	
-	}
-	\label{telemetry_backend_asyncio}
-
-
 \begin{center}
 \begin{tikzpicture}
   \begin{scope}[blend group = soft light]
@@ -473,6 +466,12 @@ korutyn, jednocześnie wykonujących różne operacje sieciowe.
   \node[align=center] { \textbf{Wspólna} \\ \textbf{pętla zdarzeń} \\ \textbf{\texttt{asyncio}}};
 \end{tikzpicture}
 \end{center}
+\caption{
+		Zadania wykonywane równolegle wewnątrz systemu obsługi telemetrii.
+		Wspólny interfejs obsługi korutyn oraz wymianę danych pomiędzy
+		zadaniami zapewnia biblioteka \texttt{asyncio}.	
+	}
+	\label{telemetry_backend_asyncio}
 \end{figure}
 
 % \texttt{Asyncio} pozwala na zinterfejsowanie ze sobą 
@@ -562,7 +561,7 @@ frameworkiem \texttt{JavaScript} jest~\texttt{VueJS}.
 \section{Struktura repozytoriów} \label{repo_structure}
 
 \subsection{Konfiguracja \textit{CI/CD}}
-
+i
 Jak zaznaczono w celu pracy (\ref{intro_objective}), system zaopatrzony został w  
 mechanizmy automatyzujące testowanie i wdrażanie nowych 
 funkcjonalności. Popularne narzędzia do ciągłej integracji, takie jak
