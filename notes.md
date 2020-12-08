@@ -57,8 +57,6 @@ Implementacja systemu zarządzania - CI/CD
 Testy z wykorzystaniem CI/CD
 
 
-
-
 ## Cel pracy
 
 Prototyp systemu monitorującego -> system inspekcji obszarów, zgadza się z
@@ -79,6 +77,4 @@ Wracać do tematu pracy w treści, jak Haidt
 ## Wdrażanie
 
 Pokazać kontekst CI/CD
-
-
 
