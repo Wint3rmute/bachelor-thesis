@@ -1,5 +1,37 @@
 \chapter{Wymagania funkcjonalne systemu} \label{chapter_functional_requirements}
 
+\begin{figure}[H]
+\centering\small
+\label{top_level_use_case_diagram}
+\begin{tikzpicture}
+\begin{umlsystem}[x=4]{System inspekcji obszarów}    
+
+    \umlusecase[y=6, width=3cm, name=planner]{Zaplanowanie trasy lotu}
+    \umlusecase[y=3, width=3cm, name=data_stream]{Odbiór danych z drona w trakcie lotu}
+        \umlusecase[y=4, x=7.5, width=3cm, name=telem]{Odbiór telemetrii w trakcie lotu}
+        \umlusecase[y=2, x=7.5, width=3cm, name=photos]{Odbiór zdjęć w trakcie lotu}
+    \umlusecase[y=0, width=3cm, name=reports]{Przegląd raportów z lotu}
+
+
+    \umlinclude{data_stream}{telem} 
+    \umlinclude{data_stream}{photos} 
+
+    \umlactor[x=-4.2, y=3]{użytkownik}
+    \umlassoc{użytkownik}{planner}   
+    \umlassoc{użytkownik}{data_stream}   
+    \umlassoc{użytkownik}{reports}
+
+\end{umlsystem}
+\end{tikzpicture}
+\caption{
+    Diagram przypadków użycia systemu
+}
+\end{figure}
+
+Rysunek \ref{top_level_use_case_diagram} ilustruje przypadki użycia systemu,
+opisane w celu pracy (\ref{intro_objective}). Poniższy rozdział opisuje, jak
+przypadki użycia przekładają się na wymagania funkcjonalne systemu.
+
 \section{Oprogramowanie na dronie}
 
 Wielowirnikowce podłączone do systemu muszą być
