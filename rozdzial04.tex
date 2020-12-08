@@ -110,9 +110,9 @@ variables:
   IMAGE_NAME: "registry.gitlab.com/academic-aviation-club/gavron/frontend"
 
 # Przed wykonaniem danego skryptu budującego, wykonywane jest logowanie
-# do rejestru dockera - umożliwi to zapisanie~w nim 
+# do rejestru dockera - umożliwi to zapisanie w nim 
 # zbudowanego obrazu aplikacji. Zmienna $GITLAB_DEPLOY_TOKEN
-# przypisywana jest~w ustawieniach repozytorium
+# przypisywana jest w ustawieniach repozytorium
 before_script:
   - docker login -u baczek-vps -p $GITLAB_DEPLOY_TOKEN registry.gitlab.com
 
@@ -120,7 +120,7 @@ before_script:
 # później wykorzystany do testów integracyjnych
 build_testing_image:
   stage: build
-  # Zapewnia dostęp do dockera~w ramach zadania `build_testing_image`
+  # Zapewnia dostęp do dockera w ramach zadania `build_testing_image`
   services:
     - docker:19.03.12-dind
   image: docker:19.03.12
@@ -178,8 +178,8 @@ IMAGE=registry.gitlab.com/academic-aviation-club/gavron/frontend:master
 
 docker pull $IMAGE
 docker run \
-    -d \ # detach: kontener działa~w tle, nie wysyła logów do terminala
-    -p 5000:5000 \ # mapuje port 5000~z kontenera do portu na komputerze  
+    -d \ # detach: kontener działa w tle, nie wysyła logów do terminala
+    -p 5000:5000 \ # mapuje port 5000 z kontenera do portu na komputerze  
     --name frontend \ # Nadaje nazwę uruchomionemu kontenerowi
     $IMAGE # Nazwa obrazu do uruchomienia 
 \end{lstlisting}
@@ -192,13 +192,13 @@ IMAGE=registry.gitlab.com/academic-aviation-club/gavron/frontend:master
 
 docker pull $IMAGE # Pobranie najnowszej wersji kontenera
 
-# Nazwa kontenera nadana~w poprzednim przykładzie, za pomocą --name
+# Nazwa kontenera nadana w poprzednim przykładzie, za pomocą --name
 docker stop frontend
 
-# Usunięcie kontenera~w starej wersji (jego stanu, zmian~w systemie plików)
+# Usunięcie kontenera w starej wersji (jego stanu, zmian w systemie plików)
 docker rm frontend
 
-# Tak samo jak~w przykładzie powyżej
+# Tak samo jak w przykładzie powyżej
 docker run \
     -d \ # detach: kontener działa w tle, nie wysyła logów do terminala
     -p 5000:5000 \ # mapuje port 5000 z kontenera do portu na komputerze  
