@@ -77,7 +77,7 @@ systemu spełniającego te wymagania. % zdefiniowane~w rozdziale \ref{chapter_fu
 
 \section{Dron}
 
-\subsection{Kontroler lotu}
+\subsection{Kontroler lotu} \label{flight_controller}
 
 Wielowirnikowce podłączone do systemu, muszą być
 wyposażone w kontroler lotu -- umożliwiający
@@ -138,7 +138,7 @@ strumienia telemetriii, na maszynie musi znaleźć się też komputer pokładowy
 do zastosowań bardziej ogólnych. Będzie on wykorzystywany do
 obsługi wysokopoziomowych peryferiów: kamery oraz modemu GSM. Do zadań
 komputera pokładowego będzie należała także realizacja logiki biznesowej systemu
-- odczytanie harmonogramu przelotów z serwera webowego i załadowanie do kontrolera lotu
+-- odczytanie harmonogramu przelotów z serwera webowego i załadowanie do kontrolera lotu
 konkretnej trasy przelotu.
 
 \subsubsection{Wymagania sprzętowe}
@@ -168,7 +168,7 @@ ArduPilota do komunikacji z zewnętrznymi systemami \cite{ardupilot_mavlink}.
 
 Infrastruktura projektu ArduPilot dostarcza gotowe narzędziae do
 parsowania i tworzenia wiadomości w protokole \textit{MavLink}.
-Jedną z nich jest \texttt{pymavlink} - implementacja protokołu \textit{MavLink} 
+Jedną z nich jest \texttt{pymavlink} -- implementacja protokołu \textit{MavLink} 
 w języku Python. \texttt{pymavlink} zawiera podstawowe funkcje i obiekty konieczne
 do komunikacji z kontrolerem lotu. Biblioteka jest niskopoziomowa i nie w całości
 napisana w sposób obiektowy -- finalnie wykorzystujemy więc bibliotekę
@@ -179,7 +179,7 @@ pisane są \textit{Pythonie}.
 
 \section{Protokoły wymiany danych}
 
-\subsection{Dane telemetryczne - biblioteka \texttt{protobuf}} \label{protobuf_chapter}
+\subsection{Dane telemetryczne -- biblioteka \texttt{protobuf}} \label{protobuf_chapter}
 
 % W trakcie lotu, drony regularnie wysyłają dane telemetryczne -- 
 % informują o swoim obecnym położeniu, podają stan baterii oraz .
@@ -352,7 +352,7 @@ print("Serialised header:")
 print(serialised_header) 
 \end{lstlisting}
 
-\subsection{Zdjęcia wysyłane w trakcie lotu - biblioteka \texttt{imagezmq}}
+\subsection{Zdjęcia wysyłane w trakcie lotu -- biblioteka \texttt{imagezmq}}
 
 Wykonane przez drony zdjęcia wysyłane są na serwer webowyza pomocą biblioteki
 \texttt{imagezmq}. Jak zaznaczono w podrozdziale wymagań funkcjonalnych, 
@@ -432,7 +432,7 @@ TCP.
 Po odebraniu ramek UDP na serwerze telemetrii, dane telemetryczne rozsyłane są do
 wszystkich podłączonych obecnie aplikacji klienckich. Aplikacja kliencka może
 być uruchomiona na dowolnej przeglądarce internetowej, w związku z czym wykorzystanie
-niskopoziomowych protokołów nie jest tutaj możliwe - przeglądarki internetowe nie 
+niskopoziomowych protokołów nie jest tutaj możliwe -- przeglądarki internetowe nie 
 obsługują ich ze względów bezpieczeństwa. Nadal wymagana jest jednak komunikacja
 w czasie rzeczywistym. 
 Aby spełnić te wymagania, wykorzystany został protokół \texttt{WebSocket}\cite{websocket},
@@ -496,7 +496,7 @@ wykorzystano język Python i framework \texttt{Django},
 jednak równie dobrze sprawdzi się tutaj dowolna inna technologia
 (\texttt{Spring}, \texttt{.NET}, \texttt{Ruby on Rails}).
 
-\subsection{Sztuczna inteligencja - analiza obrazów z lotów}
+\subsection{Sztuczna inteligencja -- analiza obrazów z lotów}
 
 Ostatnim komponentem tworzącym oprogramowanie serwerowe jest moduł sztucznej inteligencji,
 rozpoznający obiekty na zdjęciach wykonanych w trakcie lotu. Zakres pracy nie obejmuje
@@ -506,7 +506,7 @@ go z pozostałymi komponentami systemu (w szczególności z systemem
 odbierającym zdjęcia z lotu).
 
 Do rozpoznawania obrazów wykorzystany został otwartoźródłowy system
-YOLO - \textit{You Only Look Once} \cite{yolo}. W ramach integracji, system został
+YOLO -- \textit{You Only Look Once} \cite{yolo}. W ramach integracji, system został
 skompilowany do formy biblioteki współdzielonej i podłączony do skryptu
 w języku \textit{Python}. Skrypt monitoruje określony folder w systemie plików
 i rozpoznaje zdjęcia, które się w nim pojawią.
@@ -574,7 +574,7 @@ znajdował się specjalny plik konfiguracyjny, o nazwie \texttt{gitlab-ci.yml}.
 Jest on obecny we wszystkich repozytoriach projektowych.
 
 
-\subsection{Wspólne punkty stykowe - \texttt{git submodules}}
+\subsection{Wspólne punkty stykowe -- \texttt{git submodules}}
 
 Komunikacja pomiędzy komponentami systemu realizowana jest za pośrednictwem
 pakietów \texttt{Protobuf}, opisanych w rozdziale \ref{protobuf_chapter}.
@@ -603,7 +603,7 @@ submoduł z definicjami.
 
 
 \newpage
-\section{Architektura systemu - podsumowanie}
+\section{Architektura systemu -- podsumowanie}
 
 Rysunek \ref{technologies_diagram} opisuje wykorzystywane w projekcie
 technologie i sprzęt.
@@ -658,7 +658,7 @@ technologie i sprzęt.
 	\draw[->] (definitions) to[out=west, in=south east] node[fill=white,pos=.6]{Submoduł} (flight_computer); % leave fill=white away in order to get your image. pos=. is optional. Default would be .5
 \end{forest}
 \caption{
-	Architektura systemu - wykorzystane technologie
+	Architektura systemu -- wykorzystane technologie
 }
 \label{technologies_diagram}
 \end{figure}
