@@ -91,9 +91,9 @@ Symulatory lotu są szeroko wykorzystywane w przemyśle lotniczym
 \cite{simulation_and_simulators}. Amatorskie otwartoźródłowe kontrolery
 lotu nie są tutaj wyjątkiem -- jak wspomniano~w rozdziale poświęconym
 kontrolerom lotu (\ref{flight_controller}), wykorzystywane w projekcie 
-oprogramowanie \textit{ArduPilot} ma możliwość pracy w trybie SITL
+oprogramowanie \textit{ArduPilot} ma możliwość pracy w trybie \textit{SITL}
 (\textit{software in the loop}). Jest to możliwe dzięki specjalnym opcjom,
-które można ustalić w trakcie kompilacji. Opcje umożliwiają przemapowanie
+które można ustawić w trakcie kompilacji. Opcje umożliwiają przemapowanie
 interfejsów kontrolujących peryferia samolotu na ich wirtualne odpowiedniki,
 które podłączane są do symulatora. Kod sterujący zachowaniem drona 
 oraz dane telemetryczne pozostają takie same jak w przypadku
@@ -112,6 +112,51 @@ zawarty jest na rysunku~\ref{sitl_diagram}.
 \end{figure}
 
 
+Ponieważ jedyna zmiana w wynikowym pliku wykonywalnym
+z kontrolerem lotu to przemapowane interfejsy peryferiów,
+komunikacja z kontrolerem lotu nadal działa w dokładnie
+taki sam sposób. Kod, który był w stanie skomunikować
+się z kontrolerem lotu działającym w trybie \textit{SITL},
+będzie na pewno działał również na prawdziwej maszynie
+(wyjątkiem byłaby oczywiście usterka sprzętowa, jednak takie
+problemy leżą poza zakresem odpowiedzialności kodu).
+
+Listing \ref{list:connecting_to_ardupilot_or_sitl} ilustruje,
+jak zależnie od parametru konfiguracyjnego, skrypt sterujący 
+dronem będzie próbował podłączyć się do prawdziwej maszyny lub
+do symulatora. Jedyną różnicą są parametry w konstruktorze
+obiektu połączenia, pozostały kod nie musi być modyfikowany
+gdy przechodzi się z symulatora na prawdziwego drona.
+
+\begin{lstlisting}[
+    language=Python,
+    label=list:connecting_to_ardupilot_or_sitl,
+    caption={
+        Przykład kodu łączącego się z prawdziwym dronem lub 
+        z symulatorem lotu, zależnie od wartości parametru
+        \texttt{USE\_SITL}. Utworzony obiekt \texttt{connection},
+        reprezentujący połączenie, zawsze zachowuje się w taki
+        sam sposób, niezależnie czy wykorzystywana jest
+        prawdziwa maszyna czy symulator. 
+    },
+    basicstyle=\footnotesize\ttfamily
+]
+if USE_SITL:
+    connection = mavutil.mavlink_connection(
+        'udpin:0.0.0.0:14551' # Połączenie z symulatorem na porcie UDP
+    )
+
+else:    
+    connection = mavutil.mavlink_connection(
+        '/dev/ttyS0', # Połączenie z dronem za pomocą interfejsu UART
+        baud=57600
+    )
+# Dalszy kod wykorzystujący obiekt `connection`.
+# Nie ma znaczenia czy `connection` oznacza połączenie
+# do symulatora czy do prawdziwego drona/samolotu
+\end{lstlisting}
+
+\subsection{\textit{SITL} i automatyczne testy w systemie \textit{CI/CD}}
 
 
 
