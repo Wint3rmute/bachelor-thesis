@@ -3,85 +3,83 @@
 \section{Oprogramowanie na dronie}
 
 Wielowirnikowce podłączone do systemu muszą być
-zdolne do autonomicznego lotu -- w kontekście pracy
+zdolne do autonomicznego lotu --~w kontekście pracy
 oznacza to zdolność do automatycznego startu,
 lądowania, stabilizacji oraz samodzielnego
-lotu do koordynatów GPS. W trakcie lotu, maszyna musi
-zbierać i wysyłać dwa rodzaje danych:
+lotu do koordynatów GPS.~W trakcie lotu, maszyna musi
+zbierać~i wysyłać dwa rodzaje danych:
 \begin{itemize}
     \item dane telemetryczne,
-    \item zdjęcia wykonane w czasie lotu.
+    \item zdjęcia wykonane~w czasie lotu.
 \end{itemize}
 
-Dane telemetryczne muszą zawierać informacje o pozycji
+Dane telemetryczne muszą zawierać informacje~o pozycji
 drona oraz identyfikować maszynę za pomocą unikatowego
 identyfikatora oraz numeru lotu. Przesyłany jest też
-poziom naładowania baterii oraz informacja, czy w obecnym
+poziom naładowania baterii oraz informacja, czy~w obecnym
 czasie prowadzone jest nagrywanie.
 
 \section{Protokoły wymiany danych}
-
-W przypadku systemu działającego autonomicznie, wymiana danych jest kluczowym
-elementem pozwalającym na sprawdzanie poprawności działania
-i diagnozowania błędów w systemie. Podczas lotów testowych
+~W przypadku systemu działającego autonomicznie, wymiana danych jest kluczowym
+elementem pozwalającym na sprawdzanie poprawności działania~i diagnozowania błędów~w systemie. Podczas lotów testowych
 często nie ma możliwości bezpośredniej obserwacji systemu
-lub ingerencji w jego sposób działania. Odpowiednia architektura
-zbierająca i archiwizująca dane z lotów pozwala znacznie szybciej 
-wykryć potencjalne problemy i zapobiec krytycznym błędom. 
+lub ingerencji~w jego sposób działania. Odpowiednia architektura
+zbierająca~i archiwizująca dane~z lotów pozwala znacznie szybciej 
+wykryć potencjalne problemy~i zapobiec krytycznym błędom. 
 
 \subsection{Dane telemetryczne}
 Protokół do wymiany danych telemetrycznych powinien
-wysyłać dane w postaci binarnej, gdyż jest to bardziej
-efektywne niż kodowanie ich w postaci tekstowej (na
-przykład w formacie \texttt{JSON}, typowym dla języków
-wysokopoziomowych - wykorzystywanym w technologiach webowych).
+wysyłać dane~w postaci binarnej, gdyż jest to bardziej
+efektywne niż kodowanie ich~w postaci tekstowej (na
+przykład~w formacie \texttt{JSON}, typowym dla języków
+wysokopoziomowych - wykorzystywanym~w technologiach webowych).
 
-Protokół powinien być w łatwy sposób rozszerzalny,
-pozwalając w przyszłości zredefiniować część wysyłanych
+Protokół powinien być~w łatwy sposób rozszerzalny,
+pozwalając~w przyszłości zredefiniować część wysyłanych
 pakietów lub dodać nowe dane, bez tracenia kompatybilności
 wstecznej bądź konieczności przebudowania całego systemu.
-Poszczególne komponenty systemu będą pisane w różnych
+Poszczególne komponenty systemu będą pisane~w różnych
 językach programowania -- biorąc to pod uwagę, pożądaną
 cechą protokołu jest też możliwość szybkiego przeportowania
 go na inny język programowania. 
 
-\subsection{Zdjęcia wykonane w trakcie lotu}
-Efektywny przesył zdjęć oraz filmów to temat zbyt obszerny
-i wymagający, żeby poruszać go w treści pracy - system
-powinien wykorzystywać dowolny prosty w implementacji
+\subsection{Zdjęcia wykonane~w trakcie lotu}
+Efektywny przesył zdjęć oraz filmów to temat zbyt obszerny~i
+wymagający, żeby poruszać go~w treści pracy - system
+powinien wykorzystywać dowolny prosty~w implementacji
 protokół wysyłania zdjęć. Architektura systemu powinna
 zapewnić możliwość prostej wymiany tego komponentu, dzięki
-czemu w przyszłości będzie możliwe zastąpienie go
+czemu~w przyszłości będzie możliwe zastąpienie go
 przez bardziej zoptymalizowane rozwiązanie.
 
 \section{Oprogramowanie serwerowe}
 
-Serwer webowy jest komponentem, który odbiera, archiwizuje i przekazuje
-dane nadchodzące z dronów do aplikacji klienckiej. Jest punktem centralnym systemu,
+Serwer webowy jest komponentem, który odbiera, archiwizuje~i przekazuje
+dane nadchodzące~z dronów do aplikacji klienckiej. Jest punktem centralnym systemu,
 wykorzystywanym bezpośrednio przez wszystkie pozostałe elementy.
 
-\subsection{Odbiór i multipleksowanie telemetrii}
+\subsection{Odbiór~i multipleksowanie telemetrii}
 
-Aby umożliwić diagnozowanie stanu systemu w czaie rzeczywistym -- szczególnie
-stanu wykonujących lot wielowirnikowców, telemetria nadchodząca z maszyn nie może być
+Aby umożliwić diagnozowanie stanu systemu~w czaie rzeczywistym -- szczególnie
+stanu wykonujących lot wielowirnikowców, telemetria nadchodząca~z maszyn nie może być
 jedynie archiwizowana na dysku serwera centralnego. Konieczną funkcjonalnością jest
-przesyłanie jej w czasie rzeczywistym do wielu jednocześnie podłączonych klientów.
+przesyłanie jej~w czasie rzeczywistym do wielu jednocześnie podłączonych klientów.
 
-Umożliwi to podjęcie akcji w przypadku wykrycia krytycznego błędu, który mógłby
+Umożliwi to podjęcie akcji~w przypadku wykrycia krytycznego błędu, który mógłby
 zakończyć się uszkodzeniem bądź rozbiciem drona, ułatwi też wykonywanie testów - zarówno
-na rzeczywistych maszynach, jak i wykorzystujących symulatory lotu.
+na rzeczywistych maszynach, jak~i wykorzystujących symulatory lotu.
 
 \section{Oprogramowanie klienckie}
 
 Aplikacja kliencka skupiona jest wokół trzech funkcjonalności:
 
 \begin{enumerate}
-    \item planowanie tras i harmonogramu lotów,
-    \item odbiór telemetrii i zdjęć z dronów w czasie rzeczywistym,
-    \item przegląd i analiza telemetrii oraz zdjęć zarchiwizowanych z poprzednich lotów.
+    \item planowanie tras~i harmonogramu lotów,
+    \item odbiór telemetrii~i zdjęć~z dronów~w czasie rzeczywistym,
+    \item przegląd~i analiza telemetrii oraz zdjęć zarchiwizowanych~z poprzednich lotów.
 \end{enumerate}
 
 Kluczowym elementem aplikacji klienckiej jest obsługa mapy -- wszystkie
 wymienione funkcjonalności wymagają wizualizacji nadchodzących danych geograficznych,
-rozszerzonych o dodatkowe informacje (na przykład godzina przelotu przez dany punkt lub
-zarejestrowane w danym miejscu zdjęcia i wykryte na nich obiekty).
+rozszerzonych~o dodatkowe informacje (na przykład godzina przelotu przez dany punkt lub
+zarejestrowane~w danym miejscu zdjęcia~i wykryte na nich obiekty).

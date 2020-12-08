@@ -3,46 +3,45 @@
 
 \section{Geneza pracy} \label{intro_genesis}
 % kilka akapitów wprowadzających,
-% z czego powinno wynikać, że zrobienie
-% takiego systemu jest potrzebne i ma sens.
+%~z czego powinno wynikać, że zrobienie
+% takiego systemu jest potrzebne ~i$3ma sens.
 
-Przedstawiony w pracy prototyp systemu inspekcji obszarów powstał w ramach działalności
+Przedstawiony~w pracy prototyp systemu inspekcji obszarów powstał~w ramach działalności
 Akademickiego Klubu Lotniczego -- koła naukowego Politechniki Wrocławskiej, zajmującego
-się rozwijaniem technologii związanych z autonomicznymi dronami i samolotami
+się rozwijaniem technologii związanych~z autonomicznymi dronami~i samolotami
 \cite{akl_home_page}. Projekt został sfinansowany przez Wrocławski Fundusz
 Aktywności Studenckiej \cite{fast_webpage}.
 
-Sektor gospodarki związany z inżynierią bezzałogowych maszyn lotniczych znajduje się
-w stanie dynamicznego rozwoju i generuje coraz większe przychody.
-Tym samym przyciąga inwestorów skłonnych zainwestować w innowacyjne pomysły zarówno 
-dużych przedsiębiorstw, jak i młodych konstruktorów. Międzynarodowe zawody sponsorowane
-przez podmioty prywatne i organizacje rządowe umożliwiają pasjonatom wdrożenie w życie
+Sektor gospodarki związany~z inżynierią bezzałogowych maszyn lotniczych znajduje się~w
+stanie dynamicznego rozwoju~i generuje coraz większe przychody.
+Tym samym przyciąga inwestorów skłonnych zainwestować~w innowacyjne pomysły zarówno 
+dużych przedsiębiorstw, jak~i młodych konstruktorów. Międzynarodowe zawody sponsorowane
+przez podmioty prywatne~i organizacje rządowe umożliwiają pasjonatom wdrożenie~w życie
 ich wizji. Przykład stanowi \textit{UAV Challenge} -- zawody skoncentrowane na
 autonomicznych systemach wsparcia służb medycznych, współorganizowane przez rząd
-australijskiego stanu Queensland, które przyciągają corocznie najlepsze zespoły z całego
-świata\cite{uav_sponsors}. Potencjał inwestycyjny i naukowy, którym dysponuje ta branża,
-sprzyja powstawaniu różnorodnych rozwiązań. W konsekwencji bezpośrednio niezwiązane z
-lotnictwem sektory korzystają z dorobku autonomicznej awiacji. Tytułem przykładu: 
-generowanie trójwymiarowych map terenu, przy użyciu zdjęć wykonanych z dronów znajduje
-zastostowanie w dziedzinach takich jak górnictwo, geodezja czy militaria
-\cite{uav_photogrametry}, natomiast dostarczanie towarów indywidualnym klientom z pomocą
-dronów jest w stanie zrewolucjonizować przemysł transportowy \cite{prime_air}.
+australijskiego stanu Queensland, które przyciągają corocznie najlepsze zespoły~z całego
+świata\cite{uav_sponsors}. Potencjał inwestycyjny~i naukowy, którym dysponuje ta branża,
+sprzyja powstawaniu różnorodnych rozwiązań.~W konsekwencji bezpośrednio niezwiązane~z lotnictwem sektory korzystają~z dorobku autonomicznej awiacji. Tytułem przykładu: 
+generowanie trójwymiarowych map terenu, przy użyciu zdjęć wykonanych~z dronów znajduje
+zastostowanie~w dziedzinach takich jak górnictwo, geodezja czy militaria
+\cite{uav_photogrametry}, natomiast dostarczanie towarów indywidualnym klientom~z pomocą
+dronów jest~w stanie zrewolucjonizować przemysł transportowy \cite{prime_air}.
 
 % Przeprowadzenie autonomicznej misji bezzałogową maszyną możliwe jest dzięki osiągnięciom
-% inżynierii oprogramowania. Entuzjaści programowania regularnie udoskonalają i rozbudowują
-% projekty open-source. Powszechna dostępność i możliwość korzystania ze sprawdzonych
-% i stabilnych rozwiązań zdecydowanie usprawnia proces realizowania
-% kreatywnych i innowacyjnych projektów. 
+% inżynierii oprogramowania. Entuzjaści programowania regularnie udoskonalają~i rozbudowują
+% projekty open-source. Powszechna dostępność~i możliwość korzystania ze sprawdzonych
+%~i stabilnych rozwiązań zdecydowanie usprawnia proces realizowania
+% kreatywnych~i innowacyjnych projektów. 
 
-System realizowany w ramach pracy mógłby potencjalnie służyć jako wsparcie dla służb
+System realizowany~w ramach pracy mógłby potencjalnie służyć jako wsparcie dla służb
 medycznych, wspomagając poszukiwanie osób zaginionych. Algorytmy sztucznej inteligencji,
-zastosowane do analizy zdjęć wykonanych w czasie lotów mogą zostać przetrenowane, aby 
+zastosowane do analizy zdjęć wykonanych~w czasie lotów mogą zostać przetrenowane, aby 
 rozpoznawać dowolne obiekty (samochody, budynki, drzewa). Dzięki temu, system może zostać
 szybko przystosowany do nowych zastosowań.
   
 
 % Szczególnie interesujące są zagadnienia integracji komponentów systemu,
-% oraz testowanie - które w przypadku systemu angażującego rzeczywiste
+% oraz testowanie - które~w przypadku systemu angażującego rzeczywiste
 % maszyny nie może ograniczyć się jedynie do standardowych testów jednostkowych.
 
 \newpage
@@ -51,35 +50,34 @@ szybko przystosowany do nowych zastosowań.
 % - Celem ogólnym pracy jest…?,
 % - Celami szczegółowymi pracy są…?
 
-Celem pracy jest wykorzystanie nowoczesnych praktyk z zakresu inżynierii 
-oprogramowania w celu stworzenia prototypu systemu inspekcji obszarów,
-wykorzystującego autonomiczne drony. System ma wykorzystywać napisaną w ramach pracy
-infrastrukturę informatyczną, pozwalającą na planowanie tras lotów, obsługę telemetrii
-i rozpoznawanie obiektów na zdjęciach wykonanych w czasie lotu, za pomocą algorytmów
+Celem pracy jest wykorzystanie nowoczesnych praktyk~z zakresu inżynierii 
+oprogramowania~w celu stworzenia prototypu systemu inspekcji obszarów,
+wykorzystującego autonomiczne drony. System ma wykorzystywać napisaną~w ramach pracy
+infrastrukturę informatyczną, pozwalającą na planowanie tras lotów, obsługę telemetrii~i
+rozpoznawanie obiektów na zdjęciach wykonanych~w czasie lotu, za pomocą algorytmów
 sztucznej inteligencji. 
 
-Architektura systemu (wykorzystane technologie i struktura podprojektów składających
+Architektura systemu (wykorzystane technologie~i struktura podprojektów składających
 się na system) musi pozwalać na zautomatyzowanie procesu wdrażania
-systemu, oraz zautomatyzowanie wdrażania nowych funkcjonalności -- każde
-z wdrożeń musi być poprzedzone testami integracyjnymi na poziomie całego systemu.
-Aby przeprowadzić pełne testy integracyjne, prototyp systemu będzie uruchamiany
-w środowisku testowym, zawierającym zintegrowany symulator drona/samolotu.
+systemu, oraz zautomatyzowanie wdrażania nowych funkcjonalności -- każde~z wdrożeń musi
+być poprzedzone testami integracyjnymi na poziomie całego systemu.
+Aby przeprowadzić pełne testy integracyjne, prototyp systemu będzie uruchamiany~w
+środowisku testowym, zawierającym zintegrowany symulator drona/samolotu.
 
 Finalnie, system ma pozwolić użytkownikowi na zaplanowanie trasy przelotu drona
-oraz wyznaczenie harmonogramu, według którego mają odbywać się loty. W trakcie 
-lotu, system ma w czasie rzeczywistym dostarczać użytkownikowi dane telemetryczne
-o obecnej pozycji maszyny i pozwalać na podgląd zdjęć wykonywanych w czasie lotu.
+oraz wyznaczenie harmonogramu, według którego mają odbywać się loty.~W trakcie 
+lotu, system ma~w czasie rzeczywistym dostarczać użytkownikowi dane telemetryczne~o
+obecnej pozycji maszyny~i pozwalać na podgląd zdjęć wykonywanych~w czasie lotu.
 Po wylądowaniu, system wygeneruje dla użytkownika podsumowanie lotu, zawierające
-trasę pokonaną przez drona, wraz z wykonanymi zdjęciami, na których oznaczone zostaną
+trasę pokonaną przez drona, wraz~z wykonanymi zdjęciami, na których oznaczone zostaną
 rozpoznane przez algorytmy sztucznej inteligencji obiekty.
 
-\section{Zakres i struktura pracy} \label{intro_scope}
+\section{Zakres~i struktura pracy} \label{intro_scope}
 
-Zakres pracy obejmuje elementy projektu związane z
-inżynierią i architekturą oprogramowania -- proces projektowania struktury systemu,
-wybór technologii, zaprojektowanie punktów stykowych w systemie, automatyzacja
-procesu wdrażania i testowania systemu.
+Zakres pracy obejmuje elementy projektu związane~z inżynierią~i architekturą oprogramowania -- proces projektowania struktury systemu,
+wybór technologii, zaprojektowanie punktów stykowych~w systemie, automatyzacja
+procesu wdrażania systemu~i nowych funkcjonalności.
 
-% Praca opisuje także sposób testowania systemu -- od weryfikacji poprawności działania
-% poszczególnych komponentów, po pełne automatyczne testy integracyjne, wykorzystujące 
-% wszystkie komponenty systemu wraz ze zintegrowanym symulatorem drona. 
+Praca opisuje także sposób testowania systemu -- od weryfikacji poprawności działania
+poszczególnych komponentów, po pełne automatyczne testy integracyjne, wykorzystujące 
+wszystkie komponenty systemu wraz ze zintegrowanym symulatorem drona. 
