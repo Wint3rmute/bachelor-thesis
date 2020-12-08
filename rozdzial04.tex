@@ -46,9 +46,8 @@ zapamiętywać zmian, ponieważ pliki strony nie zmieniają się podczas hostowa
 Jak wspomniano~w rozdziale \ref{repo_structure}, poświęconym strukturze repozytoriów,
 wszystkie repozytoria zawierają plik \texttt{.gitlab-ci.yml}. Plik ten definiuje skrypty,
 jakie wykona system \texttt{CI/CD}, gdy do repozytorium zostanie dodany nowy kod.
-Przykładowa konfiguracja \textit{Gitlab CI} dla repozytorium~z aplikacją kliencką
-opisana została~w listingu \ref{list:ci_cd_frontend}. Diagram ilustrujący proces pracy
-programisty~z systemem \textit{CI/CD} zawarty jest na rysunku \ref{ci_workflow}.
+Diagram ilustrujący proces pracy programisty~z systemem \textit{CI/CD} zawarty jest
+na rysunku \ref{ci_workflow}.
 
 \begin{figure}[H]
 	\centering\small
@@ -82,7 +81,7 @@ programisty~z systemem \textit{CI/CD} zawarty jest na rysunku \ref{ci_workflow}.
     \draw[<-,align=center] ($(programmer)!0.90!(programmer_ground)$) -- node[above,scale=1,midway]{Informacja, czy \\ \textit{commit} przeszedł testy} ($(repo)!0.90!(repo_ground)$);
 \end{tikzpicture}
 	\caption{
-      Diagram sekwencji, opisujący proces automatycznej budowy kontenerów 
+      Diagram sekwencji, opisujący proces automatycznej budowy i testowania kontenerów 
 	}
 	\label{ci_workflow}
 \end{figure}
@@ -91,9 +90,12 @@ Ponieważ konteneryzacja pozwala na zupełne zautomatyzowanie procesu budowania,
 skrypty~w systemie \texttt{CI/CD} są~w stanie samodzielnie zbudować kontener,
 zawierający konkretny komponent systemu. Następnie, kontener poddawany jest testom
 (opisanym~w rozdziale \ref{chapter_tests}). Po przejściu testów, kontener wysyłany jest
-do \textit{rejestru kontenerów} -- specjalnego repozytorium,~w którym można
+do \textit{rejestru kontenerów} -- specjalnego repozytorium, w~którym można
 przechowywać~i wersjonować kontenery. Skrypt systemu \texttt{CI/CD} automatycznie oznacza
-kontener za pomocą nazwy brancha, na której został zbudowany. Kontenery pochodzące~z brancha \textit{master}, uruchamiane są na serwerze produkcyjnym.
+kontener za pomocą nazwy brancha, na której został zbudowany. Kontenery pochodzące~z brancha
+\textit{master}, uruchamiane są na serwerze produkcyjnym. Przykładowa konfiguracja
+\textit{Gitlab CI}, wykorzystywana~w repozytorium aplikacji klienckiej opisana została~w listingu
+\ref{list:ci_cd_frontend}.
 
 \begin{lstlisting}[language=yml, label=list:ci_cd_frontend,caption={Plik konfiguracyjny \textit{Gitlab CI}, budujący aplikację kliencką }, basicstyle=\footnotesize\ttfamily]
 # Definicje zmiennych, wpływających na proces budowania
