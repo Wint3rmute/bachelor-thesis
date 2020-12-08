@@ -26,49 +26,20 @@ lotnictwem sektory korzystają z dorobku autonomicznej awiacji. Tytułem przykł
 generowanie trójwymiarowych map terenu, przy użyciu zdjęć wykonanych z dronów znajduje
 zastostowanie w dziedzinach takich jak górnictwo, geodezja czy militaria
 \cite{uav_photogrametry}, natomiast dostarczanie towarów indywidualnym klientom z pomocą
-dronów jest w stanie zrewolucjonizować przemysł transportowy.
+dronów jest w stanie zrewolucjonizować przemysł transportowy \cite{prime_air}.
 
-Przeprowadzenie autonomicznej misji bezzałogową maszyną możliwe jest dzięki osiągnięciom
-inżynierii oprogramowania. Entuzjaści programowania regularnie udoskonalają i rozbudowują
-projekty open-source. Powszechna dostępność i możliwość korzystania ze sprawdzonych
-i stabilnych rozwiązań zdecydowanie usprawnia proces realizowania
-kreatywnych i innowacyjnych projektów. 
+% Przeprowadzenie autonomicznej misji bezzałogową maszyną możliwe jest dzięki osiągnięciom
+% inżynierii oprogramowania. Entuzjaści programowania regularnie udoskonalają i rozbudowują
+% projekty open-source. Powszechna dostępność i możliwość korzystania ze sprawdzonych
+% i stabilnych rozwiązań zdecydowanie usprawnia proces realizowania
+% kreatywnych i innowacyjnych projektów. 
+
+System realizowany w ramach pracy mógłby potencjalnie służyć jako wsparcie dla służb
+medycznych, wspomagając poszukiwanie osób zaginionych. Algorytmy sztucznej inteligencji,
+zastosowane do analizy zdjęć wykonanych w czasie lotów mogą zostać przetrenowane, aby 
+rozpoznawać dowolne obiekty (samochody, budynki, drzewa). Dzięki temu, system może zostać
+szybko przystosowany do nowych zastosowań.
   
-
-% Autonomiczne lotnictwo to dynamicznie rozwijający się sektor branży lotniczej.
-% Technologie pozwalające na wykorzystanie autonomicznych dronów i samolotów
-% w nowych projektach biznesowych są powszechnie dostępne. Istnieją
-% zarówno systemy zamknięte, w pełni komercyjne, jak i projekty otwartoźródłowe,
-% pozwalające na zapoznanie się z kodem źródłowym oprogramowania sterującego statkami
-% powietrznymi i interakcję z aktywną społecznością pasjonatów, wspólnie rozwijającą
-% projekt. 
-
-% W świecie biznesu powstają coraz to nowe rozwiązania, wykorzystujące autonomiczne
-% maszyny do świadczenia usług - od razu nasuwającym się rozwiązaniem
-% jest autonomiczne dostarczanie paczek \cite{prime_air}, ale istnieją też znacznie
-% bardziej ambitne projekty: dostarczanie defibrylatora wprost do domu osoby, u której
-% wystąpiło zatrzymanie akcji serca \cite{10.1001/jama.2017.3957} lub generowanie
-% trójwymiarowych map terenu, wykorzystując zdjęcia wykonanych z dronów
-% \cite{uav_photogrametry}. Biznes jest stosunkowo młody, więc branża jest otwarta
-% na innowatorów -- firmy takie jak Boeing i Lockheed Martin sponsorują międzynarodowe
-% konkursy przeznaczone dla młodych konstruktorów \cite{sae_2018}. 
-
-% Zainteresowani autonomicznym lotnictwem inwestorzy nie ograniczają się do
-% prywatnych firm. Rząd australijskiego stanu Queensland współorganizuje
-% \textit{UAV Challenge} -- zawody skupione wokół rozwijania systemów wspierających 
-% służby medyczne \cite{uav_sponsors}.
-
-% Wykorzystanie otwartych technologii, skupionych wokół awiacji autonomicznej
-% i połączenie ich z nowoczesnymi praktykami wdrażania oprogramowania to temat atrakcyjny
-% zarówno z perspektywy inżynierii oprogramowania, jak i z perspektywy biznesowej. 
-% % zapytać o to
-% Koło naukowe Politechniki Wrocławskiej -- \textit{Akademicki Klub Lotniczy} (AKL) zajmuje
-% się budowaniem i rozwijaniem autonomicznych dronów i samolotów \cite{akl_home_page}.
-% Omawiany w pracy system powstał w ramach realizacji projektu
-% z Wrocławskiego Funduszu Aktywności Studenckiej\cite{fast_webpage}.
-
-
-
 
 % Szczególnie interesujące są zagadnienia integracji komponentów systemu,
 % oraz testowanie - które w przypadku systemu angażującego rzeczywiste
@@ -80,31 +51,35 @@ kreatywnych i innowacyjnych projektów.
 % - Celem ogólnym pracy jest…?,
 % - Celami szczegółowymi pracy są…?
 
-Celem pracy jest stworzenie prototypu systemu inspekcji terenów, wykorzystującego
-autonomiczne drony. System ma integrować się z już istniejącym oprogramowaniem
-sterującym autonomicznymi maszynami, oraz wykorzystywać napisaną na potrzeby pracy
+Celem pracy jest wykorzystanie nowoczesnych praktyk z zakresu inżynierii 
+oprogramowania w celu stworzenia prototypu systemu inspekcji obszarów,
+wykorzystującego autonomiczne drony. System ma wykorzystywać napisaną w ramach pracy
 infrastrukturę informatyczną, pozwalającą na planowanie tras lotów, obsługę telemetrii
 i rozpoznawanie obiektów na zdjęciach wykonanych w czasie lotu, za pomocą algorytmów
-sztucznej inteligencji. Finalnie, system ma generować raport podsumowujący każdy lot,
-w którym zawarta będzie trasa pokonana przez drona i zdjęcia wykonane w trakcie lotu,
-wraz z rozpoznanymi na nich obiektami. 
+sztucznej inteligencji. 
 
-Architektura systemu musi pozwalać na zautomatyzowanie procesu wdrażania
-systemu, oraz zautomatyzowanie wdrażania nowych funkcjonalności - każde
-z wdrożeń musi być poprzedzone testami integracyjnymi na poziomie całego systemu. 
+Architektura systemu (wykorzystane technologie i struktura podprojektów składających
+się na system) musi pozwalać na zautomatyzowanie procesu wdrażania
+systemu, oraz zautomatyzowanie wdrażania nowych funkcjonalności -- każde
+z wdrożeń musi być poprzedzone testami integracyjnymi na poziomie całego systemu.
+Aby przeprowadzić pełne testy integracyjne, prototyp systemu będzie uruchamiany
+w środowisku testowym, zawierającym zintegrowany symulator drona/samolotu.
 
-Prototyp ma być w pełni testowalny, zarówno na poziomie pojedynczych
-elementów systemu jak i na poziomie integracji całego projektu - testy muszą
-angażować wszystkie komponenty systemu, uruchomione wewnątrz w pełni
-zautomatyzowanego środowiska testowego.
+Finalnie, system ma pozwolić użytkownikowi na zaplanowanie trasy przelotu drona
+oraz wyznaczenie harmonogramu, według którego mają odbywać się loty. W trakcie 
+lotu, system ma w czasie rzeczywistym dostarczać użytkownikowi dane telemetryczne
+o obecnej pozycji maszyny i pozwalać na podgląd zdjęć wykonywanych w czasie lotu.
+Po wylądowaniu, system wygeneruje dla użytkownika podsumowanie lotu, zawierające
+trasę pokonaną przez drona, wraz z wykonanymi zdjęciami, na których oznaczone zostaną
+rozpoznane przez algorytmy sztucznej inteligencji obiekty.
 
-\section{Zakres pracy} \label{intro_scope}
+\section{Zakres i struktura pracy} \label{intro_scope}
 
 Zakres pracy obejmuje elementy projektu związane z
 inżynierią i architekturą oprogramowania -- proces projektowania struktury systemu,
 wybór technologii, zaprojektowanie punktów stykowych w systemie, automatyzacja
-procesu wdrażania systemu i nowych funkcjonalności.
+procesu wdrażania i testowania systemu.
 
-Praca opisuje także sposób testowania systemu -- od weryfikacji poprawności działania
-poszczególnych komponentów, po pełne automatyczne testy integracyjne, wykorzystujące 
-wszystkie komponenty systemu wraz ze zintegrowanym symulatorem drona. 
+% Praca opisuje także sposób testowania systemu -- od weryfikacji poprawności działania
+% poszczególnych komponentów, po pełne automatyczne testy integracyjne, wykorzystujące 
+% wszystkie komponenty systemu wraz ze zintegrowanym symulatorem drona. 
