@@ -174,7 +174,8 @@ do komunikacji z kontrolerem lotu. Biblioteka jest niskopoziomowa i nie w cało�
 napisana w sposób obiektowy -- finalnie wykorzystujemy więc bibliotekę
 \texttt{dronekit-python}\cite{dronekit_python}, która rozbudowuje \texttt{pymavlink}
 o w pełni obiektowy, wysokopoziomowy interfejs do komunikacji z kontrolerem lotu. 
-Skrypty odpowiedzialne za logikę biznesową napisane są w Pythonie.
+Skrypty odpowiedzialne za komunikację~z kontrolerem lotu~i~z~serwerem webowym
+pisane są \textit{Pythonie}.
 
 \section{Protokoły wymiany danych}
 
@@ -354,8 +355,10 @@ print(serialised_header)
 \subsection{Zdjęcia wysyłane w trakcie lotu - biblioteka \texttt{imagezmq}}
 
 Wykonane przez drony zdjęcia wysyłane są na serwer webowyza pomocą biblioteki
-\texttt{imagezmq}. Jak zaznaczono we wstępie, wysyłanie strumienia wideo to
-temat zbyt skomplikowany, aby poruszać go w pracy -- rozwiązanie wykorzystywane
+\texttt{imagezmq}. Jak zaznaczono w podrozdziale wymagań funkcjonalnych, 
+poświęconym wysyłaniu zdjęć z lotów (\ref{functional_requirements_imagezmq}),
+wysyłanie strumienia wideo to temat zbyt skomplikowany, aby poruszać go w
+pracy -- rozwiązanie wykorzystywane
 do przesyłu zdjęć zostało wybrane ze względu na prostotę instalacji i implementacji.
 
 Biblioteka \texttt{imagezmq} pozwala wysyłać obrazy za pomocą protokołu \texttt{zmq}.
@@ -560,7 +563,7 @@ frameworkiem \texttt{JavaScript} jest~\texttt{VueJS}.
 
 \subsection{Konfiguracja \textit{CI/CD}}
 
-Jak zaznaczono w zakresie pracy (\ref{intro_scope}), system zaopatrzony jest w  
+Jak zaznaczono w celu pracy (\ref{intro_objective}), system zaopatrzony został w  
 mechanizmy automatyzujące testowanie i wdrażanie nowych 
 funkcjonalności. Popularne narzędzia do ciągłej integracji, takie jak
 \textit{Jenkins}, \textit{Gitlab CI} czy \textit{Travis CI}, wykorzystują specjalny
