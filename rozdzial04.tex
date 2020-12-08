@@ -1,22 +1,27 @@
 \chapter{Wdrażanie systemu} \label{chapter_deployment}
 
 % Napisać jeszcze raz, wtf
-Jak zaznaczono~w zakresie pracy (\ref{intro_scope}),
-architektura systemu ma pozwalać na automatyzację wdrożeń.~W poniższym rozdziale opisane są technologie~i praktyki, które zostały 
-zastosowane, aby zautomatyzować wdrażanie systemu oraz proces
-dodawania do systemu nowych funkcjonalności.
+Jak zaznaczono~w zakresie pracy (\ref{intro_objective}),
+architektura systemu ma pozwalać na automatyzację wdrożeń.
+W poniższym rozdziale opisane są technologie~i praktyki, które zostały 
+zastosowane, aby zautomatyzować wdrażanie systemu.
 
 \section{Konteneryzacja}
 
-Wszystkie elementy systemu docelowo są uruchamiane~w kontenerach.
+Wszystkie elementy systemu (za wyjątkiem oprogramowania na dronie) są uruchamiane~w kontenerach.
 Wykorzystanym systemem konteneryzacji jest \texttt{docker}\cite{docker}.
-% można dopisać~w rozdziale03 że jest Dockerfile~w każdym repo
-Konteneryzacja ułatwia proces przenoszenia oprogramowania ~z maszyny na maszynę. Pozwala też na pełne zautomatyzowanie
+Konteneryzacja pozwala na zupełne zautomatyzowanie
 procesu budowania oprogramowania~i instalacji koniecznych
-składników środowiska uruchomieniowego. Konteneryzacja
-aplikacji wymusza na programiście napisanie skryptu,~w wyniku
-którego~w kontenerze zostanie zainstalowane wszystkie konieczne 
-oprogramowanie.
+składników środowiska uruchomieniowego. Aby zbudować kontener zawierający
+aplikację, programista musi napisać skrypt,~w wyniku
+którego~w kontenerze zostanie zainstalowane konieczne 
+do uruchomienia aplikacji oprogramowanie. Proces instalacji i konfiguracji
+wymaganych bibliotek jest więc automatyczny i deterministyczny -- wszystko
+zależy tylko i wyłącznie od skryptu budującego kontener.
+
+Konteneryzacja ułatwia proces przenoszenia oprogramowania~z maszyny na maszynę. Raz zbudowany
+kontener może zostać uruchomiony na dowolnej nowej maszynie, bez konieczności instalowania 
+czy konfigurowania bibliotek czy programów. 
 
 \subsection{Zachowywanie stanu systemu plików~w kontenerze} \label{volumes}
 
@@ -25,16 +30,16 @@ na którym działają kontenery zostanie zresetowany, bądź kontener zostanie
 usunięty~i utworzony na nowo (na przykład~w celu aktualizacji), system
 plików~w kontenerze zostanie zresetowany do stanu,~w jakim znajdował się ~w momencie uruchomienia (takim, jaki jest zapisany~w \textit{obrazie kontenera}).
 
-\texttt{Docker} pozwala rozwiązać ten problem za pomocą mechanizmu zwanego 
-woluminami (\textit{docker volumes})\cite{docker_volumes}.
+\texttt{Docker} pozwala rozwiązać ten problem za pomocą mechanizmu 
+woluminów (\textit{docker volumes})\cite{docker_volumes}.
 Za pomocą woluminów, dowolny fragment systemu
 plików kontenera może zostać zmapowany do nieulotnej pamięci komputera, na którym 
-działa kontener.~W ten sposób zapewnia się persystencję plików baz danych, czy innych
-plików, które mają być przetrzymywane przez aplikację.\\ % newline CAN be removed
+działa kontener.~W ten sposób zapewnia się persystencję baz danych lub innych
+plików, które mają być przechowywane przez aplikację.\\ % newline CAN be removed
 
 \textit{Uwaga:} nie wszystkie kontenery potrzebują zachowywać pliki - kontener
 odpowiedzialny za hostowanie statycznej strony internetowej nie potrzebuje
-zapamiętywać zmian~w plikach strony. 
+zapamiętywać zmian, ponieważ pliki strony nie zmieniają się podczas hostowania. 
 
 \section{Automatyczne budowanie komponentów systemu}
 
@@ -162,7 +167,7 @@ wyświetlają informacje~o tym, czy dany commit przeszedł testy~w systemie CI/C
 
 \end{figure}
 
-\section{Automatyczne aktualizacje kontenerów}
+\section{Automatyczne aktualizacje kontenerów} \label{ouroboros}
 
 Pobranie~i uruchomienie kontenera, zawierającego dany komponent systemu
 nie wymaga przechodzenia przez proces instalacji czy konfiguracji - wystarczy
@@ -222,13 +227,13 @@ jednocześnie działających kontenerów dockerowych:
   \item Kontener~z serwerem API,
   \item Kontener~z serwerem \texttt{imagezmq},
   \item Kontener~z systemem telemetrii,
-  \item Kontener~z programem \texttt{ouroboros},
+  \item Kontener~z programem \texttt{ouroboros} (opisanym w rozdziale \ref{ouroboros}),
   \item Kontener~z systemem do rozpoznawania obrazów. 
 \end{enumerate}
 
 \noindent
-Każdy kontener musi zostać odpowiednio skonfigurowany~w momencie uruchamiania,
-konfiguracja obejmuje:
+Każdy kontener musi zostać odpowiednio skonfigurowany~w momencie uruchamiania.
+Konfiguracja poszczególnego kontenera obejmuje:
 
 \begin{itemize}
   \item Przypisanie limitów zasobów (n.p. maksymalny procent wykorzystania procesora)
@@ -247,3 +252,4 @@ Narzędzie \texttt{docker-compose} pozwala zebrać całą konfigurację kontener
 jednego pliku konfiguracyjnego \cite{docker_compose}.~W ten sposób, po uzyskaniu
 dostępu do rejestru~z kontenerami, zawierającymi komponenty systemu, możliwe jest
 natychmiastowe pobranie~i uruchomienie systemu~z właściwą konfiguracją kontenerów.
+
