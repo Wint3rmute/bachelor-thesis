@@ -15,9 +15,9 @@ procesu budowania oprogramowania~i instalacji koniecznych
 składników środowiska uruchomieniowego. Aby zbudować kontener zawierający
 aplikację, programista musi napisać skrypt,~w wyniku
 którego~w kontenerze zostanie zainstalowane konieczne 
-do uruchomienia aplikacji oprogramowanie. Proces instalacji i konfiguracji
-wymaganych bibliotek jest więc automatyczny i deterministyczny -- wszystko
-zależy tylko i wyłącznie od skryptu budującego kontener.
+do uruchomienia aplikacji oprogramowanie. Proces instalacji~i konfiguracji
+wymaganych bibliotek jest więc automatyczny~i deterministyczny -- wszystko
+zależy tylko~i wyłącznie od skryptu budującego kontener.
 
 Konteneryzacja ułatwia proces przenoszenia oprogramowania~z maszyny na maszynę. Raz zbudowany
 kontener może zostać uruchomiony na dowolnej nowej maszynie, bez konieczności instalowania 
@@ -41,17 +41,56 @@ plików, które mają być przechowywane przez aplikację.\\ % newline CAN be re
 odpowiedzialny za hostowanie statycznej strony internetowej nie potrzebuje
 zapamiętywać zmian, ponieważ pliki strony nie zmieniają się podczas hostowania. 
 
-\section{Automatyczne budowanie komponentów systemu}
+\section{Automatyczne budowanie~i testowanie komponentów systemu}
 
 Jak wspomniano~w rozdziale \ref{repo_structure}, poświęconym strukturze repozytoriów,
 wszystkie repozytoria zawierają plik \texttt{.gitlab-ci.yml}. Plik ten definiuje skrypty,
-jakie wykona system \texttt{CI/CD}, gdy do repozytorium zostanie dodany nowy kod
-(przykładowa konfiguracja \textit{Gitlab CI} dla repozytorium~z aplikacją kliencką
-opisana~w listingu \ref{list:ci_cd_frontend}).
+jakie wykona system \texttt{CI/CD}, gdy do repozytorium zostanie dodany nowy kod.
+Przykładowa konfiguracja \textit{Gitlab CI} dla repozytorium~z aplikacją kliencką
+opisana została~w listingu \ref{list:ci_cd_frontend}. Diagram ilustrujący proces pracy
+programisty~z systemem \textit{CI/CD} zawarty jest na rysunku \ref{ci_workflow}.
+
+\begin{figure}[H]
+	\centering\small
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\begin{tikzpicture}[node distance=4cm,auto,>=stealth']
+    
+    \node[] (programmer) {Programista};
+    \node[right of = programmer] (repo) {Repozytorium};
+    \node[right of = repo] (ci_cd) {System \texttt{CI/CD}};
+    \node[right of = ci_cd] (registry) {Rejestr kontenerów};
+
+    \node[below of = programmer, node distance=6cm] (programmer_ground) {};
+    \node[below of = repo, node distance=6cm] (repo_ground) {};
+    \node[below of = ci_cd, node distance=6cm] (ci_cd_ground) {};
+    \node[below of = registry, node distance=6cm] (registry_ground) {};
+    %
+    \draw (repo) -- (repo_ground);
+    \draw (programmer) -- (programmer_ground);
+    \draw (ci_cd) -- (ci_cd_ground);
+    \draw (registry) -- (registry_ground);
+
+
+    \draw[->] ($(programmer)!0.20!(programmer_ground)$) -- node[above,scale=1,midway]{Nowy \textit{commit}} ($(repo)!0.20!(repo_ground)$);
+    % \draw[<-] ($(programmer)!0.35!(programmer_ground)$) -- node[above,scale=1,midway]{Text} ($(repo)!0.35!(repo_ground)$);
+    \draw[->,align=center] ($(repo)!0.35!(repo_ground)$) -- node[above,scale=1,midway]{Zainicjowanie procesu\\budowania} ($(ci_cd)!0.35!(ci_cd_ground)$);
+
+    \draw[->,align=center] ($(ci_cd)!0.60!(ci_cd_ground)$) -- node[above,scale=1,midway]{ Wysłanie zbudowanego \\~i przetestowanego \\ konteneru do rejestru} ($(registry)!0.60!(registry_ground)$);
+    
+    \draw[<-,align=center] ($(repo)!0.70!(repo_ground)$) -- node[above,scale=1,midway]{Status~i logi \\z systemu \texttt{CI/CD}} ($(ci_cd)!0.70!(ci_cd_ground)$);
+    \draw[<-,align=center] ($(programmer)!0.90!(programmer_ground)$) -- node[above,scale=1,midway]{Informacja, czy \\ \textit{commit} przeszedł testy} ($(repo)!0.90!(repo_ground)$);
+\end{tikzpicture}
+	\caption{
+      Diagram sekwencji, opisujący proces automatycznej budowy kontenerów 
+	}
+	\label{ci_workflow}
+\end{figure}
 
 Ponieważ konteneryzacja pozwala na zupełne zautomatyzowanie procesu budowania,
 skrypty~w systemie \texttt{CI/CD} są~w stanie samodzielnie zbudować kontener,
-zawierający konkretny komponent systemu. Następnie, kontener wysyłany jest
+zawierający konkretny komponent systemu. Następnie, kontener poddawany jest testom
+(opisanym~w rozdziale \ref{chapter_tests}). Po przejściu testów, kontener wysyłany jest
 do \textit{rejestru kontenerów} -- specjalnego repozytorium,~w którym można
 przechowywać~i wersjonować kontenery. Skrypt systemu \texttt{CI/CD} automatycznie oznacza
 kontener za pomocą nazwy brancha, na której został zbudowany. Kontenery pochodzące~z brancha \textit{master}, uruchamiane są na serwerze produkcyjnym.
@@ -71,9 +110,9 @@ variables:
   IMAGE_NAME: "registry.gitlab.com/academic-aviation-club/gavron/frontend"
 
 # Przed wykonaniem danego skryptu budującego, wykonywane jest logowanie
-# do rejestru dockera - umożliwi to zapisanie w nim 
+# do rejestru dockera - umożliwi to zapisanie~w nim 
 # zbudowanego obrazu aplikacji. Zmienna $GITLAB_DEPLOY_TOKEN
-# przypisywana jest w ustawieniach repozytorium
+# przypisywana jest~w ustawieniach repozytorium
 before_script:
   - docker login -u baczek-vps -p $GITLAB_DEPLOY_TOKEN registry.gitlab.com
 
@@ -81,7 +120,7 @@ before_script:
 # później wykorzystany do testów integracyjnych
 build_testing_image:
   stage: build
-  # Zapewnia dostęp do dockera w ramach zadania `build_testing_image`
+  # Zapewnia dostęp do dockera~w ramach zadania `build_testing_image`
   services:
     - docker:19.03.12-dind
   image: docker:19.03.12
@@ -112,59 +151,19 @@ build_prod_image:
   - docker push $IMAGE_NAME:$CI_COMMIT_REF_NAME
 \end{lstlisting}
 
-Wszystkie logi, jakie system CI/CD zbierze~w trakcie budowania obrazu ~z aplikacją są dostępne dla programisty - pozwala to odnaleźć błędy,
-które pojawiły się~w procesie budowania. Systemy obsługi repozytorium
-(taki jak \textit{GitHub}, \textit{BitBucket} czy \textit{GitLab}),
-wyświetlają informacje~o tym, czy dany commit przeszedł testy~w systemie CI/CD:
+Wszystkie logi, jakie system CI/CD zbierze~w trakcie budowania~i testowania obrazu~z aplikacją są
+dostępne dla programisty - pozwala to odnaleźć błędy, które pojawiły się~w procesie budowania oraz
+sprawdzić wyniki testów. Systemy obsługi repozytorium (taki jak \textit{GitHub}, \textit{BitBucket}
+czy \textit{GitLab}), wyświetlają informacje~o tym, czy dany commit przeszedł testy~w systemie
+\textit{CI/CD}, ułatwiając odnajdywanie commitów zawierających błędy. Przykład tej funkcji
+zilustrowany jest na rysunku \ref{gitlab_ci_history}.
 
 \begin{figure}[H]
-    \centering
-    \caption{ Historia zmian~w kodzie~w serwisie \textit{GitLab}.
-    Ikony po prawej stronie informują, czy dany commit przeszedł testy~w systemie CI/CD }
-\includegraphics[width=.7\linewidth]{rys04/gitlab_ci_commit_status.png}
-    
+  \centering
+  \includegraphics[width=.7\linewidth]{rys04/gitlab_ci_commit_status.png}
+  \caption{ Historia zmian~w kodzie~w serwisie \textit{GitLab}.
+  Ikony po prawej stronie informują, czy dany commit przeszedł testy~w systemie CI/CD }
 	\label{gitlab_ci_history}
-\end{figure}
-
-
-
-
-\begin{figure}[H]
-	\centering\small
-	\caption{
-      Diagram sekwencji, opisujący proces automatycznej budowy kontenerów 
-	}
-	\label{telemetry_backend_architecture}
-\tikzstyle{arrow} = [thick,->,>=stealth]
-
-\begin{tikzpicture}[node distance=4cm,auto,>=stealth']
-    
-    \node[] (programmer) {Programista};
-    \node[right of = programmer] (repo) {Repozytorium};
-    \node[right of = repo] (ci_cd) {System \texttt{CI/CD}};
-    \node[right of = ci_cd] (registry) {Rejestr kontenerów};
-
-    \node[below of = programmer, node distance=6cm] (programmer_ground) {};
-    \node[below of = repo, node distance=6cm] (repo_ground) {};
-    \node[below of = ci_cd, node distance=6cm] (ci_cd_ground) {};
-    \node[below of = registry, node distance=6cm] (registry_ground) {};
-    %
-    \draw (repo) -- (repo_ground);
-    \draw (programmer) -- (programmer_ground);
-    \draw (ci_cd) -- (ci_cd_ground);
-    \draw (registry) -- (registry_ground);
-
-
-    \draw[->] ($(programmer)!0.20!(programmer_ground)$) -- node[above,scale=1,midway]{Nowy \textit{commit}} ($(repo)!0.20!(repo_ground)$);
-    % \draw[<-] ($(programmer)!0.35!(programmer_ground)$) -- node[above,scale=1,midway]{Text} ($(repo)!0.35!(repo_ground)$);
-    \draw[->,align=center] ($(repo)!0.35!(repo_ground)$) -- node[above,scale=1,midway]{Zainicjowanie procesu\\budowania} ($(ci_cd)!0.35!(ci_cd_ground)$);
-
-    \draw[->,align=center] ($(ci_cd)!0.60!(ci_cd_ground)$) -- node[above,scale=1,midway]{ Wysłanie zbudowanego \\~i przetestowanego \\ konteneru do rejestru} ($(registry)!0.60!(registry_ground)$);
-    
-    \draw[<-,align=center] ($(repo)!0.70!(repo_ground)$) -- node[above,scale=1,midway]{Status~i logi \\z systemu \texttt{CI/CD}} ($(ci_cd)!0.70!(ci_cd_ground)$);
-    \draw[<-,align=center] ($(programmer)!0.90!(programmer_ground)$) -- node[above,scale=1,midway]{Informacja, czy \\ \textit{commit} przeszedł testy} ($(repo)!0.90!(repo_ground)$);
-\end{tikzpicture}
-
 \end{figure}
 
 \section{Automatyczne aktualizacje kontenerów} \label{ouroboros}
@@ -193,10 +192,10 @@ IMAGE=registry.gitlab.com/academic-aviation-club/gavron/frontend:master
 
 docker pull $IMAGE # Pobranie najnowszej wersji kontenera
 
-# Nazwa kontenera nadana w poprzednim przykładzie, za pomocą --name
+# Nazwa kontenera nadana~w poprzednim przykładzie, za pomocą --name
 docker stop frontend
 
-# Usunięcie kontenera w starej wersji (jego stanu, zmian~w systemie plików)
+# Usunięcie kontenera~w starej wersji (jego stanu, zmian~w systemie plików)
 docker rm frontend
 
 # Tak samo jak~w przykładzie powyżej
@@ -227,7 +226,7 @@ jednocześnie działających kontenerów dockerowych:
   \item Kontener~z serwerem API,
   \item Kontener~z serwerem \texttt{imagezmq},
   \item Kontener~z systemem telemetrii,
-  \item Kontener~z programem \texttt{ouroboros} (opisanym w rozdziale \ref{ouroboros}),
+  \item Kontener~z programem \texttt{ouroboros} (opisanym~w rozdziale \ref{ouroboros}),
   \item Kontener~z systemem do rozpoznawania obrazów. 
 \end{enumerate}
 

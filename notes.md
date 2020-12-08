@@ -1,3 +1,5 @@
+**RYSUNEK PODPISUJEMY POD RYSUNKIEM, TABELĘ NAD TABELĄ, LISTING NAD**
+
 # PYTANIA NA 10.12.20
 
 - Czy okej jest "w poniższym rozdziale", 2 i 3
@@ -42,7 +44,6 @@ Cel systemu: high levelowy opis tego na co system ma pozwalać
 
 Wymagania funkcjonalne: high levelowy opis tego, do czego system będzie używany
 
-**RYSUNEK PODPISUJEMY POD RYSUNKIEM, TABELĘ NAD TABELĄ, LISTING NAD**
 
 Architektura systemu obejmuje komponenty opisane na rysunku \ref
 
