@@ -1,10 +1,9 @@
 \chapter{ Architektura systemu: przegląd i wybór technologii } \label{chapter_architecture}
 
-\section{Zarys architektury}
+% \section{Zarys architektury}
 
 \begin{figure}[H]
 \centering\small
-\label{top_level_architecture_diagram}
 \hspace{-1.2cm}
 \begin{forest}
 	% forest preamble: determine layout and format of tree
@@ -53,7 +52,13 @@
 \caption{
 	Zarys architektury systemu
 }
+\label{top_level_architecture_diagram}
 \end{figure}
+
+Diagram \ref{top_level_architecture_diagram} opisuje architekturę systemu,
+wynikającą z wymagań funkcjonalnych opisanych~w rozdziale \ref{chapter_functional_requirements}.
+Poniższy rozdział opisuje proces wyboru technologii, dzieki którym będzie możliwa budowa 
+systemu spełniającego te wymagania. % zdefiniowane~w rozdziale \ref{chapter_functional_requirements}.
 
 % \begin{tikzpicture}
 	
@@ -232,11 +237,6 @@ rzeczywistym pomiędzy wieloma systemami informatycznymi. W obecnej wersji
 
 \begin{figure}[H]
 	\centering\small
-	\caption{
-	 Diagram przedstawiający system generowania implementacji protokołu, na podstawie
-	 narzędzia \texttt{protobuf}	
-	}
-	\label{protobuf_generation}
 	\hspace{-1.2cm}
 \tikzstyle{arrow} = [thick,->,>=stealth]
 \begin{tikzpicture}[node distance=5cm]
@@ -275,6 +275,11 @@ rzeczywistym pomiędzy wieloma systemami informatycznymi. W obecnej wersji
 	\draw [arrow] (coompiler) -- (implementation_c.west);
 
 \end{tikzpicture}
+\caption{
+	Diagram przedstawiający system generowania implementacji protokołu, na podstawie
+	narzędzia \texttt{protobuf}	
+}
+\label{protobuf_generation}
 \end{figure}
 
 Poza automatycznym generowaniem
@@ -534,16 +539,19 @@ Aplikacja kliencka pozwala na wykonanie następujących działań:
 	\end{itemize} 
 \end{itemize}
 
-Najbardziej wymagającym z wymagań jest obsługa mapy, która będzie obecna we wszystkich
+Najbardziej istotnym z wymagań jest obsługa mapy, która będzie obecna we wszystkich
 widokach aplikacji. W systemie została wykorzystana biblioteka \texttt{Leaflet}, 
-służąca do wizualizowania danych na mapach. Biblioteka napisana jest z myślą o technologiach 
-webowych, aplikacja kliencka została więc zrealizowana jako aplikacja webowa.
-Wykorzystanym w aplikacji frameworkiem \texttt{JavaScript} jest \texttt{VueJS}. 
+służąca do wizualizowania danych na mapach. Rysunek \ref{frontend_flight_planner}
+zawiera jeden z widoków finalnej wersji aplikacji klienckiej, wykorzystującej
+bibliotekę \texttt{leaflet} w komponencie do planowania trasy lotu.
+Biblioteka napisana jest z myślą o technologiach  webowych, aplikacja kliencka
+została więc zrealizowana jako aplikacja webowa. Wykorzystanym w aplikacji
+frameworkiem \texttt{JavaScript} jest~\texttt{VueJS}. 
 
 \begin{figure}[H]
 	\centering
+	\includegraphics[width=\linewidth]{rys03/flight_planner.png}
 	\caption{ Widok aplikacji klienckiej, odpowiedzialny za planowanie tras. }
-\includegraphics[width=\linewidth]{rys03/flight_planner.png}
 	\label{frontend_flight_planner}
 \end{figure}
 
@@ -592,21 +600,21 @@ pobranie nowych definicji do wszystkich innych  repozytoriów, które wykorzystu
 submoduł z definicjami. 
 
 
-
+\newpage
 \section{Architektura systemu - podsumowanie}
+
+Rysunek \ref{technologies_diagram} opisuje wykorzystywane w projekcie
+technologie i sprzęt.
 
 \begin{figure}[H]
 \centering\small
-\caption{
-	Architektura systemu - wykorzystane technologie
-}
-\label{technologies_diagram}
+
 \hspace{-1.2cm}
 \begin{forest}
 	% forest preamble: determine layout and format of tree
 	direction switch, 
 	for tree={fork sep=2em, l sep=0.5cm, s sep=0.6cm}
-	[ ,yshift=3em,alias=LP, s sep=2.2cm
+	[ System inspekcji obszarów ,yshift=3em,alias=LP, s sep=2.2cm
 	  [ \textbf{Dron}
 		[ Kontroler lotu 
 		  [ \texttt{ArduPilot} ]
@@ -647,4 +655,8 @@ submoduł z definicjami.
 	\draw[->] (definitions) to[out=north east, in=south east] node[fill=white,pos=.6]{Submoduł} (front_websocket); % leave fill=white away in order to get your image. pos=. is optional. Default would be .5
 	\draw[->] (definitions) to[out=west, in=south east] node[fill=white,pos=.6]{Submoduł} (flight_computer); % leave fill=white away in order to get your image. pos=. is optional. Default would be .5
 \end{forest}
+\caption{
+	Architektura systemu - wykorzystane technologie
+}
+\label{technologies_diagram}
 \end{figure}

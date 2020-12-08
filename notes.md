@@ -1,10 +1,17 @@
+# PYTANIA NA 10.12.20
+
+- Czy okej jest "w poniższym rozdziale", 2 i 3
+
+- Czy trzeba robić \ref do każdego listingu/diagramu, nawet jak to jest oczywiste?
+    Przykładowo listingi i diagramy w rozdziale o protobufie
+
+
+
 # Tutorial tikz
 
 `https://www.bu.edu/math/files/2013/08/tikzpgfmanual.pdf`
 
 # Pytania
-
-- Jak robić listingi? Mówić jaki to język/składnia? Przykładowo: gitlabowy YML/linuxowy bash
 
 - Jak opisywać pracę ludzi z klubu?
 
