@@ -158,7 +158,19 @@ else:
 
 \subsection{\textit{SITL} i automatyczne testy w systemie \textit{CI/CD}}
 
+Jak opisano w rozdziale \ref{chapter_deployment}, wszystkie komponenty systemu
+docelowo uruchamiane są w kontenerach. Takie rozwiązanie pozwala na zagwarantowanie
+poprawnego wdrożenia systemu na serwerze produkcyjnym. Równocześnie, kontenery wysyłane
+na serwer produkcyjny można wcześniej przetestować w wirtualnym środowisku testowym.
 
+Na potrzeby projektu, symulator kontrolera lotu został zkonteneryzowany i wykorzystany
+w \textit{CI/CD} do testów integracyjnych, angażujących wszystkie komponenty systemu.
+Zespół pracujący nad projektem używał gotowego kontenera z symulatorem,
+aby przeprowadzać testy na własnych maszynach. Takie rozwiązanie eliminuje wszystkie
+problemy, jakie mogą pojawić się podczas wykorzystywania oprogramowania którego
+konfiguracja jest bardzo złożona -- tak jak w przypadku symulatora lotu.
+
+\subsection{Budowanie testów integracyjnych z wykorzystaniem \textit{Gitlab CI}}
 
 \section{Testy w terenie}
 

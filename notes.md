@@ -7,7 +7,7 @@
 - Czy trzeba robić \ref do każdego listingu/diagramu, nawet jak to jest oczywiste?
     Przykładowo listingi i diagramy w rozdziale o protobufie
 
-
+- Mam \cite w obrazku, przez co przesuwają się wszystkie przypisy (diagram sitl). Co teraz?
 
 # Tutorial tikz
 
