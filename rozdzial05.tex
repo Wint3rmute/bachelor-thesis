@@ -271,9 +271,9 @@ się w odpowiedni sposób; nie pozostawił na serwerze działających procesów 
 \subsection{Wczesne etapy rozwoju systemu} \label{early_tests}
 
 Ze względu na pandemię COVID-19, system testowany był w terenie jedynie trzy razy.
-Przy pierwszych testach, dron testowy nie był jeszcze przygotowany, system został 
-zaadaptowany do jednego z samolotów Akademickiego Klubu Lotniczego. Testom została
-poddana aplikacja kliencka i system obsługi telemetrii.
+Podczas pierwszych testów, dron testowy nie był jeszcze przygotowany, system został 
+zaadaptowany do wykorzystania w jednym z samolotów Akademickiego Klubu Lotniczego.
+Testom została poddana aplikacja kliencka i system obsługi telemetrii.
 
 \begin{figure}[H]
 	\centering
@@ -317,19 +317,88 @@ Finalnie wykorzystywany dron, przedstawiony na rysunku \ref{testing_drone}, zawi
 ten sam kontroler lotu co samolot używany do wczesnych testów, opisanych w podrozdziale 
 \ref{early_tests}. Dodatkowo, dron zaopatrzony był w kamerę na gimbalu.
 
-\subsection{Aplikacja kliencka}
+\subsection{Przebieg lotów testowych}
+
+W trakcie lotów testowych kilkakrotnie został wykonany scenariusz 
+wykorzystania systemu, opisany w celu pracy (\ref{intro_objective}):
+
+\begin{enumerate}
+    \item W aplikacji klienckiej wyznaczona została nowa trasa lotu,
+    \item dron pobrał trasę i rozkład lotu z serwera \textit{REST API},
+    \item dron wystartował, po czym zaczął wysyłać dane telemetryczne i zdjęcia (\ref{final_frontend}),
+    \item dane telemetryczne i wykonane zdjęcia zostały przekazane do aplikacji klienckiej,
+    \item odebrane na serwerze zdjęcia zostały przetworzone przez algorytmy sztucznej inteligencji,
+        które rozpoznały obecnych na zdjęciach ludzi (\ref{final_ai_good}).
+\end{enumerate}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{rys05/final_flight_telem.png}
     \caption{
         Finalna wersja aplikacji klienckiej w trakcie testów w terenie. 
-        W prawym dolnym rogu widoczny podgląd zdjęć wykonywanych w trakcie lotu.
+        W prawym dolnym rogu widoczny podgląd zdjęć wykonywanych w trakcie lotu,
+        przesyłanych w czasie rzeczywistym do aplikacji.
     }
-	\label{testing_drone}
+	\label{final_frontend}
+\end{figure}
+
+Aplikacja kliencka, widoczna na rysunku \ref{final_frontend} wyświetla zaplanowaną
+wcześniej trasę przelotu oraz pozycję drona, odczytaną z danych telemetrycznych.
+Pozycja maszyny jest aktualizowana w czasie rzeczywistym. Równolegle odbierane
+są nowe zdjęcia wykonane w czasie lotu.
+
+\subsection{Rozpoznawanie obiektów na zdjęciach}
+\begin{multicols}{2}
+    
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{rys05/correctly_recognised_2_ppl.jpg}
+    \caption{
+        Zdjęcie wykonane podczas lotu, na zdjęciu poprawnie rozpoznano dwie osoby.
+    }
+	\label{final_ai_good}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{rys05/car_person.jpg}
+    \caption{
+        Zdjęcie wykonane podczas lotu. Samochód został niepoprawnie oznaczony jako osoba.
+    }
+	\label{final_ai_bad}
+\end{figure}
+\end{multicols}
+
+Algorytmy sztucznej inteligencji, omówione w podrozdziale \ref{yolo} 
+próbowały rozpoznać ludzi na zdjęciach wykonanych w trakcie lotów.
+Większość zdjęć została rozpoznana poprawnie, system nie rozpoznawał
+głównie zdjęć, które były niewyraźne. Rysunki \ref{final_ai_good} i \ref{final_ai_bad}
+zawierają przykładowe zdjęcia wraz z oznaczonymi na obiektami.
+Tabela \ref{ai_results} zawiera podsumowanie dokładności rozpoznawania
+ludzi na zdjęciach wykonanych podczas lotów.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture} 
+        \pie [rotate = 0]
+        {
+            76/Ludzie rozpoznani poprawnie,
+            9/{Ludzie ucięci przez kadr},
+            15/{Ludzie nie rozpoznani}
+        }
+    \end{tikzpicture}
+
+    \caption{
+         wykonane podczas lotu. Samochód został niepoprawnie oznaczony jako osoba.
+    }
+	\label{final_ai_bad}
 \end{figure}
 
 
-\subsection{Rozpoznawanie obiektów na zdjęciach}
+Beczka z mleczka
 
+% 31 na zdjęciach
+% 26 rozpoznanych
+% 3 osoby ucięte w połowie, ciężko powiedzieć
+% 1 raz samochód rozpoznany jako osoba
 
