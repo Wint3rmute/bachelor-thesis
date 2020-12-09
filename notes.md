@@ -9,6 +9,8 @@
 
 - Mam \cite w obrazku, przez co przesuwają się wszystkie przypisy (diagram sitl). Co teraz?
 
+- Mówić rysunek jak coś jest diagramem/zdjęciem?
+
 # Tutorial tikz
 
 `https://www.bu.edu/math/files/2013/08/tikzpgfmanual.pdf`

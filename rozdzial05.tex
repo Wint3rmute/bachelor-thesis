@@ -200,7 +200,7 @@ na podłączenie własnych serwerów do swojej sieci -- dzięki takiemu rozwiąz
 użytkownicy mogą wykorzystywać pełne możliwości systemu ciągłej integracji.
 
 Podłączony do systemu serwer wykonuje skrypty uruchamiające testy integracyjne
-wprost na serwerze, co pozwala na równoległe uruchomienie wielu kontenerów 
+bezpośrednio na serwerze, co pozwala na równoległe uruchomienie wielu kontenerów 
 \texttt{docker} oraz monitorowanie ich pracy z zewnątrz -- jak pokazano
 na diagramie \ref{integration_tests_diagram}.
 
@@ -246,7 +246,15 @@ z poprzednich etapów. W przypadku testów integracyjnych oznacza to, że wpierw
 zweryfikowane musi zostać działanie wszystkich kontenerów składających się
 na system, następnie testowane są interakcje między komponentami. 
 Finalny zestaw testów integracyjnych (\textit{test pipeline}), które były
-wykonywane na systemie ilustruje rysunek \ref{pipeline_gitlab_ci}.
+wykonywane na systemie ilustruje rysunek \ref{pipeline_gitlab_ci}.\\
+\\
+\noindent
+\textit{Uwaga:} etapy takie jak \textit{Pull images} czy \textit{Clean after component tests}
+sprawdzają stan serwera przed i po wykonaniu etapu testów. Jest to wymagane, ponieważ testy
+nie ograniczają się do izolowanych kontenerów dockera, lecz wymagaja komunikowania się
+z komponentami za pomocą skryptów uruchamianych bezpośrednio na serwerze testowym. 
+Etapy wykonywane pomiędzy testami weryfikują, czy konkretny etap testów zakończył 
+się w odpowiedni sposób; nie pozostawił na serwerze działających procesów lub kontenerów.
 
 \begin{figure}[H]
 	\centering
@@ -259,4 +267,69 @@ wykonywane na systemie ilustruje rysunek \ref{pipeline_gitlab_ci}.
 \end{figure}
 
 \section{Testy w terenie}
+
+\subsection{Wczesne etapy rozwoju systemu} \label{early_tests}
+
+Ze względu na pandemię COVID-19, system testowany był w terenie jedynie trzy razy.
+Przy pierwszych testach, dron testowy nie był jeszcze przygotowany, system został 
+zaadaptowany do jednego z samolotów Akademickiego Klubu Lotniczego. Testom została
+poddana aplikacja kliencka i system obsługi telemetrii.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{rys05/test_sae.jpg}
+    \caption{
+        Pierwsze loty testowe, wykorzystujące jeden z samolotów Akademickiego
+        Klubu Lotniczego. Testy objęły aplikację kliencką i system obsługi telemetrii.
+    }
+	\label{test_sae}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{rys05/sae_telem.jpg}
+    \caption{
+        Wczesna wersja aplikacji klienckiej, wyświetlająca pozycję samolotu w trakcie lotu.
+    }
+	\label{telem_sae}
+\end{figure}
+
+Jak wspomniano w podrozdziale \ref{ouroboros}, automatyczne aktualizowanie infrastruktury
+internetowej systemu pozwoliło na szybsze i bezpieczniejsze wprowadzanie poprawek w systemie.
+Jest to szczególnie pożądane w przypadku testowania dronów/samolotów, ponieważ przeprowadzenie
+lotu wymaga obecności całego zespołu: mechaników, elektroników, programistów oraz pilota. Szybsze
+wprowadzanie zmian w oprogramowaniu umożliwia sprawniejsze wykonywanie lotów i wykonanie
+większej ilości lotów testowych.
+
+\subsection{Finalne testy systemu}
+\subsection{Platforma testowa}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{rys05/testing_drone.jpg}
+    \caption{
+        Dron wykorzystywany do finałowych testów projektu.
+    }
+	\label{testing_drone}
+\end{figure}
+
+
+Finalnie wykorzystywany dron, przedstawiony na rysunku \ref{testing_drone}, zawierał
+ten sam kontroler lotu co samolot używany do wczesnych testów, opisanych w podrozdziale 
+\ref{early_tests}. Dodatkowo, dron zaopatrzony był w kamerę na gimbalu.
+
+\subsection{Aplikacja kliencka}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{rys05/final_flight_telem.png}
+    \caption{
+        Finalna wersja aplikacji klienckiej w trakcie testów w terenie. 
+        W prawym dolnym rogu widoczny podgląd zdjęć wykonywanych w trakcie lotu.
+    }
+	\label{testing_drone}
+\end{figure}
+
+
+\subsection{Rozpoznawanie obiektów na zdjęciach}
+
 
