@@ -218,6 +218,13 @@ czasu sprawdza, czy uruchomione na serwerze kontenery nie wymagają aktualizacji
 Jeśli~w rejestrze dostępna jest nowa wersja obrazu kontenera, pobiera ją~i zastępuje
 nią obecnie działający kontener.
 
+Dzięki zastosowaniu narzędzia \texttt{Ouroboros}, w trakcie testów w terenie 
+udało się znacznie usprawnić aktualizacje infrastruktury systemu. W przypadku
+pojawienia się błędu, programiści musieli jedynie zaktualizować kod w repozytorium --
+system \textit{CI/CD} automatycznie budował poprawioną wersję kontenera, \texttt{Ouroboros}
+aktualizował serwer produkcyjny. Po dodaniu nowego kodu do repozytorium, uaktualniona
+wersja aplikacji pojawiała się na serwerze po mniej niż pięciu minutach.
+
 \section{Orkiestracja systemu złożonego~z wielu kontenerów -- \texttt{docker-compose}}
 
 Finalnie, infrastruktura internetowa systemu składa się~z sześciu

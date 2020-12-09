@@ -53,8 +53,8 @@ pracy z systemami kontroli wersji. W przypadku implementowania nowej
 funkcji na gałęzi (\textit{branch}), system \textit{CI/CD} pozwala określić,
 czy nowa funkcjonalność nie destabilizuje systemu -- ostrzegając przed 
 przyjęciem na główną gałąź (\textit{master branch}) kodu, który nie przeszedł
-testów jednostkowych. Rysunek \ref{failed_pipeline} przedstawia przykład takiego zachowania,
-na przykładzie usługi \textit{GitLab}.
+testów jednostkowych. Rysunek \ref{failed_pipeline} przedstawia przykład
+takiego zachowania w usłudze \textit{GitLab}.
 
 \begin{figure}[H]
 	\centering
@@ -63,7 +63,7 @@ na przykładzie usługi \textit{GitLab}.
         Widok interfejsu scalania gałęzi w serwisie \textit{GitLab}.
         Gałąź \texttt{finish\_integration\_tests} nie przechodzi testów
         w systemie \textit{CI/CD}. Administrator repozytorium natychmiast
-        ma informację, że kod nie jest jeszcze gotowy do scalenia.
+        otrzymuje informację, że kod nie jest jeszcze gotowy do scalenia.
     }
 	\label{failed_pipeline}
 \end{figure}
@@ -171,6 +171,92 @@ problemy, jakie mogą pojawić się podczas wykorzystywania oprogramowania któr
 konfiguracja jest bardzo złożona -- tak jak w przypadku symulatora lotu.
 
 \subsection{Budowanie testów integracyjnych z wykorzystaniem \textit{Gitlab CI}}
+
+Do uruchamiania testów integracyjnych przeznaczony został dedytkowany serwer
+Linux. Serwer służył za platformę, na której uruchamiane były wszystkie 
+komponenty systemu. Diagram \ref{integration_tests_diagram} ilustruje 
+sposób wykorzystywania dedykowanego serwera w celu przeprowadzenia 
+testów integracyjnych.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{rys05/integration_tests_diagram.png}
+    \caption{
+        Pełne testy integracyjne na dedykowanym serwerze.
+    }
+	\label{integration_tests_diagram}
+\end{figure}
+
+\subsection{Konfiguracja serwera zarządzanego przez \textit{Gitlab CI}}
+
+Platforma \textit{GitLab} umożliwia uruchamianie testów na własnej
+infrastrukturze, w ramach usług dostępnych dla darmowych kont.
+Infrastruktura platformy domyślnie pozwala jedynie
+na testowanie wewnątrz izolowanych kontenerów \texttt{docker}.
+Jest to rozwiązanie zupełnie wystarczające w przypadku testów jednostkowych.
+Uruchomienie pełnego systemu w sztucznym środowisku wymaga jednak
+większej kontroli nad serwerem testowym. \textit{Gitlab CI} pozwala
+na podłączenie własnych serwerów do swojej sieci -- dzięki takiemu rozwiązaniu
+użytkownicy mogą wykorzystywać pełne możliwości systemu ciągłej integracji.
+
+Podłączony do systemu serwer wykonuje skrypty uruchamiające testy integracyjne
+wprost na serwerze, co pozwala na równoległe uruchomienie wielu kontenerów 
+\texttt{docker} oraz monitorowanie ich pracy z zewnątrz -- jak pokazano
+na diagramie \ref{integration_tests_diagram}.
+
+\subsection{Definiowanie wieloetapowych testów integracyjnych}
+
+W ramach testów integracyjnych testowane są wpierw pojedyncze kontenery --
+nie są to jednak testy jednostkowe. Uruchamiany jest cały kontener zawierający
+komponent systemu, następnie jest on testowany przez zewnętrzny skrypt.
+W przypadku aplikacji klienckiej, uruchamiana jest sterowana automatycznie 
+przeglądarka internetowa, która symuluje zachowanie prawdziwego użytkownika,
+tworząc nową trasę przelotu drona. W przypadku serwera \textit{REST API}, wykonywane
+są zapytania \textit{http} weryfikujące poprawność działania \textit{API}.
+
+Po przetestowaniu pojedynych kontenerów, uruchamiane są testy angażujące
+wiele kontenerów -- sprawdzające czy komponenty systemu będą ze sobą współpracowały.
+Przykładowy scenariusz testowy zawiera:
+
+\begin{enumerate}
+    \item Uruchomienie kontenerów:
+    \begin{itemize}
+        \item symulatora kontrolera lotu,
+        \item aplikacji sterującej dronem,
+        \item aplikacji klienckiej
+        \item serwera telemetrii
+        \item serwera API.
+    \end{itemize}
+    \item Wykorzystanie zdalnie sterowanej przeglądarki w
+            celu dodania nowej trasy przelotu w aplikacji klienckiej.
+    \item Sprawdzenie, czy w aplikacji klienckiej pojawi się telemetria z drona,
+            wykonującego zaplanowaną trasę.
+\end{enumerate}
+
+Taki test angażuje wszystkie uruchamiane komponenty. Skrypt wykonujący test
+musi jedynie sterować aplikacją kliencką i weryfikować, czy pojawiają się
+w niej dane pochodzące z pozostałych komponentów systemu.
+
+\subsubsection{Etapy testów w \textit{GitLab CI}}
+
+Platforma \textit{GitLab CI} pozwala na podzielenie testów na etapy. 
+Każdy etap składa się z określonej liczby zadań. Aby system \textit{CI/CD}
+mógł przejść do kolejnego etapu, muszą zostać wykonane wszystkie zadania 
+z poprzednich etapów. W przypadku testów integracyjnych oznacza to, że wpierw
+zweryfikowane musi zostać działanie wszystkich kontenerów składających się
+na system, następnie testowane są interakcje między komponentami. 
+Finalny zestaw testów integracyjnych (\textit{test pipeline}), które były
+wykonywane na systemie ilustruje rysunek \ref{pipeline_gitlab_ci}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{rys05/pipeline.png}
+    \caption{
+        Interfejs \textit{GitLab CI} prezentujący postęp w wykonywaniu
+        wieloetapowych testów integracyjnych.
+    }
+	\label{pipeline_gitlab_ci}
+\end{figure}
 
 \section{Testy w terenie}
 
