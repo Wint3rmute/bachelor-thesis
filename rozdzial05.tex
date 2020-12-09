@@ -271,8 +271,8 @@ się w odpowiedni sposób; nie pozostawił na serwerze działających procesów 
 \subsection{Wczesne etapy rozwoju systemu} \label{early_tests}
 
 Ze względu na pandemię COVID-19, system testowany był w terenie jedynie trzy razy.
-Podczas pierwszych testów, dron testowy nie był jeszcze przygotowany, system został 
-zaadaptowany do wykorzystania w jednym z samolotów Akademickiego Klubu Lotniczego.
+Podczas pierwszych testów, dron z kamerą nie był jeszcze przygotowany, system został więc 
+zaadaptowany do wykorzystania w jednym z samolotów Akademickiego Klubu Lotniczego (\ref{test_sae}).
 Testom została poddana aplikacja kliencka i system obsługi telemetrii.
 
 \begin{figure}[H]
@@ -374,28 +374,31 @@ próbowały rozpoznać ludzi na zdjęciach wykonanych w trakcie lotów.
 Większość zdjęć została rozpoznana poprawnie, system nie rozpoznawał
 głównie zdjęć, które były niewyraźne. Rysunki \ref{final_ai_good} i \ref{final_ai_bad}
 zawierają przykładowe zdjęcia wraz z oznaczonymi na obiektami.
-Tabela \ref{ai_results} zawiera podsumowanie dokładności rozpoznawania
-ludzi na zdjęciach wykonanych podczas lotów.
+Diagram \ref{ai_results} zawiera podsumowanie dokładności rozpoznawania
+ludzi, obliczonej na podstawie wszystkich zdjęć wykonanych podczas lotów.
 
 \begin{figure}[H]
 	\centering
-	\begin{tikzpicture} 
-        \pie [rotate = 0]
+    \begin{tikzpicture}[align=center]
+        
+        \pie [
+            rotate = 0,
+            /tikz/every pin/.style={align=center},
+            explode=0.2,
+            color={green!50,orange!70,red!70}
+            ]
         {
-            76/Ludzie rozpoznani poprawnie,
-            9/{Ludzie ucięci przez kadr},
-            15/{Ludzie nie rozpoznani}
+            76/Ludzie poprawnie\\ rozpoznani,
+            9/Ludzie nierozpoznani{,}\\nie w pełni widoczni na zdjęciu,
+            15/Ludzie nierozpoznani{,}\\ mimo że byli w pełni\\ widoczni na zdjęciu
         }
     \end{tikzpicture}
 
     \caption{
-         wykonane podczas lotu. Samochód został niepoprawnie oznaczony jako osoba.
+        Dokładność z jaką rozpoznawani są ludzie na zdjęciach wykonanych podczas lotów
     }
-	\label{final_ai_bad}
+	\label{ai_results}
 \end{figure}
-
-
-Beczka z mleczka
 
 % 31 na zdjęciach
 % 26 rozpoznanych
