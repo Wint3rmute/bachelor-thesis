@@ -1,30 +1,34 @@
 \chapter{Podsumowanie}
-\label{chap:podsumowanie}
-Lorem ipsum dolor sit amet eleifend et, congue arcu. Morbi tellus sit amet, massa. Vivamus est id risus. Sed sit amet, libero. Aenean ac ipsum. Mauris vel lectus. 
 
-\section{Sekcja poziomu 1}% 
-Lorem ipsum dolor sit amet eleifend et, congue arcu. Morbi tellus sit amet, massa. Vivamus est id risus. Sed sit amet, libero. Aenean ac ipsum. Mauris vel lectus. 
 
-Nam id nulla a adipiscing tortor, dictum ut, lobortis urna. Donec non dui. Cras tempus orci ipsum, molestie quis, lacinia varius nunc, rhoncus purus, consectetuer congue risus. 
+W trakcie testów w terenie wszystkie komponenty systemu bezkonfliktowo współgrały
+ze sobą. Jest to zasługa faktu, że były wcześniej regularnie sprawdzane
+wewnątrz środowiska testowego. Z punktu widzenia infrastruktury sieciowej,
+testy w terenie nie różniły się niczym od testów wykonywanych na symulatorze --
+dane telemetryczne odbierane z drona były dokładnie takie~same.
 
-\subsection{Sekcja poziomu 2}
-Lorem ipsum dolor sit amet eleifend et, congue arcu. Morbi tellus sit amet, massa. Vivamus est id risus. Sed sit amet, libero. Aenean ac ipsum. Mauris vel lectus. 
-\subsubsection{Sekcja poziomu 3}
-Lorem ipsum dolor sit amet eleifend et, congue arcu. Morbi tellus sit amet, massa. Vivamus est id risus. Sed sit amet, libero. Aenean ac ipsum. Mauris vel lectus. 
-\paragraph{Paragraf 4}
-Lorem ipsum dolor sit amet eleifend et, congue arcu. Morbi tellus sit amet, massa. Vivamus est id risus. Sed sit amet, libero. Aenean ac ipsum. Mauris vel lectus. 
-\section{Sekcja poziomu 1}% 
-Lorem ipsum dolor sit amet eleifend et, congue arcu. Morbi tellus sit amet, massa. Vivamus est id risus. Sed sit amet, libero. Aenean ac ipsum. Mauris vel lectus. 
-%\show\chapter
-%\show\section
-%\show\subsection
+Osiągniętą dokładność rozpoznawania ludzi na zdjęciach wykonanych w trakcie lotu
+można uznać za zadowalającą, zważywszy na fakt że praca nie skupiała się na
+algorytmach rozpoznawania obrazu. Wykorzystanie otwartych zbiorów danych, zawierających
+oznakowane zdjęcia wykonane z samolotów i dronów (przykładowo \textit{VisDrone Dataset} \cite{visdrone}),
+może poprawnić dokładność rozpoznawania obiektów na zdjęciach.
 
-%\showthe\secindent
-%\showthe\beforesecskip
-%\showthe\aftersecskip
-%\showthe\secheadstyle
-%\showthe\subsecindent
-%\showthe\beforesubsecskip
-%\showthe\aftersubsecskip
-%\showthe\subseccheadstyle
-%\showthe\parskip
+Jak wspomniano w podrozdziale \ref{early_tests}, automatyczne aktualizowanie infrastruktury
+internetowej systemu pozwoliło na szybsze i bezpieczniejsze wprowadzanie poprawek w systemie.
+Dzięki temu udało się uniknąć potencjalnych błędów przy wdrażaniu nowych funkcjonalności.
+
+Zastosowane w pracy rozwiązania kwalifikują się do metodyki \textit{DevOps}, opierającej
+się na zacieśnieniu więzów pomiędzy programistami i administratorami systemu.
+Automatyzacja procesów związanych z testami i wdrożeniami oraz powiązanie ich
+z repozytorium projektowym zwiększa u programistów świadomość tego, jak ważny jest proces wdrażania.
+W przypadku systemu wykorzystującego realne, fizyczne i drogie komponenty, pozwala to 
+przyspieszyć ,,dojrzewanie'' systemu -- czas, po którym programiści mogą być pewni stabilności
+działania produktu, nad którym pracują.
+
+W początkowej fazie rozwoju projektu, dodatkowy wysiłek związany z budową infrastruktury
+odpowiedzialnej za wdrożenia może wydawać się zupełnie zbędny. Nie jest to jednak 
+błąd, jak w przypadku przedwczesnej optymalizacji. Wczesne zdefiniowanie ram projektu
+pozwala na utrzymanie rozwoju kodu w ryzach. Jest niezbędne w celu utrzymania
+stałego kursu ku wyznaczonym w projekcie celom.
+
+% nk zdanie z agregacją entropii
