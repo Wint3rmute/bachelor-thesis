@@ -1,15 +1,57 @@
+# Odpowiedzi 11.12.20
+
+## Intro
+
+- Zmienić "cel pracy" na "cel i zakres pracy"
+- Zmienić zawartość na "projekt architektury systemu obszarów (...) na potrzeby/realizowany w ramach koła naukowego" (to jest cel)
+- Następnie, zakres pracy to: 
+    - zdefiniowanie wymagań
+    - architektura
+    - zaprojektowanie testów
+    - przeprowadzenie testów
+    - sposób uruchamiania testów i ich wpływ na wdrażanie "dodatkowo w ramach pracy przedstawione są elementy zarządzania projektem" (tutaj CI/CD)
+
+## Geneza pracy
+
+Pierwszy akapit zrzucić niżej. Wpleść CI/CD do wstępu, uzasadnić jego wykorzystanie, że to jest kluczowe dla dobrego rozwoju systemu/produktu
+Przetrenowane -> ponownie wytrenowane/wytrenowane na nowych danych
+
+## Wdrażanie systemu
+może zamiast tego implementacja potoku CI/CD?
+
+## Testy systemu
+
+Powiedzieć o podziale testów na integracyjne, komponentów, integracyjne, w terenie.
+Opis tego jakie rzeczy były testowane. Ile było testów na komponent (xd).
+
+- Testy jednostkowe - bardziej konkretny opis procesu testowania. Co zdefiniowano, jakie rzeczy są sprawdzane.
+
+- OPIS KROKÓW WSZĘDZIE, nazwać test, co robi, jaki jest cel, jak się weryfikuje, dodać UID testu (?)
+
+- Zamiast wczesnych testów w terenie, testy systemowe, jako osobna sekcja
+- Na końcu testy w terenie
+
+## Podsumowanie
+
+- W ramach projektu stworzono (...)
+
+**POPRAWIĆ LABELKI W SZABLONIE**
 **RYSUNEK PODPISUJEMY POD RYSUNKIEM, TABELĘ NAD TABELĄ, LISTING NAD**
 
 # PYTANIA NA 10.12.20
 
 - Czy okej jest "w poniższym rozdziale", 2 i 3
+    > lepiej "w niniejszym"
 
 - Czy trzeba robić \ref do każdego listingu/diagramu, nawet jak to jest oczywiste?
     Przykładowo listingi i diagramy w rozdziale o protobufie
+    >  tak
 
 - Mam \cite w obrazku, przez co przesuwają się wszystkie przypisy (diagram sitl). Co teraz?
+    > przerzucić listę diagramów na dół
 
 - Mówić rysunek jak coś jest diagramem/zdjęciem?
+    > można mówić wedle woli, tak jak jest styknie
 
 # Tutorial tikz
 
