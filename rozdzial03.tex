@@ -215,9 +215,11 @@ w formie binarnej, co jest konieczne, gdy jednym z wymagań jest wydajne zapakow
 Jednym z możliwych rozwiązań tego problemu jest wykorzystanie narzędzi do generowania
 kodu. Narzędzia tego typu pozwalają na zdefiniowanie standardu danych telemetrycznych
 we własnym (specyficznym dla narzędzia) języku, opisującym strukturę danych przesyłanych
-przez protokół. Następnie, narzędzia takie generują implementację protokołu w wybranych
-językach programowania. Dzięki automatycznemu generowaniu implementacji protokołu,
-programiści nie muszą dbać o spójność implementacji pomiędzy wieloma językami.
+przez protokół. Następnie, narzędzia generują implementację protokołu w wybranych
+językach programowania (jak zilustrowano na diagramie \ref{protobuf_generation}).
+Dzięki automatycznemu generowaniu implementacji,
+programiści nie muszą utrzymywać tego samego protokołu
+w kilku różnych językach~programowania.
 
 Wykorzystywanym w projekcie narzędziem do generowania implementacji protokołu jest
 \texttt{protobuf} (\textit{Protocol Buffers})\cite{protocol_buffers} -- biblioteka
@@ -377,12 +379,12 @@ w czasie rzeczywistym z poziomu aplikacji klienckiej, jak i na analizę już zak
 \subsection{Obsługa telemetrii}
 
 System obsługujący dane telemetryczne odbiera nadchodzące z maszyn pakiety
-\texttt{protobuf}, następnie w czasie rzeczywistym przekazuje je do aplikacji klienckich 
+\texttt{protobuf} (opisane w podrozdziale \ref{protobuf_chapter}), następnie w czasie rzeczywistym przekazuje je do aplikacji klienckich 
 -- w ten sposób możliwy jest jednoczesny odbiór telemetrii na dowolnie wielu urządzeniach.
 Poszczególne loty rozróżnialne są za pomocą unikatowej krotki
 \texttt{(id\_maszyny, id\_lotu)}. Gdy system zauważy, że pakiety telemetryczne z danego
 lotu przestały napływać (przez ponad 10 sekund nie pojawił się żaden nowy pakiet o danym
-\texttt{(id\_maszyny, id\_lotu)}), archiwizuje wszystkie otrzymane w ramach tego lotu
+\texttt{(id\_maszyny, id\_lotu)}), archiwizuje otrzymane w ramach tego lotu
 pakiety, aby możliwe było przeanalizowanie ich po locie.
 
 
@@ -456,13 +458,13 @@ ilustruje zadania wykonywane przez serwer telemetrii, za pośrednictwem~\texttt{
 \begin{center}
 \begin{tikzpicture}
   \begin{scope}[blend group = soft light]
-    \fill[red!30!white]   ( 90:3) circle (3.5);
-    \fill[blue!30!white]  (210:3) circle (3.5);
-    \fill[orange!30!white]  (330:3) circle (3.5);
+    \fill[red!30!white]   ( 90:2.5) circle (2.5);
+    \fill[blue!30!white]  (210:2.5) circle (2.5);
+    \fill[orange!30!white]  (330:2.5) circle (2.5);
   \end{scope}
-  \node at ( 90:3 ) [align=center] {\small Odbiór telemetrii \\ w pakietach \texttt{UDP}};
-  \node at ( 210:3) [align=center]{ \small Utrzymywanie \\ \small połączeń \texttt{WebSocket}};
-  \node at ( 330:3) [align=center]  {\small Multipleksowanie \\ \small telemetrii};
+  \node at ( 90: 2.5 ) [align=center] {\small Odbiór telemetrii \\ w pakietach \texttt{UDP}};
+  \node at ( 210:2.5) [align=center]{ \small Utrzymywanie \\ \small połączeń \texttt{WebSocket}};
+  \node at ( 330:2.5) [align=center]  {\small Multipleksowanie \\ \small telemetrii};
   \node[align=center] { \textbf{Wspólna} \\ \textbf{pętla zdarzeń} \\ \textbf{\texttt{asyncio}}};
 \end{tikzpicture}
 \end{center}
@@ -509,7 +511,8 @@ Do rozpoznawania obrazów wykorzystany został otwartoźródłowy system
 YOLO -- \textit{You Only Look Once} \cite{yolo}. W ramach integracji, system został
 skompilowany do formy biblioteki współdzielonej i podłączony do skryptu
 w języku \textit{Python}. Skrypt monitoruje określony folder w systemie plików
-i rozpoznaje zdjęcia, które się w nim pojawią.
+i rozpoznaje zdjęcia, które się w nim pojawią. Na zdjęciu \ref{yolo_example} 
+przedstawiono przykładowy rezultat działania systemu rozpoznawania ludzi na zdjęciach.
 
 % TODO: można dodać dialogi
 

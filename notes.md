@@ -44,7 +44,7 @@ Opis tego jakie rzeczy były testowane. Ile było testów na komponent (xd).
 - Czy okej jest "w poniższym rozdziale", 2 i 3
     > lepiej "w niniejszym"
 
-- [TODOTODOTODO] Czy trzeba robić \ref do każdego listingu/diagramu, nawet jak to jest oczywiste?
+- [todo] Czy trzeba robić \ref do każdego listingu/diagramu, nawet jak to jest oczywiste?
     Przykładowo listingi i diagramy w rozdziale o protobufie
     >  tak
 
