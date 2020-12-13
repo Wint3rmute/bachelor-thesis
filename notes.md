@@ -44,14 +44,14 @@ Opis tego jakie rzeczy były testowane. Ile było testów na komponent (xd).
 - Czy okej jest "w poniższym rozdziale", 2 i 3
     > lepiej "w niniejszym"
 
-- Czy trzeba robić \ref do każdego listingu/diagramu, nawet jak to jest oczywiste?
+- [TODOTODOTODO] Czy trzeba robić \ref do każdego listingu/diagramu, nawet jak to jest oczywiste?
     Przykładowo listingi i diagramy w rozdziale o protobufie
     >  tak
 
-- Mam \cite w obrazku, przez co przesuwają się wszystkie przypisy (diagram sitl). Co teraz?
+- [done] Mam \cite w obrazku, przez co przesuwają się wszystkie przypisy (diagram sitl). Co teraz?
     > przerzucić listę diagramów na dół
 
-- Mówić rysunek jak coś jest diagramem/zdjęciem?
+- [done] Mówić rysunek jak coś jest diagramem/zdjęciem?
     > można mówić wedle woli, tak jak jest styknie
 
 # Tutorial tikz

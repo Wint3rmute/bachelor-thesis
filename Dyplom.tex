@@ -753,6 +753,38 @@ SPECJALNOŚĆ: & \@specjalnosc\\
 \setcounter{tocdepth}{1}
 \tableofcontents* 
 
+\include{skroty} %skróty można sobie pominąć
+
+\chapterstyle{default}
+
+\include{rozdzial01}
+\include{rozdzial02}
+\include{rozdzial03}
+\include{rozdzial04}
+\include{rozdzial05}
+\include{rozdzial06}
+
+% \include{rozdzialy_temp}
+
+% \include{rozdzial04}
+% \include{rozdzial05}
+% \include{rozdzial06}
+
+% \bibliographystyle{plalpha}
+% \bibliographystyle{plabbrv}
+% \bibliographystyle{plain}
+\bibliographystyle{ieeetr}
+
+%UWAGA: bibliotekę referencji należy przygotować samemu. Dobrym do tego narzędziem jest JabRef.
+%       Nazwę przygotowanej biblioteki wpisuje się poniżej bez rozszerzenia 
+%       (w tym przypadku jest to "dokumentacja.bib")
+\setlength{\bibitemsep}{2pt} % - by zacieśnić wykaz literatury
+\bibliography{dokumentacja}
+\appendix
+
+% \include{dodatekA}
+% \include{dodatekB}
+
 
 % TODO: UNCOMMENT
 
@@ -782,37 +814,9 @@ SPECJALNOŚĆ: & \@specjalnosc\\
 \mbox{}\pdfbookmark[0]{Spis tabel}{spisTabel.1}
 \addcontentsline{toc}{chapter}{Spis tabel}
 \listoftables*
-\include{skroty} %skróty można sobie pominąć
 % END OF TODO: UNCOMMENT
 
-\chapterstyle{default}
 
-\include{rozdzial01}
-\include{rozdzial02}
-\include{rozdzial03}
-\include{rozdzial04}
-\include{rozdzial05}
-\include{rozdzial06}
-
-% \include{rozdzialy_temp}
-
-% \include{rozdzial04}
-% \include{rozdzial05}
-% \include{rozdzial06}
-
-% \bibliographystyle{plalpha}
-% \bibliographystyle{plabbrv}
-% \bibliographystyle{plain}
-\bibliographystyle{ieeetr}
-
-%UWAGA: bibliotekę referencji należy przygotować samemu. Dobrym do tego narzędziem jest JabRef.
-%       Nazwę przygotowanej biblioteki wpisuje się poniżej bez rozszerzenia 
-%       (w tym przypadku jest to "dokumentacja.bib")
-\setlength{\bibitemsep}{2pt} % - by zacieśnić wykaz literatury
-\bibliography{dokumentacja}
-\appendix
-% \include{dodatekA}
-% \include{dodatekB}
 
 \chapterstyle{noNumbered}
 \phantomsection % sets an anchor
