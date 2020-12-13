@@ -22,7 +22,7 @@ testy integracyjne skonteneryzowanego symulatora drona oraz testy systemowe.
 
 Testy jednostkowe obejmują sprawdzanie poprawności zachowania implementacji 
 konkretnego komponentu, za pomocą zdefiniowanych przez programistę
-przypadków testowych. Testy jednostkowe nie wykorzystują zewnętrznych 
+przypadków testowych. Testy tego typu nie wykorzystują zewnętrznych 
 interfejsów komponentu takich jak gniazda sieciowe czy urządzenia peryferyjne --
 operują jedynie na warstwie logicznej komponentu, sprawdzając zachowanie 
 abstrakcji programistycznej.
@@ -79,10 +79,6 @@ takiego zachowania w usłudze \textit{GitLab}.
 	\label{failed_pipeline}
 \end{figure}
 
-
-\section{Testy integracyjne}
-% dopisać SITLa
-
 \section{Testy systemowe}
 
 Realizowany w pracy system nie ogranicza się do pojedynczego,
@@ -99,7 +95,8 @@ niż w przypadku testowania systemów pracujących jedynie na serwerach.
 
 \subsection{
     Symulacja i symulatory
-    \color{white}\cite{simulation_and_simulacra}}
+    % \color{white}\cite{simulation_and_simulacra}
+}
 
 Symulatory lotu są szeroko wykorzystywane w przemyśle lotniczym
 \cite{simulation_and_simulators}. Amatorskie otwartoźródłowe kontrolery
@@ -211,7 +208,7 @@ Jest to rozwiązanie zupełnie wystarczające w przypadku testów jednostkowych.
 Uruchomienie pełnego systemu w sztucznym środowisku wymaga jednak
 większej kontroli nad serwerem testowym. \textit{Gitlab CI} pozwala
 na podłączenie własnych serwerów do swojej sieci -- dzięki takiemu rozwiązaniu
-użytkownicy mogą wykorzystywać pełne możliwości systemu ciągłej integracji.
+użytkownicy mogą wykorzystywać pełne możliwości potoków ciągłej integracji.
 
 Podłączony do systemu serwer wykonuje skrypty uruchamiające testy systemowe 
 bezpośrednio na serwerze, co pozwala na równoległe uruchomienie wielu kontenerów 
@@ -220,9 +217,9 @@ na diagramie \ref{system_tests_diagram}.
 
 \subsection{Definiowanie wieloetapowych testów systemowych}
 
-W ramach testów integracyjnych testowane są wpierw pojedyncze kontenery --
+W ramach testów systemowych testowane są wpierw pojedyncze kontenery --
 nie są to jednak testy jednostkowe. Uruchamiany jest cały kontener zawierający
-komponent systemu, następnie jest on testowany przez zewnętrzny skrypt.
+komponent systemu, następnie jest on testowany przez \textbf{zewnętrzny} skrypt.
 W przypadku aplikacji klienckiej, uruchamiana jest sterowana automatycznie 
 przeglądarka internetowa, która symuluje zachowanie prawdziwego użytkownika,
 tworząc nową trasę przelotu drona. W przypadku serwera \textit{REST API}, wykonywane
