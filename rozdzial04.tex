@@ -45,8 +45,8 @@ zapamiętywać zmian, ponieważ pliki strony nie zmieniają się podczas hostowa
 
 Jak wspomniano~w rozdziale \ref{repo_structure}, poświęconym strukturze repozytoriów,
 wszystkie repozytoria zawierają plik \texttt{.gitlab-ci.yml}. Plik ten definiuje skrypty,
-jakie wykona system \texttt{CI/CD}, gdy do repozytorium zostanie dodany nowy kod.
-Diagram ilustrujący proces pracy programisty~z systemem \textit{CI/CD} zawarty jest
+jakie wykona potok \texttt{CI/CD}, gdy do repozytorium zostanie dodany nowy kod.
+Diagram ilustrujący proces pracy programisty~z potokiem \textit{CI/CD} zawarty jest
 na rysunku \ref{ci_workflow}.
 
 \begin{figure}[H]
@@ -57,7 +57,7 @@ na rysunku \ref{ci_workflow}.
     
     \node[] (programmer) {Programista};
     \node[right of = programmer] (repo) {Repozytorium};
-    \node[right of = repo] (ci_cd) {System \texttt{CI/CD}};
+    \node[right of = repo] (ci_cd) {Potok \texttt{CI/CD}};
     \node[right of = ci_cd] (registry) {Rejestr kontenerów};
 
     \node[below of = programmer, node distance=6cm] (programmer_ground) {};
@@ -77,7 +77,7 @@ na rysunku \ref{ci_workflow}.
 
     \draw[->,align=center] ($(ci_cd)!0.60!(ci_cd_ground)$) -- node[above,scale=1,midway]{ Wysłanie zbudowanego \\~i przetestowanego \\ konteneru do rejestru} ($(registry)!0.60!(registry_ground)$);
     
-    \draw[<-,align=center] ($(repo)!0.70!(repo_ground)$) -- node[above,scale=1,midway]{Status~i logi \\z systemu \texttt{CI/CD}} ($(ci_cd)!0.70!(ci_cd_ground)$);
+    \draw[<-,align=center] ($(repo)!0.70!(repo_ground)$) -- node[above,scale=1,midway]{Status~i logi \\z potoku \texttt{CI/CD}} ($(ci_cd)!0.70!(ci_cd_ground)$);
     \draw[<-,align=center] ($(programmer)!0.90!(programmer_ground)$) -- node[above,scale=1,midway]{Informacja, czy \\ \textit{commit} przeszedł testy} ($(repo)!0.90!(repo_ground)$);
 \end{tikzpicture}
 	\caption{
@@ -87,11 +87,11 @@ na rysunku \ref{ci_workflow}.
 \end{figure}
 
 Ponieważ konteneryzacja pozwala na zupełne zautomatyzowanie procesu budowania,
-skrypty~w systemie \texttt{CI/CD} są~w stanie samodzielnie zbudować kontener,
+skrypty~w potoku \texttt{CI/CD} są~w stanie samodzielnie zbudować kontener,
 zawierający konkretny komponent systemu. Następnie, kontener poddawany jest testom
 (opisanym~w rozdziale \ref{chapter_tests}). Po przejściu testów, kontener wysyłany jest
 do \textit{rejestru kontenerów} -- specjalnego repozytorium, w~którym można
-przechowywać~i wersjonować kontenery. Skrypt systemu \texttt{CI/CD} automatycznie oznacza
+przechowywać~i wersjonować kontenery. Skrypt potoku \texttt{CI/CD} automatycznie oznacza
 kontener za pomocą nazwy brancha, na której został zbudowany. Kontenery pochodzące~z brancha
 \textit{master}, uruchamiane są na serwerze produkcyjnym. Przykładowa konfiguracja
 \textit{Gitlab CI}, wykorzystywana~w repozytorium aplikacji klienckiej opisana została~w listingu
@@ -153,10 +153,10 @@ build_prod_image:
   - docker push $IMAGE_NAME:$CI_COMMIT_REF_NAME
 \end{lstlisting}
 
-Wszystkie logi, jakie system CI/CD zbierze~w trakcie budowania~i testowania obrazu~z aplikacją są
+Wszystkie logi, jakie potok CI/CD zbierze~w trakcie budowania~i testowania obrazu~z aplikacją są
 dostępne dla programisty -- pozwala to odnaleźć błędy, które pojawiły się~w procesie budowania oraz
 sprawdzić wyniki testów. Systemy obsługi repozytorium (taki jak \textit{GitHub}, \textit{BitBucket}
-czy \textit{GitLab}), wyświetlają informacje~o tym, czy dany commit przeszedł testy~w systemie
+czy \textit{GitLab}), wyświetlają informacje~o tym, czy dany commit przeszedł testy~w potoku 
 \textit{CI/CD}, ułatwiając odnajdywanie commitów zawierających błędy. Przykład tej funkcji
 zilustrowany jest na rysunku \ref{gitlab_ci_history}.
 
@@ -164,7 +164,7 @@ zilustrowany jest na rysunku \ref{gitlab_ci_history}.
   \centering
   \includegraphics[width=.7\linewidth]{rys04/gitlab_ci_commit_status.png}
   \caption{ Historia zmian~w kodzie~w serwisie \textit{GitLab}.
-  Ikony po prawej stronie informują, czy dany commit przeszedł testy~w systemie CI/CD }
+  Ikony po prawej stronie informują, czy dany commit przeszedł testy~w potoku CI/CD }
 	\label{gitlab_ci_history}
 \end{figure}
 
@@ -221,7 +221,7 @@ nią obecnie działający kontener.
 Dzięki zastosowaniu narzędzia \texttt{Ouroboros}, w trakcie testów w terenie 
 udało się znacznie usprawnić aktualizacje infrastruktury systemu. W przypadku
 pojawienia się błędu, programiści musieli jedynie zaktualizować kod w repozytorium --
-system \textit{CI/CD} automatycznie budował poprawioną wersję kontenera, \texttt{Ouroboros}
+potok \textit{CI/CD} automatycznie budował poprawioną wersję kontenera, \texttt{Ouroboros}
 aktualizował serwer produkcyjny. Po dodaniu nowego kodu do repozytorium, uaktualniona
 wersja aplikacji pojawiała się na serwerze po mniej niż pięciu minutach.
 
