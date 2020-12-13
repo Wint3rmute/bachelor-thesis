@@ -41,10 +41,10 @@ Opis tego jakie rzeczy były testowane. Ile było testów na komponent (xd).
 
 # PYTANIA NA 10.12.20
 
-- Czy okej jest "w poniższym rozdziale", 2 i 3
+- [done] Czy okej jest "w poniższym rozdziale", 2 i 3
     > lepiej "w niniejszym"
 
-- [todo] Czy trzeba robić \ref do każdego listingu/diagramu, nawet jak to jest oczywiste?
+- [done] Czy trzeba robić \ref do każdego listingu/diagramu, nawet jak to jest oczywiste?
     Przykładowo listingi i diagramy w rozdziale o protobufie
     >  tak
 
