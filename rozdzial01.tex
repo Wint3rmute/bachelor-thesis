@@ -32,7 +32,15 @@ medycznych, wspomagając poszukiwanie osób zaginionych. Jest jednak to jedynie 
 przykład z szerokiego spektrum potencjalnych zastosowań. Algorytmy sztucznej inteligencji,
 zastosowane do analizy zdjęć wykonanych~w czasie lotów, mogą zostać wytrenowane
 na nowych danych, aby rozpoznawać dowolne obiekty (samochody, budynki, drzewa). 
-Dzięki temu, system może zostać szybko przystosowany do nowych wymagań. 
+Dzięki temu, system może zostać szybko przystosowany do nowych celów.
+
+Budowa systemu wykorzystującego fizyczne komponenty, takie jak autonomiczne drony,
+wymaga wprowadzenia dodatkowych zabezpieczeń, pozwalających na przetestowanie stabilności
+systemu, zanim zostanie uruchomiony w terenie. Wymaganie podyktowane jest wysokim kosztem
+dronów oraz względami bezpieczeństwa -- utrata kontroli nad maszyną latającą, gdy wokół znajdują
+się ludzie, stanowi duże zagrożenie. Nowoczesne praktyki inżynierii oprogramowania, takie jak 
+automatyczne testy w potoku \textit{CI/CD} oraz zastosowanie symulatorów i atrap
+w miejsce rzeczywistych, fizycznych obiektów pozwalają na budowę takich zabezpieczeń.
 
 Przedstawiony~w pracy prototyp systemu inspekcji obszarów powstał~w ramach działalności
 Akademickiego Klubu Lotniczego -- koła naukowego Politechniki Wrocławskiej, zajmującego
@@ -40,13 +48,11 @@ się rozwijaniem technologii związanych~z autonomicznymi dronami~i samolotami
 \cite{akl_home_page}. Projekt został sfinansowany przez Wrocławski Fundusz
 Aktywności Studenckiej \cite{fast_webpage}.
 
-  
-
 % Szczególnie interesujące są zagadnienia integracji komponentów systemu,
 % oraz testowanie - które~w przypadku systemu angażującego rzeczywiste
 % maszyny nie może ograniczyć się jedynie do standardowych testów jednostkowych.
 
-\newpage
+% \newpage
 \section{Cel pracy} \label{intro_objective}
 % koniecznie sformułowania:
 % - Celem ogólnym pracy jest…?,
