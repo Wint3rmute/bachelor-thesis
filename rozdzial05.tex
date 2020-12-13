@@ -284,7 +284,22 @@ się w odpowiedni sposób; nie pozostawił na serwerze działających procesów 
 Ze względu na pandemię COVID-19, system testowany był w terenie jedynie trzy razy.
 Podczas pierwszych testów, dron z kamerą nie był jeszcze przygotowany, system został więc 
 zaadaptowany do wykorzystania w jednym z samolotów Akademickiego Klubu Lotniczego (\ref{test_sae}).
-Testom została poddana aplikacja kliencka i system obsługi telemetrii.
+% Testom została poddana aplikacja kliencka i system obsługi telemetrii.
+Wielokrotnie wykonany został scenariusz testowy, sprawdzający działanie systemu obsługi telemetrii i 
+aplikacji klienckiej:
+
+\begin{enumerate}
+    \item uruchomienie serwera telemetrii,
+    \item uruchomienie aplikacji klienckiej,
+    \item podłączenie zasilania do samolotu,
+    \item sprawdzenie, czy w aplikacji klienckiej pojawią się dane telemetryczne napływające z samolotu,
+    \item sprawdzenie, czy dane telemetryczne są poprawne (czy zgadza się pozycja GPS),
+    \item wykonanie testowego lotu,
+    \item sprawdzenie, czy podczas lotu w aplikacji klienckiej regularnie aktualizuje się pozycja samolotu. 
+    \item sprawdzenie, czy po zakończeniu lotu logi serwera telemetrii zawierają informację o zarejestrowaniu zakończenia lotu.
+\end{enumerate}
+
+
 
 \begin{figure}[H]
 	\centering
