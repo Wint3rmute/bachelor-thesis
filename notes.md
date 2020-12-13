@@ -3,7 +3,7 @@
 ## Intro
 
 - Zmienić "cel pracy" na "cel i zakres pracy"
-- Zmienić zawartość na "projekt architektury systemu obszarów (...) na potrzeby/realizowany w ramach koła naukowego" (to jest cel)
+- [done] Zmienić zawartość na "projekt architektury systemu obszarów (...) na potrzeby/realizowany w ramach koła naukowego" (to jest cel)
 - Następnie, zakres pracy to: 
     - zdefiniowanie wymagań
     - architektura
@@ -14,7 +14,7 @@
 ## Geneza pracy
 
 - [done] Pierwszy akapit zrzucić niżej.
-- Wpleść CI/CD do wstępu, uzasadnić jego wykorzystanie, że to jest kluczowe dla dobrego rozwoju systemu/produktu
+- [done]  Wpleść CI/CD do wstępu, uzasadnić jego wykorzystanie, że to jest kluczowe dla dobrego rozwoju systemu/produktu
 - [done] Przetrenowane -> ponownie wytrenowane/wytrenowane na nowych danych
 
 ## Wdrażanie systemu
