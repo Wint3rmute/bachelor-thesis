@@ -4,7 +4,7 @@
 
 - [???] Zmienić "cel pracy" na "cel i zakres pracy"
 - [done] Zmienić zawartość na "projekt architektury systemu obszarów (...) na potrzeby/realizowany w ramach koła naukowego" (to jest cel)
-- Następnie, zakres pracy to: 
+- [done] Następnie, zakres pracy to: 
     - zdefiniowanie wymagań
     - architektura
     - zaprojektowanie testów
