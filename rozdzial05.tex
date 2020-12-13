@@ -1,56 +1,64 @@
 \chapter{Testy systemu} \label{chapter_tests}
 
 Jak zaznaczono w celu pracy (\ref{intro_objective}), prototyp systemu
-ma być w pełni testowalny. Testy wykonywane są wewnątrz systemu ciągłej integracji 
-(\textit{CI/CD}), opisanym w rozdziale \ref{chapter_deployment}. Poniższy rozdział opisuje
-rozwiązania zastosowane w celu przetestowania działania systemu,
-zanim został on uruchomiony na prawdziwym dronie.
+ma być w pełni testowalny. Testy wykonywane są wewnątrz potoku ciągłej integracji 
+(\textit{CI/CD}), opisanym w rozdziale \ref{chapter_deployment}. Niniejszy rozdział opisuje
+rozwiązania zastosowane w celu przetestowania działania systemu.
+Wykonane w projekcie testy dzielą się na cztery kategorie:
 
-\section{Testy jednostkowe}
+\begin{itemize}
+    \item jednostkowe,
+    \item integracyjne,
+    \item systemowe,
+    \item terenowe.
+\end{itemize}
 
-Komponenty systemu zaopatrzone są w testy jednostkowe, co pozwala na
-sprawdzenie działania kodu w zakresie poszczególnego komponentu.
-Przykład testu jednostkowego wykorzystywanego w systemie
-zawarty jest w listingu \ref{list:unit_test_example}.
+\noindent
+\textit{Uwaga:} w pracy opisane są tylko testy, które zostały
+napisane napisane przez autora. Obejmuje to testy jednostkowe systemu telemetrii,
+testy integracyjne skonteneryzowanego symulatora drona oraz testy systemow,
+na poziomie całego systemu.
 
-\begin{lstlisting}[
-    language=Python,
-    label=list:unit_test_example,
-    caption={
-        Test jednostkowy modułu sterującego uruchamianiem symulatoru drona.
-        test sprawdza, czy symulator uruchamia się, oraz czy zostaje poprawnie
-        zamknięty po wywołaniu metody \texttt{.stop()}.
-    },
-    basicstyle=\footnotesize\ttfamily
-]
-def test_container_lifecycle():
-	# Check how many docker containers are running
-	num_of_containers = int(check_output('docker ps | wc -l', shell=True))
+\subsection{Testy jednostkowe}
 
-	print('setting up the runnner')
-	runner = SitlDockerHelper('ArduCopter', run_in_background=True)
+Testy jednostkowe obejmują sprawdzanie zachowania implementacji 
+konkretnego komponentu, za pomocą zdefiniowanych przez programistę
+przypadków testowych. Tabela \ref{telem_server_unit_tests} zawiera 
+opis testów jednostkowych sprawdzających działania serwera
+obsługującego telemetrię.
 
-	print('running the container')
-	runner.run()
-	sleep(10)
+\begin{table}[H]
+	\centering\small
+	\caption{
+        Testy jednostkowe serwera obsługującego telemetrię.
+	}
+	\label{telem_server_unit_tests}
+    
+    \begin{tabularx}{\textwidth} { 
+        | >{\raggedright\arraybackslash}X 
+        | >{\raggedright\arraybackslash}X | }
+        \hline
+        \textbf{Nazwa testu} & \textbf{Opis testu} \\
+        \hline
+        \texttt{test\_init\_state} & Sprawdzenie stanu początkowego obiektu reprezentującego serwer telemetrii \\
+        \hline
+        \texttt{test\_adding\_new\_flight} & Sprawdzenie czy nadejście pakietu telemetrii spowoduje zarejestrowanie nowego aktywnego lotu \\
+        \hline
+        \texttt{test\_new\_packet\_from\_existing\_flight  } & Sprawdzenie czy nadejście pakietu telemetrii z lotu o takim samym identyfikatorze co poprzednio otrzymany pakiet, spowoduje dopisanie pakietu do już istniejącego aktywnego lotu (nie zaś stworzenie nowego aktywnego lotu) \\
+        \hline
+        \texttt{test\_adding\_two\_flights} & Sprawdzenie czy utrzymanie pakietów o dwóch różnych identyfikatorach lotu spowoduje utworzenie dwóch aktywnych lotów. \\
+        \hline
+        \texttt{test\_flight\_archivisation\_on\_timeout} & Sprawdzenie czy po upłynięciu 20 sekund od otrzymania ostatniego pakietu, lot zostanie uznany za zakończony i przesłany do archiwizacji. \\
+        \hline
+    \end{tabularx}
+      
+\end{table}
 
-	new_num_of_containers = int(
-        check_output('docker ps | wc -l', shell=True)
-    )
 
-	# Check if the number of running containers has increased
-	assert num_of_containers + 1 == new_num_of_containers
 
-	print('stopping')
-	runner.stop()
-
-	# Check if the num of running containers is back to the start state
-	assert int(check_output('docker ps | wc -l', shell=True)) == num_of_containers
-\end{lstlisting}
-
-Wykonywanie testów w systemie \textit{CI/CD} zwiększa sprawność
+Wykonywanie testów w potoku \textit{CI/CD} zwiększa sprawność
 pracy z systemami kontroli wersji. W przypadku implementowania nowej 
-funkcji na gałęzi (\textit{branch}), system \textit{CI/CD} pozwala określić,
+funkcji na gałęzi (\textit{branch}), potok \textit{CI/CD} pozwala określić,
 czy nowa funkcjonalność nie destabilizuje systemu -- ostrzegając przed 
 przyjęciem na główną gałąź (\textit{master branch}) kodu, który nie przeszedł
 testów jednostkowych. Rysunek \ref{failed_pipeline} przedstawia przykład
@@ -62,7 +70,7 @@ takiego zachowania w usłudze \textit{GitLab}.
     \caption{
         Widok interfejsu scalania gałęzi w serwisie \textit{GitLab}.
         Gałąź \texttt{finish\_integration\_tests} nie przechodzi testów
-        w systemie \textit{CI/CD}. Administrator repozytorium natychmiast
+        w potoku \textit{CI/CD}. Administrator repozytorium natychmiast
         otrzymuje informację, że kod nie jest jeszcze gotowy do scalenia.
     }
 	\label{failed_pipeline}
@@ -156,7 +164,7 @@ else:
 # do symulatora czy do prawdziwego drona/samolotu
 \end{lstlisting}
 
-\subsection{\textit{SITL} i automatyczne testy w systemie \textit{CI/CD}}
+\subsection{\textit{SITL} i automatyczne testy w potoku \textit{CI/CD}}
 
 Jak opisano w rozdziale \ref{chapter_deployment}, wszystkie komponenty systemu
 docelowo uruchamiane są w kontenerach. Takie rozwiązanie pozwala na zagwarantowanie
@@ -164,7 +172,7 @@ poprawnego wdrożenia systemu na serwerze produkcyjnym. Równocześnie, kontener
 na serwer produkcyjny można wcześniej przetestować w wirtualnym środowisku testowym.
 
 Na potrzeby projektu, symulator kontrolera lotu został zkonteneryzowany i wykorzystany
-w \textit{CI/CD} do testów integracyjnych, angażujących wszystkie komponenty systemu.
+w potoku \textit{CI/CD} do testów integracyjnych, angażujących wszystkie komponenty systemu.
 Zespół pracujący nad projektem używał gotowego kontenera z symulatorem,
 aby przeprowadzać testy na własnych maszynach. Takie rozwiązanie eliminuje wszystkie
 problemy, jakie mogą pojawić się podczas wykorzystywania oprogramowania którego
@@ -240,7 +248,7 @@ w niej dane pochodzące z pozostałych komponentów systemu.
 \subsubsection{Etapy testów w \textit{GitLab CI}}
 
 Platforma \textit{GitLab CI} pozwala na podzielenie testów na etapy. 
-Każdy etap składa się z określonej liczby zadań. Aby system \textit{CI/CD}
+Każdy etap składa się z określonej liczby zadań. Aby potok \textit{CI/CD}
 mógł przejść do kolejnego etapu, muszą zostać wykonane wszystkie zadania 
 z poprzednich etapów. W przypadku testów integracyjnych oznacza to, że wpierw
 zweryfikowane musi zostać działanie wszystkich kontenerów składających się
