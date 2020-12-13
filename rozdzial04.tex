@@ -119,7 +119,7 @@ before_script:
   - docker login -u baczek-vps -p $GITLAB_DEPLOY_TOKEN registry.gitlab.com
 
 # Zawsze budowany jest obraz testowy, który zostanie
-# później wykorzystany do testów integracyjnych
+# później wykorzystany do testów systemowych 
 build_testing_image:
   stage: build
   # Zapewnia dostęp do dockera w ramach zadania `build_testing_image`
@@ -130,7 +130,7 @@ build_testing_image:
   # Skrypt wpierw buduje obraz dockera, zawierający aplikację.
   # Następnie uruchamia na obrazie testy jednostkowe. Jeśli testy
   # nie zwrócą błędu, obraz jest wysyłany do rejestru.
-  # Na obrazach w rejestrze wykonywane są testy integracyjne.
+  # Na obrazach w rejestrze wykonywane są testy systemowe.
   script:
   - docker build -f docker/test.dockerfile -t $IMAGE_NAME:test_$CI_COMMIT_REF_NAME .
   - docker run $IMAGE_NAME:$CI_COMMIT_REF_NAME "npm run test"

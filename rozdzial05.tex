@@ -16,15 +16,18 @@ Wykonane w projekcie testy dzielą się na cztery kategorie:
 \noindent
 \textit{Uwaga:} w pracy opisane są tylko testy, które zostały
 napisane napisane przez autora. Obejmuje to testy jednostkowe systemu telemetrii,
-testy integracyjne skonteneryzowanego symulatora drona oraz testy systemow,
-na poziomie całego systemu.
+testy integracyjne skonteneryzowanego symulatora drona oraz testy systemowe.
 
-\subsection{Testy jednostkowe}
+\section{Testy jednostkowe}
 
-Testy jednostkowe obejmują sprawdzanie zachowania implementacji 
+Testy jednostkowe obejmują sprawdzanie poprawności zachowania implementacji 
 konkretnego komponentu, za pomocą zdefiniowanych przez programistę
-przypadków testowych. Tabela \ref{telem_server_unit_tests} zawiera 
-opis testów jednostkowych sprawdzających działania serwera
+przypadków testowych. Testy jednostkowe nie wykorzystują zewnętrznych 
+interfejsów komponentu takich jak gniazda sieciowe czy urządzenia peryferyjne --
+operują jedynie na warstwie logicznej komponentu, sprawdzając zachowanie 
+abstrakcji programistycznej.
+Tabela \ref{telem_server_unit_tests} zawiera 
+opis testów jednostkowych sprawdzających działanie serwera
 obsługującego telemetrię.
 
 \begin{table}[H]
@@ -40,22 +43,22 @@ obsługującego telemetrię.
         \hline
         \textbf{Nazwa testu} & \textbf{Opis testu} \\
         \hline
-        \texttt{test\_init\_state} & Sprawdzenie stanu początkowego obiektu reprezentującego serwer telemetrii \\
+        \texttt{test\_init\_state} & Sprawdzenie stanu początkowego obiektu reprezentującego serwer telemetrii. \\
         \hline
-        \texttt{test\_adding\_new\_flight} & Sprawdzenie czy nadejście pakietu telemetrii spowoduje zarejestrowanie nowego aktywnego lotu \\
+        \texttt{test\_adding\_new\_flight} & Sprawdzenie czy nadejście pakietu telemetrii spowoduje zarejestrowanie nowego aktywnego lotu. \\
         \hline
-        \texttt{test\_new\_packet\_from\_existing\_flight  } & Sprawdzenie czy nadejście pakietu telemetrii z lotu o takim samym identyfikatorze co poprzednio otrzymany pakiet, spowoduje dopisanie pakietu do już istniejącego aktywnego lotu (nie zaś stworzenie nowego aktywnego lotu) \\
+        \texttt{test\_new\_packet\_from\_existing\_flight  } & Sprawdzenie czy nadejście pakietu telemetrii z lotu o takim samym identyfikatorze co poprzednio otrzymany pakiet, spowoduje dopisanie pakietu do już istniejącego aktywnego lotu (nie zaś stworzenie nowego aktywnego lotu).\\
         \hline
         \texttt{test\_adding\_two\_flights} & Sprawdzenie czy utrzymanie pakietów o dwóch różnych identyfikatorach lotu spowoduje utworzenie dwóch aktywnych lotów. \\
         \hline
         \texttt{test\_flight\_archivisation\_on\_timeout} & Sprawdzenie czy po upłynięciu 20 sekund od otrzymania ostatniego pakietu, lot zostanie uznany za zakończony i przesłany do archiwizacji. \\
         \hline
-    \end{tabularx}
-      
+        \texttt{test\_behaviour\_when} \texttt{getting\_invalid\_packet\_type} & Sprawdzenie czy w przypadku otrzymania pakietu o niewłaściwym typie zostanie zgłoszony wyjątek. \\
+        \hline
+     \end{tabularx}
 \end{table}
 
-
-
+\subsection{Testy jednostkowe w potoku \textit{CI/CD}}
 Wykonywanie testów w potoku \textit{CI/CD} zwiększa sprawność
 pracy z systemami kontroli wersji. W przypadku implementowania nowej 
 funkcji na gałęzi (\textit{branch}), potok \textit{CI/CD} pozwala określić,
@@ -78,6 +81,9 @@ takiego zachowania w usłudze \textit{GitLab}.
 
 
 \section{Testy integracyjne}
+% dopisać SITLa
+
+\section{Testy systemowe}
 
 Realizowany w pracy system nie ogranicza się do pojedynczego,
 samodzielnego komponentu, zawiera kilka równolegle działających
@@ -172,27 +178,27 @@ poprawnego wdrożenia systemu na serwerze produkcyjnym. Równocześnie, kontener
 na serwer produkcyjny można wcześniej przetestować w wirtualnym środowisku testowym.
 
 Na potrzeby projektu, symulator kontrolera lotu został zkonteneryzowany i wykorzystany
-w potoku \textit{CI/CD} do testów integracyjnych, angażujących wszystkie komponenty systemu.
+w potoku \textit{CI/CD} do testów systemowych, angażujących wszystkie komponenty systemu.
 Zespół pracujący nad projektem używał gotowego kontenera z symulatorem,
 aby przeprowadzać testy na własnych maszynach. Takie rozwiązanie eliminuje wszystkie
 problemy, jakie mogą pojawić się podczas wykorzystywania oprogramowania którego
 konfiguracja jest bardzo złożona -- tak jak w przypadku symulatora lotu.
 
-\subsection{Budowanie testów integracyjnych z wykorzystaniem \textit{Gitlab CI}}
+\subsection{Budowanie testów systemowych z wykorzystaniem \textit{Gitlab CI}}
 
-Do uruchamiania testów integracyjnych przeznaczony został dedytkowany serwer
+Do uruchamiania testów systemowych przeznaczony został dedytkowany serwer
 Linux. Serwer służył za platformę, na której uruchamiane były wszystkie 
-komponenty systemu. Diagram \ref{integration_tests_diagram} ilustruje 
+komponenty systemu. Diagram \ref{system_tests_diagram} ilustruje 
 sposób wykorzystywania dedykowanego serwera w celu przeprowadzenia 
-testów integracyjnych.
+testów ystemowych
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{rys05/integration_tests_diagram.png}
     \caption{
-        Pełne testy integracyjne na dedykowanym serwerze.
+        Pełne testy systemowe na dedykowanym serwerze.
     }
-	\label{integration_tests_diagram}
+	\label{system_tests_diagram}
 \end{figure}
 
 \subsection{Konfiguracja serwera zarządzanego przez \textit{Gitlab CI}}
@@ -207,12 +213,12 @@ większej kontroli nad serwerem testowym. \textit{Gitlab CI} pozwala
 na podłączenie własnych serwerów do swojej sieci -- dzięki takiemu rozwiązaniu
 użytkownicy mogą wykorzystywać pełne możliwości systemu ciągłej integracji.
 
-Podłączony do systemu serwer wykonuje skrypty uruchamiające testy integracyjne
+Podłączony do systemu serwer wykonuje skrypty uruchamiające testy systemowe 
 bezpośrednio na serwerze, co pozwala na równoległe uruchomienie wielu kontenerów 
 \texttt{docker} oraz monitorowanie ich pracy z zewnątrz -- jak pokazano
-na diagramie \ref{integration_tests_diagram}.
+na diagramie \ref{system_tests_diagram}.
 
-\subsection{Definiowanie wieloetapowych testów integracyjnych}
+\subsection{Definiowanie wieloetapowych testów systemowych}
 
 W ramach testów integracyjnych testowane są wpierw pojedyncze kontenery --
 nie są to jednak testy jednostkowe. Uruchamiany jest cały kontener zawierający
@@ -250,10 +256,10 @@ w niej dane pochodzące z pozostałych komponentów systemu.
 Platforma \textit{GitLab CI} pozwala na podzielenie testów na etapy. 
 Każdy etap składa się z określonej liczby zadań. Aby potok \textit{CI/CD}
 mógł przejść do kolejnego etapu, muszą zostać wykonane wszystkie zadania 
-z poprzednich etapów. W przypadku testów integracyjnych oznacza to, że wpierw
+z poprzednich etapów. W przypadku testów systemowych oznacza to, że wpierw
 zweryfikowane musi zostać działanie wszystkich kontenerów składających się
 na system, następnie testowane są interakcje między komponentami. 
-Finalny zestaw testów integracyjnych (\textit{test pipeline}), które były
+Finalny zestaw testów systemowych (\textit{test pipeline}), które były
 wykonywane na systemie ilustruje rysunek \ref{pipeline_gitlab_ci}.\\
 \\
 \noindent
@@ -269,7 +275,7 @@ się w odpowiedni sposób; nie pozostawił na serwerze działających procesów 
 	\includegraphics[width=\linewidth]{rys05/pipeline.png}
     \caption{
         Interfejs \textit{GitLab CI} prezentujący postęp w wykonywaniu
-        wieloetapowych testów integracyjnych.
+        wieloetapowych testów systemowych.
     }
 	\label{pipeline_gitlab_ci}
 \end{figure}
