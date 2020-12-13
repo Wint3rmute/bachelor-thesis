@@ -13,8 +13,9 @@
 
 ## Geneza pracy
 
-Pierwszy akapit zrzucić niżej. Wpleść CI/CD do wstępu, uzasadnić jego wykorzystanie, że to jest kluczowe dla dobrego rozwoju systemu/produktu
-Przetrenowane -> ponownie wytrenowane/wytrenowane na nowych danych
+- [done] Pierwszy akapit zrzucić niżej.
+- Wpleść CI/CD do wstępu, uzasadnić jego wykorzystanie, że to jest kluczowe dla dobrego rozwoju systemu/produktu
+- [done] Przetrenowane -> ponownie wytrenowane/wytrenowane na nowych danych
 
 ## Wdrażanie systemu
 może zamiast tego implementacja potoku CI/CD?
