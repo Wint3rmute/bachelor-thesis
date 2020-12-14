@@ -544,9 +544,9 @@ Listing \thelstlisting: #1\hfill%\hfill%
 }%}
 
 %\AtBeginDocument{% 
-        \addto\captionspolish{% 
-\renewcommand\indexname{Indeks rzeczowy}
-}%}
+        % \addto\captionspolish{% 
+% \renewcommand\indexname{Indeks rzeczowy}
+% }%}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                  
 %% Definicje stopek i nagłówków
@@ -789,12 +789,12 @@ SPECJALNOŚĆ: & \@specjalnosc\\
 % TODO: UNCOMMENT
 
 \newpage
-\mbox{}\pdfbookmark[0]{Spis rysunków}{spisRysunkow.1}
+% \mbox{}\pdfbookmark[0]{Spis rysunków}{spisRysunkow.1}
 \addcontentsline{toc}{chapter}{Spis rysunków}
 \listoffigures*
 
 % \newpage
-\mbox{}\pdfbookmark[0]{Spis listingów}{spisListingow.1}
+% \mbox{}\pdfbookmark[0]{Spis listingów}{spisListingow.1}
 \addcontentsline{toc}{chapter}{Spis listingów}
 \lstlistoflistings*
 
@@ -811,16 +811,16 @@ SPECJALNOŚĆ: & \@specjalnosc\\
 % TODO: UNCOMMENT
 
 % \newpage
-\mbox{}\pdfbookmark[0]{Spis tabel}{spisTabel.1}
+% \mbox{}\pdfbookmark[0]{Spis tabel}{spisTabel.1}
 \addcontentsline{toc}{chapter}{Spis tabel}
 \listoftables*
 % END OF TODO: UNCOMMENT
 
 
 
-\chapterstyle{noNumbered}
-\phantomsection % sets an anchor
-\addcontentsline{toc}{chapter}{Indeks rzeczowy}
-\printindex
+% \chapterstyle{noNumbered}
+% \phantomsection % sets an anchor
+% \addcontentsline{toc}{chapter}{Indeks rzeczowy}
+% \printindex
 
 \end{document}
